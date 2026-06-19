@@ -49,6 +49,16 @@ select:disabled{opacity:0.4;background:var(--bg3);}
 .type-chip.on{border-color:var(--text1);background:var(--text1);color:var(--bg2);font-weight:500;}
 .type-chip.soon{opacity:0.45;cursor:not-allowed;}
 .type-group-label{font-size:11px;color:var(--text4);font-weight:500;width:100%;margin:4px 0 -2px;}
+.cat-card{display:flex;align-items:center;justify-content:space-between;width:100%;padding:18px;margin-bottom:12px;border:1px solid var(--border2);border-radius:14px;background:var(--bg2);cursor:pointer;font-family:inherit;text-align:left;}
+.cat-card:active{background:var(--bg3);}
+.cat-name{font-size:16px;font-weight:600;color:var(--text1);display:block;}
+.cat-count{font-size:13px;color:var(--text3);display:block;margin-top:2px;}
+.item-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px;margin-bottom:8px;border:1px solid var(--border2);border-radius:12px;background:var(--bg2);cursor:pointer;font-family:inherit;font-size:15px;color:var(--text1);text-align:left;}
+.item-row:active{background:var(--bg3);}
+.item-row.soon{opacity:0.5;cursor:default;color:var(--text3);}
+.back-btn{background:none;border:none;color:var(--text2);font-size:14px;cursor:pointer;font-family:inherit;padding:6px 0;margin-bottom:6px;}
+.cat-title{font-size:18px;font-weight:600;margin-bottom:14px;}
+.nav-chev{width:18px;height:18px;stroke:var(--text4);fill:none;stroke-width:2;flex-shrink:0;}
 .deadline-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;margin-bottom:1rem;font-size:13px;border:1px solid var(--border2);background:var(--bg2);}
 .dl-pill{font-size:12px;font-weight:500;padding:4px 10px;border-radius:99px;white-space:nowrap;}
 .dl-done{background:var(--green-light);color:var(--green-dark);}
@@ -133,25 +143,27 @@ table.matrix{border-collapse:collapse;font-size:12px;width:100%;}
 
   <!-- ===== 제출 (영양사) ===== -->
   <div class="section active" id="sec-submit">
-    <label class="field-label">올릴 항목 선택 <span class="required">*</span></label>
-    <div class="type-chips" id="type-chips"></div>
-
-    <div class="two-col">
-      <div><label class="field-label">매니저 <span class="required">*</span></label>
-        <select id="manager-select" onchange="onManagerChange()"><option value="">매니저 선택</option></select></div>
-      <div><label class="field-label" id="period-label">날짜 <span class="required">*</span></label>
-        <input type="date" id="date-input" onchange="onContextChange()" /></div>
-    </div>
     <div class="form-group">
-      <label class="field-label">사업장 <span class="required">*</span></label>
-      <select id="site-select" disabled onchange="onContextChange()"><option value="">먼저 매니저를 선택하세요</option></select>
+      <label class="field-label">내 이름 <span class="required">*</span></label>
+      <select id="manager-select" onchange="onManagerChange()"><option value="">이름 선택</option></select>
       <div class="sub-hint" id="site-hint"></div>
     </div>
 
-    <div id="deadline-banner"></div>
-    <div id="submit-body"><div class="empty">항목과 사업장을 선택하세요</div></div>
-    <div class="submit-wrap" id="submit-wrap" style="display:none;">
-      <button class="btn-submit" id="btn-submit" onclick="submitSlots()">모두 제출</button>
+    <div id="nav-area"></div>
+
+    <div id="form-area" style="display:none;">
+      <div id="form-header"></div>
+      <div class="two-col">
+        <div><label class="field-label">사업장 <span class="required">*</span></label>
+          <select id="site-select" onchange="onContextChange()"><option value="">사업장 선택</option></select></div>
+        <div><label class="field-label" id="period-label">날짜 <span class="required">*</span></label>
+          <input type="date" id="date-input" onchange="onContextChange()" /></div>
+      </div>
+      <div id="deadline-banner"></div>
+      <div id="submit-body"></div>
+      <div class="submit-wrap" id="submit-wrap" style="display:none;">
+        <button class="btn-submit" id="btn-submit" onclick="submitSlots()">모두 제출</button>
+      </div>
     </div>
   </div>
 
@@ -333,7 +345,7 @@ async function init(){
   showLoading('불러오는 중...');
   await loadConfig();
   hideLoading();
-  renderTypeChips();
+  renderNav();
   const mSel=$('manager-select');
   [...MANAGERS].sort((a,b)=>a.name.localeCompare(b.name,'ko')).forEach(m=>mSel.appendChild(new Option(m.name,m.name)));
   $('date-input').value=todayStr;
@@ -343,21 +355,37 @@ async function init(){
 }
 init();
 
-// ── 항목 칩 ──
-function renderTypeChips(){
-  const wrap=$('type-chips');let html='';
-  GROUP_ORDER.forEach(g=>{
-    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
-    if(!keys.length)return;
-    html+=`<div class="type-group-label">${g}</div>`;
-    keys.forEach(k=>{
-      const t=TYPES[k];const on=k===curType?' on':'';const soon=t.ready?'':' soon';
-      html+=`<div class="type-chip${on}${soon}" ${t.ready?`onclick="pickType('${k}')"`:''}>${t.label}${t.ready?'':' · 준비중'}</div>`;
-    });
-  });
-  wrap.innerHTML=html;
+// ── 카테고리 → 항목 네비게이션 ──
+let curGroup=null, navView='cats';
+const CHEV='<svg class="nav-chev" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>';
+function renderNav(){
+  const nav=$('nav-area');
+  if(navView==='cats'){
+    nav.innerHTML=GROUP_ORDER.map(g=>{
+      const n=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].ready).length;
+      return `<button class="cat-card" onclick="openGroup('${g}')"><span><span class="cat-name">${g}</span><span class="cat-count">${n}개 항목</span></span>${CHEV}</button>`;
+    }).join('');
+  }else if(navView==='items'){
+    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===curGroup);
+    nav.innerHTML=`<button class="back-btn" onclick="backToCats()">← 카테고리</button><div class="cat-title">${curGroup}</div>`+
+      keys.map(k=>{const t=TYPES[k];
+        return t.ready
+          ? `<button class="item-row" onclick="openType('${k}')"><span>${t.label}</span>${CHEV}</button>`
+          : `<div class="item-row soon">${t.label} · 준비중</div>`;
+      }).join('');
+  }
 }
-window.pickType=function(k){curType=k;renderTypeChips();syncPeriodLabel();onContextChange();};
+window.openGroup=function(g){curGroup=g;navView='items';$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();};
+window.backToCats=function(){navView='cats';curGroup=null;$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();};
+window.backToItems=function(){navView='items';$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();};
+window.openType=function(k){
+  curType=k;navView='form';
+  $('nav-area').style.display='none';
+  $('form-area').style.display='block';
+  $('form-header').innerHTML=`<button class="back-btn" onclick="backToItems()">← ${TYPES[k].group}</button><div class="cat-title">${TYPES[k].label}</div>`;
+  syncPeriodLabel();
+  onContextChange();
+};
 
 function syncPeriodLabel(){
   const t=TYPES[curType];
@@ -369,13 +397,13 @@ window.onManagerChange=async function(){
   const name=cMgr(),siteSel=$('site-select'),hint=$('site-hint');
   if(name)localStorage.setItem('savedManager',name);
   siteSel.innerHTML='';
-  if(!name){siteSel.appendChild(new Option('먼저 매니저를 선택하세요',''));siteSel.disabled=true;hint.textContent='';renderSubmitBody();return;}
-  const mgr=MANAGERS.find(m=>m.name===name);siteSel.disabled=false;
-  if(mgr.sites.length>1)siteSel.appendChild(new Option('사업장 선택',''));
+  if(!name){siteSel.appendChild(new Option('사업장 선택',''));hint.textContent='';if(navView==='form')renderSubmitBody();return;}
+  const mgr=MANAGERS.find(m=>m.name===name);
+  if(mgr.sites.length!==1)siteSel.appendChild(new Option('사업장 선택',''));
   mgr.sites.forEach(s=>siteSel.appendChild(new Option(s,s)));
   hint.textContent=`담당 사업장 ${mgr.sites.length}곳`;
-  if(mgr.sites.length===1){siteSel.value=mgr.sites[0];await onContextChange();}
-  else renderSubmitBody();
+  if(mgr.sites.length===1)siteSel.value=mgr.sites[0];
+  if(navView==='form')await onContextChange();
 };
 window.onContextChange=onContextChange;
 async function onContextChange(){
@@ -676,9 +704,31 @@ window.saveDl=async function(){showLoading('저장 중...');try{await saveDeadli
 
 function renderSiteSummary(){
   const sites=Object.keys(SITE_MEALS).length,mgrs=MANAGERS.length;
-  $('site-summary').innerHTML=`<div style="font-size:14px;">등록 사업장 <b>${sites}</b>곳 · 매니저 <b>${mgrs}</b>명</div>
-    <div class="sub-hint" style="margin-top:8px;">사업장/매니저/끼니 편집 UI는 기존 보존식 앱의 설정 화면을 그대로 이식하면 됩니다(같은 config/settings 사용).</div>`;
+  $('site-summary').innerHTML=`<div style="font-size:14px;margin-bottom:12px;">현재 등록: 사업장 <b>${sites}</b>곳 · 매니저 <b>${mgrs}</b>명</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px;">데이터 가져오기 (JSON 붙여넣기)</div>
+    <div class="sub-hint" style="margin-bottom:8px;">보존식 앱 "내보내기"에서 복사한 내용을 붙여넣고 저장하면 매니저·사업장 명단이 이 명단으로 갱신됩니다.</div>
+    <textarea id="import-json" placeholder='{"managers":[...],"siteMeals":{...}}' style="width:100%;height:140px;font-family:monospace;font-size:12px;"></textarea>
+    <button class="btn-primary" style="width:100%;margin-top:10px;" onclick="importConfig()">가져와서 저장</button>`;
 }
+function refreshManagerDropdown(){
+  const mSel=$('manager-select');const cur=mSel.value;
+  mSel.innerHTML='<option value="">이름 선택</option>';
+  [...MANAGERS].sort((a,b)=>a.name.localeCompare(b.name,'ko')).forEach(m=>mSel.appendChild(new Option(m.name,m.name)));
+  if(MANAGERS.find(m=>m.name===cur))mSel.value=cur;
+}
+window.importConfig=async function(){
+  const raw=$('import-json').value.trim();
+  if(!raw){toast('JSON을 붙여넣어 주세요',true);return;}
+  let data;try{data=JSON.parse(raw);}catch(e){toast('JSON 형식이 올바르지 않습니다',true);return;}
+  if(!Array.isArray(data.managers)||typeof data.siteMeals!=='object'||!data.siteMeals){toast('managers / siteMeals 형식이 필요합니다',true);return;}
+  showLoading('저장 중...');
+  try{
+    await setDoc(doc(db,'config','settings'),{managers:data.managers,siteMeals:data.siteMeals,updatedAt:new Date().toISOString()});
+    MANAGERS=data.managers;SITE_MEALS=data.siteMeals;
+    refreshManagerDropdown();renderSiteSummary();
+    hideLoading();toast(`저장 완료 — 매니저 ${MANAGERS.length}명 · 사업장 ${Object.keys(SITE_MEALS).length}곳`);
+  }catch(e){hideLoading();toast('저장 실패: '+e.message,true);}
+};
 
 window.openModal=function(url){$('modal-img').src=url;$('modal').classList.add('open');};
 </script>
