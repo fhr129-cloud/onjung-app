@@ -62,8 +62,8 @@ select:disabled{opacity:0.4;background:var(--bg3);}
 .acc.open .acc-chev{transform:rotate(180deg);color:var(--green);}
 .acc-body{max-height:0;overflow:hidden;transition:max-height .32s ease;}
 .acc.open .acc-body{max-height:900px;}
-.item-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 16px 16px;}
-.grid-item{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:14px;border:1px solid var(--border2);border-radius:12px;background:var(--bg3);cursor:pointer;font-family:inherit;text-align:left;transition:transform .12s,border-color .2s,background .2s;}
+.item-grid{display:grid;grid-template-columns:1fr;gap:10px;padding:2px 16px 16px;}
+.grid-item{display:flex;flex-direction:row;align-items:center;gap:10px;padding:14px;border:1px solid var(--border2);border-radius:12px;background:var(--bg3);cursor:pointer;font-family:inherit;text-align:left;transition:transform .12s,border-color .2s,background .2s;}
 .grid-item:hover{border-color:var(--green);background:var(--bg2);}
 .grid-item:active{transform:scale(.97);}
 .gi-icon{width:36px;height:36px;border-radius:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--green-dark);display:flex;align-items:center;justify-content:center;}
@@ -276,7 +276,7 @@ const TYPES={
   // 1. 결산관리
   ilmagam:   {label:'일마감', group:'결산관리', kind:'file', period:'daily', slot:'single', ready:true},
   junggan:   {label:'중간결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
-  sonik:     {label:'└ 손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
+  sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
   monthclose:{label:'월말결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
 
   // 2. 결재문서 (영양사 상신 → 관리자 1인 승인)
@@ -435,13 +435,16 @@ function renderNav(){
   }
   nav.innerHTML=`<div class="site-bar"><span class="sb-left">${PIN_ICON}${selSite}</span><button class="site-change" onclick="changeSite()">변경</button></div>`+accordionHtml();
 }
-window.pickSite=function(s){selSite=s;$('site-select').value=s;navView='browse';expandedGroup=null;renderNav();window.scrollTo({top:0,behavior:'smooth'});};
-window.changeSite=function(){navView='site';selSite=null;$('site-select').value='';renderNav();window.scrollTo({top:0,behavior:'smooth'});};
+window.pickSite=function(s){selSite=s;$('site-select').value=s;navView='browse';expandedGroup=null;renderNav();history.pushState({view:'browse'},'');window.scrollTo({top:0,behavior:'smooth'});};
+function showSite(){navView='site';selSite=null;$('site-select').value='';$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();window.scrollTo({top:0,behavior:'smooth'});}
+window.changeSite=function(){history.back();};
 window.toggleGroup=function(g){
   expandedGroup=expandedGroup===g?null:g;renderNav();
   if(expandedGroup)setTimeout(()=>{const el=$('acc-'+g);if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
 };
-window.backToBrowse=function(){navView='browse';$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();};
+function showBrowse(){navView='browse';$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();window.scrollTo({top:0,behavior:'smooth'});}
+window.backToBrowse=function(){history.back();};
+window.addEventListener('popstate',function(e){const v=(e.state&&e.state.view)||'site';if(v==='browse')showBrowse();else showSite();});
 window.openType=function(k){
   curType=k;navView='form';
   $('nav-area').style.display='none';
@@ -450,6 +453,7 @@ window.openType=function(k){
   $('form-header').innerHTML=`<button class="back-btn" onclick="backToBrowse()">← ${TYPES[k].group}</button><div class="cat-title">${TYPES[k].label}</div>`;
   syncPeriodLabel();
   onContextChange();
+  history.pushState({view:'form'},'');
   window.scrollTo({top:0,behavior:'smooth'});
 };
 
