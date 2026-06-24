@@ -799,6 +799,7 @@ function renderApprovalSubmit(){
       <span class="status-pill ${stCls}">${stTxt}</span></div></div>`;
   }).join('')||'<div class="empty">제출 내역이 없습니다</div>';
   $('submit-body').innerHTML=(site?form:'<div class="empty">사업장을 먼저 선택하세요</div>')+`<div class="section-title">내 제출 내역</div>${list}`;
+}
 window.onApprFile=function(input){apprFile=input.files[0]||null;renderApprovalSubmit();};
 window.submitApproval=async function(){
   const t=TYPES[curType],manager=cMgr(),site=cSite();
@@ -815,6 +816,7 @@ window.submitApproval=async function(){
     apprFile=null;
     hideLoading();toast('제출 완료!');await loadMyApprovals();await loadSiteDone(site);renderApprovalSubmit();
   }catch(e){hideLoading();toast('제출 실패: '+e.message,true);}
+};
 
 // ── 관리자 잠금 ──
 window.unlockAdmin=function(){
