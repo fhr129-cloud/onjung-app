@@ -58,6 +58,7 @@ select:disabled{opacity:0.4;background:var(--bg3);}
 .acc-tw{flex:1;display:flex;flex-direction:column;gap:2px;}
 .acc-name{font-size:16px;font-weight:600;color:var(--text1);}
 .acc-count{font-size:12px;color:var(--text3);}
+.dl-badge{min-width:20px;height:20px;padding:0 6px;margin-right:4px;border-radius:99px;background:var(--red);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 .acc-chev{width:20px;height:20px;color:var(--text4);flex-shrink:0;transition:transform .25s,color .25s;}
 .acc.open .acc-chev{transform:rotate(180deg);color:var(--green);}
 .acc-body{max-height:0;overflow:hidden;transition:max-height .32s ease;}
@@ -76,7 +77,13 @@ select:disabled{opacity:0.4;background:var(--bg3);}
 .gi-soon{font-size:11px;color:var(--text4);}
 .back-btn{background:none;border:none;color:var(--text2);font-size:14px;cursor:pointer;font-family:inherit;padding:6px 0;margin-bottom:6px;}
 .cat-title{font-size:19px;font-weight:600;margin-bottom:16px;}
-.static-field{min-height:44px;padding:10px 12px;border:1px solid var(--border2);border-radius:10px;background:var(--bg3);color:var(--text1);font-size:15px;display:flex;align-items:center;}
+.static-field{min-height:44px;padding:10px 12px;border:1px solid var(--border2);border-radius:10px;background:var(--bg3);color:var(--text1);font-size:15px;display:flex;align-items:center;gap:7px;font-weight:500;}
+.fs-pin{display:inline-flex;color:var(--green-dark);}
+.fs-pin svg{width:16px;height:16px;}
+.form-hero{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.fh-icon{width:44px;height:44px;flex-shrink:0;border-radius:12px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;}
+.fh-icon svg{width:23px;height:23px;}
+.fh-title{font-size:19px;font-weight:600;color:var(--text1);}
 .pick-title{font-size:18px;font-weight:600;margin:6px 0 14px;}
 .site-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .site-pick{display:flex;align-items:center;gap:12px;padding:15px 14px;border:1px solid var(--border2);border-radius:12px;background:var(--bg2);cursor:pointer;font-family:inherit;text-align:left;transition:transform .12s,border-color .2s,background .2s;}
@@ -407,6 +414,8 @@ function accordionHtml(){
     const open=expandedGroup===g;
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
     const readyN=keys.filter(k=>TYPES[k].ready).length;
+    const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].time).length;
+    const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
     const grid=keys.map(k=>{const t=TYPES[k];
       return t.ready
         ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon">${KIND_ICON[t.kind]}</span><span class="gi-label">${t.label}</span></button>`
@@ -416,6 +425,7 @@ function accordionHtml(){
       <button class="acc-head" onclick="toggleGroup('${g}')">
         <span class="acc-icon">${GROUP_ICON[g]}</span>
         <span class="acc-tw"><span class="acc-name">${g}</span><span class="acc-count">${readyN}개 항목</span></span>
+        ${dlBadge}
         ${CHEV_DOWN}
       </button>
       <div class="acc-body"><div class="item-grid">${grid}</div></div>
@@ -449,8 +459,9 @@ window.openType=function(k){
   curType=k;navView='form';
   $('nav-area').style.display='none';
   $('form-area').style.display='block';
-  $('form-site').textContent=selSite||'-';
-  $('form-header').innerHTML=`<button class="back-btn" onclick="backToBrowse()">← ${TYPES[k].group}</button><div class="cat-title">${TYPES[k].label}</div>`;
+  const t=TYPES[k];
+  $('form-site').innerHTML='<span class="fs-pin">'+PIN_ICON+'</span>'+(selSite||'-');
+  $('form-header').innerHTML=`<button class="back-btn" onclick="backToBrowse()">← ${t.group}</button><div class="form-hero"><span class="fh-icon">${KIND_ICON[t.kind]}</span><span class="fh-title">${t.label}</span></div>`;
   syncPeriodLabel();
   onContextChange();
   history.pushState({view:'form'},'');
