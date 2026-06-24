@@ -394,6 +394,14 @@ function deadlineOf(typeKey){
   if(r.mode==='time'&&r.time)return new Date(r.date+'T'+r.time+':00');
   return new Date(r.date+'T23:59:59');
 }
+const WEEKDAY=['일','월','화','수','목','금','토'];
+function fmtDeadline(r){
+  if(!r||!r.date)return '';
+  const [y,m,d]=r.date.split('-').map(Number);
+  const wd=WEEKDAY[new Date(y,m-1,d).getDay()];
+  const tail=(r.mode==='time'&&r.time)?`${Number(r.time.split(':')[0])}시${r.time.split(':')[1]}분`:'종일';
+  return `마감일: ${m}/${d}(${wd}) ${tail}`;
+}
 function expectedSlots(typeKey,site,date){
   const t=TYPES[typeKey];
   if(t.kind==='approval')return[];
@@ -467,7 +475,7 @@ function accordionHtml(){
     const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
     const grid=keys.map(k=>{const t=TYPES[k];
       const dr=DEADLINES[k];
-      const dlTag=(dr&&dr.date)?`<span class="gi-dl">마감 ${Number(dr.date.split('-')[1])}/${Number(dr.date.split('-')[2])} ${dr.mode==='time'&&dr.time?dr.time:'종일'}</span>`:'';
+      const dlTag=(dr&&dr.date)?`<span class="gi-dl">${fmtDeadline(dr)}</span>`:'';
       return t.ready
         ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span>${dlTag}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
         : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span></span><span class="gi-soon">준비중</span></div>`;
@@ -568,7 +576,7 @@ function renderDeadlineBanner(slots){
   else if(dl&&dl.getTime()-Date.now()<6*36e5){cls='dl-soon';pill='마감 임박';}
   else{cls='dl-open';pill=done>0?`진행 ${done}/${slots.length}`:'미제출';}
   const r=DEADLINES[curType];
-  const dlText=dl?(r&&r.mode==='time'?`마감 ${dl.getMonth()+1}/${dl.getDate()} ${String(dl.getHours()).padStart(2,'0')}:${String(dl.getMinutes()).padStart(2,'0')}`:`마감 ${dl.getMonth()+1}/${dl.getDate()} 종일`):'마감 미설정';
+  const dlText=dl?fmtDeadline(r):'마감 미설정';
   $('deadline-banner').innerHTML=`<span>${dlText}</span><span class="dl-pill ${cls}">${pill}</span>`;
 }
 function buildSlot(slot){
@@ -798,11 +806,11 @@ function renderDeadlineSettings(){
   $('deadline-settings').innerHTML=keys.map(k=>{
     const t=TYPES[k],r=DEADLINES[k]||{};
     const mode=r.mode||'allday';
-    const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)"/>`:'';
+    const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)" onclick="this.showPicker&&this.showPicker()"/>`:'';
     return `<div class="dl-item">
       <div class="dl-item-name">${t.label}<span class="dl-item-grp">${t.group}</span></div>
       <div class="dl-item-ctl">
-        <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)"/>
+        <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)" onclick="this.showPicker&&this.showPicker()"/>
         <select onchange="setDlMode('${k}',this.value)">
           <option value="allday"${mode==='allday'?' selected':''}>종일</option>
           <option value="time"${mode==='time'?' selected':''}>시간</option>
