@@ -133,6 +133,12 @@ textarea{resize:vertical;min-height:64px;}
 .slot-name{font-size:14px;font-weight:600;}
 .badge-done{font-size:11px;font-weight:600;color:var(--blue);display:inline-flex;align-items:center;gap:3px;}
 .badge-done i{font-size:13px;}
+.new-tag{display:inline-flex;align-items:center;font-size:10px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:99px;vertical-align:middle;letter-spacing:.3px;}
+.ir-new{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;}
+.redo-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 12px;border:.5px solid var(--blue-border);border-radius:8px;background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.redo-btn:hover{background:#d9e9fa;}
+.lock-note{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:12px;color:var(--text4);}
+.lock-note i{font-size:14px;}
 .appr-dl{font-size:12px;font-weight:600;color:var(--red);display:flex;align-items:center;gap:5px;}
 .hp{background:var(--card);border:.5px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;}
 .hp-head{font-size:12px;font-weight:600;color:var(--text2);background:#fafaf8;padding:8px 12px;border-bottom:.5px solid var(--border);}
@@ -374,7 +380,7 @@ textarea{resize:vertical;min-height:64px;}
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 // 테스트 프로젝트(onjung-test) 연결됨. 운영 전환 시 운영 프로젝트 config로 교체하세요.
@@ -516,8 +522,8 @@ window.addEventListener('popstate',e=>applyState(e.state));
 
 async function updateHomeBadge(){
   try{
-    const snap=await getDocs(query(collection(db,'records'),where('status','==','pending')));
-    let n=0;snap.forEach(d=>{if(d.data().kind==='approval')n++;});
+    const snap=await getDocs(query(collection(db,'records'),where('viewed','==',false)));
+    const n=snap.size;
     const b=$('home-badge-admin');if(b){b.style.display=n>0?'inline-flex':'none';b.textContent=n;}
   }catch(e){}
 }
@@ -696,6 +702,9 @@ function buildSlot(slot){
     if(t.kind==='photo')inner=`<img class="thumb" src="${rec.photoURLs[0]}" onclick="openModal('${rec.photoURLs[0]}')"/>`;
     else if(t.kind==='file')inner=`<div class="file-line"><i class="ti ti-paperclip"></i> <a href="${rec.fileURL}" target="_blank">${rec.fileName||'첨부파일'}</a></div>`;
     else if(t.kind==='form')inner=`<div class="file-line">${t.fields.map(f=>`${f.label}: <b>${rec.form?rec.form[f.key]??'-':'-'}</b>`).join(' · ')}</div>`;
+    inner+=rec.viewed
+      ? `<div class="lock-note"><i class="ti ti-lock"></i> 관리자 확인 완료 · 수정 불가</div>`
+      : `<button class="redo-btn" onclick="redoSlot('${slot}')"><i class="ti ti-refresh"></i> 다시 올리기</button>`;
   }else{
     if(t.kind==='photo')inner=`<label class="btn-upload${st.preview?' has':''}"><i class="ti ti-camera"></i><span>${st.preview?'사진 변경':'사진 추가'}</span><input type="file" accept="image/*" onchange="onPick('${slot}',this)"/></label>${st.preview?`<img class="thumb" src="${st.preview}"/>`:''}`;
     else if(t.kind==='file')inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:'파일 첨부 (엑셀·PDF·사진 등 모든 형식)'}</span><input type="file" onchange="onPick('${slot}',this)"/></label>`;
@@ -705,6 +714,7 @@ function buildSlot(slot){
     <div class="slot-head"><span class="slot-name">${slot}</span>${done?`<span class="badge-done"><i class="ti ti-circle-check"></i> 제출완료 · ${fmtWhen(rec.submittedAt)}</span>`:''}</div>
     ${inner}</div>`;
 }
+window.redoSlot=function(slot){slotState[slot]={};renderSubmitBody();updateSubmitBtn();};
 window.onPick=function(slot,input){
   const f=input.files[0];if(!f)return;
   slotState[slot]=slotState[slot]||{};
@@ -749,7 +759,7 @@ window.submitSlots=async function(){
     $('btn-submit').textContent=`${slot} 제출 중... (${done+1}/${targets.length})`;
     try{
       const st=slotState[slot];
-      const base={type:curType,kind:t.kind,manager,site,period,slot,submittedAt:new Date().toISOString(),status:'submitted'};
+      const base={type:curType,kind:t.kind,manager,site,period,slot,submittedAt:new Date().toISOString(),status:'submitted',viewed:false};
       const docId=`${curType}__${sani(site)}__${period}__${sani(slot)}`;
       if(t.kind==='photo'){
         const blob=await compressImage(st.file);
@@ -779,7 +789,7 @@ async function loadMyApprovals(){
   const manager=cMgr();
   const q=query(collection(db,'records'),where('type','==',curType),where('manager','==',manager));
   const snap=await getDocs(q);slotState.__list=[];
-  snap.forEach(d=>slotState.__list.push(d.data()));
+  snap.forEach(d=>slotState.__list.push({id:d.id,...d.data()}));
   slotState.__list.sort((a,b)=>(b.submittedAt||'').localeCompare(a.submittedAt||''));
 }
 function renderApprovalSubmit(){
@@ -794,12 +804,24 @@ function renderApprovalSubmit(){
     const stCls=rr.status==='approved'?'st-approved':rr.status==='rejected'?'st-rejected':'st-pending';
     const stTxt=rr.status==='approved'?'승인':rr.status==='rejected'?'반려':'대기';
     const file=rr.fileURL?`<a href="${rr.fileURL}" target="_blank"><i class="ti ti-paperclip"></i> ${rr.fileName||'첨부파일'}</a>`:(rr.form&&rr.form.title||t.label);
+    const canEdit=rr.status==='pending'&&rr.viewed===false;
+    const foot=canEdit
+      ? `<button class="redo-btn" style="margin-top:10px;" onclick="cancelApproval('${rr.id}')"><i class="ti ti-trash"></i> 취소하고 다시 제출</button>`
+      : (rr.viewed?`<div class="lock-note"><i class="ti ti-lock"></i> 관리자 확인 완료 · 수정 불가</div>`:'');
     return `<div class="appr-card"><div class="appr-top"><div><div class="appr-title">${file}</div>
       <div class="appr-meta">${rr.site} · 제출 ${fmtWhen(rr.submittedAt)}${rr.status==='rejected'&&rr.rejectReason?' · 반려사유: '+rr.rejectReason:''}</div></div>
-      <span class="status-pill ${stCls}">${stTxt}</span></div></div>`;
+      <span class="status-pill ${stCls}">${stTxt}</span></div>${foot}</div>`;
   }).join('')||'<div class="empty">제출 내역이 없습니다</div>';
   $('submit-body').innerHTML=(site?form:'<div class="empty">사업장을 먼저 선택하세요</div>')+`<div class="section-title">내 제출 내역</div>${list}`;
 }
+window.cancelApproval=async function(id){
+  if(!confirm('이 제출을 취소(삭제)할까요? 다시 첨부해 제출할 수 있어요.'))return;
+  showLoading('취소 중...');
+  try{
+    await deleteDoc(doc(db,'records',id));
+    hideLoading();toast('취소했습니다');await loadMyApprovals();await loadSiteDone(cSite());renderApprovalSubmit();
+  }catch(e){hideLoading();toast('취소 실패: '+e.message,true);}
+};
 window.onApprFile=function(input){apprFile=input.files[0]||null;renderApprovalSubmit();};
 window.submitApproval=async function(){
   const t=TYPES[curType],manager=cMgr(),site=cSite();
@@ -812,7 +834,7 @@ window.submitApproval=async function(){
     const sref=ref(storage,`records/${curType}/${period}/${sani(site)}/${uid}.${ext}`);
     await withTimeout(uploadBytes(sref,apprFile),60000,'업로드');
     const url=await withTimeout(getDownloadURL(sref),10000,'URL');
-    await setDoc(doc(db,'records',`${curType}__${sani(site)}__${uid}`),{type:curType,kind:'approval',manager,site,period,fileURL:url,fileName:apprFile.name,status:'pending',submittedAt:new Date().toISOString()});
+    await setDoc(doc(db,'records',`${curType}__${sani(site)}__${uid}`),{type:curType,kind:'approval',manager,site,period,fileURL:url,fileName:apprFile.name,status:'pending',viewed:false,submittedAt:new Date().toISOString()});
     apprFile=null;
     hideLoading();toast('제출 완료!');await loadMyApprovals();await loadSiteDone(site);renderApprovalSubmit();
   }catch(e){hideLoading();toast('제출 실패: '+e.message,true);}
@@ -837,7 +859,7 @@ window.loadAdmin=async function(){
     adminCache={};adminRecords=[];
     for(const p of [date,month]){
       const snap=await getDocs(query(collection(db,'records'),where('period','==',p)));
-      snap.forEach(d=>{const r=d.data();adminCache[`${r.type}|${r.site}|${r.period}|${r.slot||'_'}`]=r;adminRecords.push(r);});
+      snap.forEach(d=>{const r=d.data();r.id=d.id;adminCache[`${r.type}|${r.site}|${r.period}|${r.slot||'_'}`]=r;adminRecords.push(r);});
     }
     renderMatrix(date);
     await renderApprovalQueue();
@@ -862,12 +884,15 @@ function renderMatrix(date){
         const rs=bySite[site],mgr=rs[0].manager||'';
         const slots=rs.map(r=>r.slot).filter(s=>s&&s!=='기본');
         const slotTxt=slots.length?' · '+slots.join(', '):'';
+        const isNew=rs.some(r=>r.viewed===false);
         return `<div class="rec-row" onclick="showDetail('${k}','${site.replace(/'/g,"\\'")}','${period}')">
-          <span class="rec-site">${site}</span><span class="rec-mgr">${mgr}${slotTxt}</span><span class="rec-cnt">${rs.length}건</span></div>`;
+          <span class="rec-site">${site}${isNew?' <span class="new-tag">NEW</span>':''}</span><span class="rec-mgr">${mgr}${slotTxt}</span><span class="rec-cnt">${rs.length}건</span></div>`;
       }).join(''):'<div class="rec-empty">아직 받은 내역이 없습니다</div>';
+      const newN=recs.filter(r=>r.viewed===false).length;
       html+=`<div class="item-rec">
         <button class="item-rec-head" onclick="toggleRec('${id}')">
           <span class="ir-name">${t.label}</span>
+          ${newN?`<span class="ir-new">${newN}</span>`:''}
           <span class="ir-cnt">${sites.length?sites.length+'개 사업장 · '+recs.length+'건':'없음'}</span>
           <i class="ti ti-chevron-down ir-chev"></i>
         </button>
@@ -887,13 +912,14 @@ window.showDetail=function(typeKey,site,period){
     const r=adminCache[`${typeKey}|${site}|${period}|${s}`];
     let v='<span class="cell-none">미제출</span>';
     if(r){
-      if(t.kind==='photo')v=`<img class="thumb" style="max-height:120px;" src="${r.photoURLs[0]}" onclick="openModal('${r.photoURLs[0]}')"/>`;
-      else if(t.kind==='file')v=`<i class="ti ti-paperclip"></i> <a href="${r.fileURL}" target="_blank">${r.fileName||'첨부'}</a>`;
+      if(t.kind==='photo')v=`<img class="thumb" style="max-height:120px;" src="${r.photoURLs[0]}" onclick="markViewed('${r.id}');openModal('${r.photoURLs[0]}')"/>${r.viewed===false?' <span class="new-tag">NEW</span>':''}`;
+      else if(t.kind==='file')v=`<i class="ti ti-paperclip"></i> <a href="${r.fileURL}" target="_blank" onclick="markViewed('${r.id}')">${r.fileName||'첨부'}</a>${r.viewed===false?' <span class="new-tag">NEW</span>':''}`;
       else if(t.kind==='form')v=t.fields.map(f=>`${f.label}: <b>${r.form?r.form[f.key]??'-':'-'}</b>`).join(' · ');
     }
     return `<div class="dl-row"><span class="nm">${s}</span><span style="grid-column:2/4;text-align:left;">${v}</span></div>`;
   }).join('');
   $('detail-wrap').innerHTML=`<div class="setting-block" style="margin-top:12px;"><div style="font-weight:600;margin-bottom:8px;">${site} · ${t.label} (${period})</div>${rows}</div>`;
+  if(t.kind==='form')slots.forEach(s=>{const r=adminCache[`${typeKey}|${site}|${period}|${s}`];if(r&&r.viewed===false)markViewed(r.id);});
 };
 async function renderApprovalQueue(){
   const snap=await getDocs(query(collection(db,'records'),where('status','==','pending')));
@@ -902,22 +928,30 @@ async function renderApprovalQueue(){
   if(!items.length){$('approval-wrap').innerHTML='<div class="empty">대기 중인 결재가 없습니다</div>';return;}
   $('approval-wrap').innerHTML=items.map(r=>{
     const t=TYPES[r.type];
-    const file=r.fileURL?`<a href="${r.fileURL}" target="_blank"><i class="ti ti-paperclip"></i> ${r.fileName||'첨부파일'}</a>`:(r.form&&r.form.title||'');
+    const isNew=r.viewed===false;
+    const file=r.fileURL?`<a href="${r.fileURL}" target="_blank" onclick="markViewed('${r.id}')"><i class="ti ti-paperclip"></i> ${r.fileName||'첨부파일'}</a>`:(r.form&&r.form.title||'');
     return `<div class="appr-card"><div class="appr-top">
-      <div><div class="appr-title">${t.label}</div>
+      <div><div class="appr-title">${t.label}${isNew?' <span class="new-tag">NEW</span>':''}</div>
       <div class="appr-meta">${r.site} · ${r.manager} · 제출 ${fmtWhen(r.submittedAt)}</div></div></div>
       ${file?`<div class="appr-reason">${file}</div>`:''}
       <div class="appr-actions"><button class="btn-green" onclick="decide('${r.id}','approved')"><i class="ti ti-check"></i> 승인</button>
       <button class="btn-red" onclick="decide('${r.id}','rejected')"><i class="ti ti-x"></i> 반려</button></div></div>`;
   }).join('');
 }
+window.markViewed=async function(id){
+  try{
+    await updateDoc(doc(db,'records',id),{viewed:true,viewedAt:new Date().toISOString()});
+    const rec=adminRecords.find(r=>r.id===id);if(rec)rec.viewed=true;
+    updateHomeBadge();
+  }catch(e){console.error('열람 표시 실패',e);}
+};
 window.decide=async function(id,status){
   let reason='';
   if(status==='rejected'){reason=prompt('반려 사유를 입력하세요');if(reason===null)return;reason=reason||'';}
   showLoading('처리 중...');
   try{
-    await updateDoc(doc(db,'records',id),{status,approvedBy:'관리자',approvedAt:new Date().toISOString(),rejectReason:reason});
-    hideLoading();toast(status==='approved'?'승인 완료':'반려 처리');await renderApprovalQueue();
+    await updateDoc(doc(db,'records',id),{status,viewed:true,viewedAt:new Date().toISOString(),approvedBy:'관리자',approvedAt:new Date().toISOString(),rejectReason:reason});
+    hideLoading();toast(status==='approved'?'승인 완료':'반려 처리');updateHomeBadge();await renderApprovalQueue();
   }catch(e){hideLoading();toast('처리 실패: '+e.message,true);}
 };
 
