@@ -174,6 +174,13 @@ textarea{resize:vertical;min-height:64px;}
 .dl-row .nm{font-size:13px;font-weight:500;}
 .dl-row input[type=time]{width:auto;}
 .dl-row input[type=number]{width:90px;}
+.dl-item{padding:11px 0;border-bottom:.5px solid #f0f0ec;}
+.dl-item:last-child{border-bottom:none;}
+.dl-item-name{font-size:13px;font-weight:500;margin-bottom:7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dl-item-grp{font-size:11px;color:var(--text4);font-weight:400;}
+.dl-item-ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.dl-item-ctl input[type=date]{width:auto;flex:1;min-width:140px;}
+.dl-item-ctl select,.dl-item-ctl input[type=time]{width:auto;}
 
 /* ── 오버레이 ── */
 .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.78);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -380,11 +387,10 @@ function cMgr(){return $('manager-select').value;}
 function cSite(){return $('site-select').value;}
 function cDate(){return $('date-input').value;}
 function periodOf(typeKey,date){const t=TYPES[typeKey];if(t.period==='monthly')return date.slice(0,7);return date;}
-function deadlineOf(typeKey,date){
-  const t=TYPES[typeKey],rule=DEADLINES[typeKey];if(!rule||!rule.time)return null;
-  const[h,mi]=rule.time.split(':').map(Number);
-  if(t.period==='monthly'){const[y,m]=date.slice(0,7).split('-').map(Number);return new Date(y,m,rule.day||5,h,mi);}
-  const d=new Date(date+'T00:00:00');d.setHours(h,mi,0,0);return d;
+function deadlineOf(typeKey){
+  const r=DEADLINES[typeKey];if(!r||!r.date)return null;
+  if(r.mode==='time'&&r.time)return new Date(r.date+'T'+r.time+':00');
+  return new Date(r.date+'T23:59:59');
 }
 function expectedSlots(typeKey,site,date){
   const t=TYPES[typeKey];
@@ -455,7 +461,7 @@ function accordionHtml(){
     const open=expandedGroup===g;
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
     const readyN=keys.filter(k=>TYPES[k].ready).length;
-    const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].time).length;
+    const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].date).length;
     const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
     const grid=keys.map(k=>{const t=TYPES[k];
       return t.ready
@@ -557,7 +563,8 @@ function renderDeadlineBanner(slots){
   else if(dl&&Date.now()>dl.getTime()){cls='dl-late';pill='마감 지남';}
   else if(dl&&dl.getTime()-Date.now()<6*36e5){cls='dl-soon';pill='마감 임박';}
   else{cls='dl-open';pill=done>0?`진행 ${done}/${slots.length}`:'미제출';}
-  const dlText=dl?`마감 ${dl.getMonth()+1}/${dl.getDate()} ${String(dl.getHours()).padStart(2,'0')}:${String(dl.getMinutes()).padStart(2,'0')}`:'마감 미설정';
+  const r=DEADLINES[curType];
+  const dlText=dl?(r&&r.mode==='time'?`마감 ${dl.getMonth()+1}/${dl.getDate()} ${String(dl.getHours()).padStart(2,'0')}:${String(dl.getMinutes()).padStart(2,'0')}`:`마감 ${dl.getMonth()+1}/${dl.getDate()} 종일`):'마감 미설정';
   $('deadline-banner').innerHTML=`<span>${dlText}</span><span class="dl-pill ${cls}">${pill}</span>`;
 }
 function buildSlot(slot){
@@ -783,15 +790,26 @@ window.decide=async function(id,status){
 
 // ── 설정 ──
 function renderDeadlineSettings(){
-  const keys=Object.keys(TYPES).filter(k=>TYPES[k].kind!=='approval');
+  const keys=Object.keys(TYPES);
   $('deadline-settings').innerHTML=keys.map(k=>{
     const t=TYPES[k],r=DEADLINES[k]||{};
-    const dayInput=t.period==='monthly'?`<input type="number" min="1" max="28" placeholder="익월N일" value="${r.day||''}" onchange="setDl('${k}','day',this.value)" title="익월 며칠"/>`:'<span></span>';
-    return `<div class="dl-row"><span class="nm">${t.label}<span style="color:var(--text4);font-size:11px;"> · ${t.period==='monthly'?'월':'매일'}</span></span>
-      ${dayInput}<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)"/></div>`;
+    const mode=r.mode||'allday';
+    const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)"/>`:'';
+    return `<div class="dl-item">
+      <div class="dl-item-name">${t.label}<span class="dl-item-grp">${t.group}</span></div>
+      <div class="dl-item-ctl">
+        <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)"/>
+        <select onchange="setDlMode('${k}',this.value)">
+          <option value="allday"${mode==='allday'?' selected':''}>종일</option>
+          <option value="time"${mode==='time'?' selected':''}>시간</option>
+        </select>
+        ${timeInput}
+      </div>
+    </div>`;
   }).join('')+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장</button>`;
 }
-window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=field==='day'?Number(val):val;};
+window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=val;};
+window.setDlMode=function(k,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k].mode=val;renderDeadlineSettings();};
 window.saveDl=async function(){showLoading('저장 중...');try{await saveDeadlines();hideLoading();toast('마감기한 저장 완료!');}catch(e){hideLoading();toast('저장 실패: '+e.message,true);}};
 function renderSiteSummary(){
   const sites=Object.keys(SITE_MEALS).length,mgrs=MANAGERS.length;
