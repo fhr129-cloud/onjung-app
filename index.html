@@ -89,7 +89,7 @@ textarea{resize:vertical;min-height:64px;}
 .acc-icon{width:38px;height:38px;border-radius:10px;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .acc-tw{flex:1;text-align:left;min-width:0;}
 .acc-name{font-size:15px;font-weight:600;display:block;}
-.acc-count{font-size:12px;color:var(--text4);}
+.acc-count{font-size:12px;color:var(--text4);display:block;margin-top:4px;}
 .acc-chev{font-size:18px;color:var(--text4);transition:transform .2s;flex-shrink:0;}
 .acc.open .acc-chev{transform:rotate(180deg);}
 .acc-body{display:none;border-top:.5px solid var(--border);background:#fbfcfd;}
@@ -187,10 +187,16 @@ textarea{resize:vertical;min-height:64px;}
 .dl-item-ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .dl-item-ctl input[type=date]{width:auto;flex:1;min-width:140px;}
 .dl-item-ctl select,.dl-item-ctl input[type=time]{width:auto;}
-.dl-cat{margin-bottom:16px;}
-.dl-cat:last-child{margin-bottom:0;}
-.dl-cat-head{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:4px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
-.dl-cat-head i{font-size:16px;}
+.dl-cat{background:var(--card);border:.5px solid var(--border);border-radius:11px;margin-bottom:8px;overflow:hidden;}
+.dl-cat-head{width:100%;display:flex;align-items:center;gap:8px;padding:13px 15px;background:none;border:none;cursor:pointer;font-family:inherit;}
+.dl-cat-head>i:first-child{font-size:17px;color:var(--blue);}
+.dlc-name{flex:1;text-align:left;font-size:14px;font-weight:600;}
+.dlc-cnt{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;}
+.dlc-chev{font-size:16px;color:var(--text4);transition:transform .2s;}
+.dl-cat-body{display:none;border-top:.5px solid var(--border);padding:4px 15px 10px;}
+.dl-cat-body.open{display:block;}
+.gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:99px;}
+.gi-done i{font-size:13px;}
 .cat-sec{margin-bottom:18px;}
 .cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue);margin:0 0 9px 2px;}
 .cat-sec-head i{font-size:18px;}
@@ -400,7 +406,7 @@ let curType=Object.keys(TYPES).find(k=>TYPES[k].ready)||'jichul';
 let slotState={};
 let adminCache={};
 let adminRecords=[];
-let expandedGroup=null, navView='site', selSite=null, curScreen='home';
+let expandedGroup=null, navView='site', selSite=null, curScreen='home', siteDone={};
 
 // ── 공통 유틸 ──
 const todayStr=(()=>{const n=new Date();return new Date(n.getTime()+9*36e5).toISOString().slice(0,10);})();
@@ -497,11 +503,12 @@ function accordionHtml(){
     const open=expandedGroup===g;
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
     const readyN=keys.filter(k=>TYPES[k].ready).length;
-    const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].date).length;
+    const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].date&&!siteDone[k]).length;
     const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
     const grid=keys.map(k=>{const t=TYPES[k];
       const dr=DEADLINES[k];
-      const dlTag=(dr&&dr.date)?`<span class="gi-dl">${fmtDeadline(dr)}</span>`:'';
+      let dlTag='';
+      if(dr&&dr.date)dlTag=siteDone[k]?`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료</span>`:`<span class="gi-dl">${fmtDeadline(dr)}</span>`;
       return t.ready
         ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span>${dlTag}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
         : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span></span><span class="gi-soon">준비중</span></div>`;
@@ -530,7 +537,30 @@ function renderNav(){
   }
   nav.innerHTML=`<div class="site-bar"><span class="sb-left"><i class="ti ti-map-pin"></i>${selSite}</span><button class="site-change" onclick="changeSite()">변경</button></div>`+accordionHtml();
 }
-window.pickSite=function(s){selSite=s;$('site-select').value=s;expandedGroup=null;go({screen:'submit',view:'browse'});};
+window.pickSite=async function(s){
+  selSite=s;$('site-select').value=s;expandedGroup=null;
+  showLoading('불러오는 중...');await loadSiteDone(s);hideLoading();
+  go({screen:'submit',view:'browse'});
+};
+async function loadSiteDone(site){
+  siteDone={};
+  if(!site)return;
+  const month=todayStr.slice(0,7);
+  const recs=[];
+  try{
+    for(const p of [todayStr,month]){
+      const snap=await getDocs(query(collection(db,'records'),where('site','==',site),where('period','==',p)));
+      snap.forEach(d=>recs.push(d.data()));
+    }
+  }catch(e){console.error('현황 로드 실패',e);}
+  Object.keys(TYPES).forEach(k=>{
+    const t=TYPES[k];if(!t.ready||t.kind==='approval')return;
+    const period=t.period==='monthly'?month:todayStr;
+    const slots=expectedSlots(k,site,todayStr);
+    if(!slots.length){siteDone[k]=true;return;}
+    siteDone[k]=slots.every(s=>recs.some(r=>r.type===k&&r.period===period&&r.slot===s));
+  });
+}
 window.changeSite=function(){history.back();};
 window.toggleGroup=function(g){
   expandedGroup=expandedGroup===g?null:g;renderNav();
@@ -615,7 +645,7 @@ function buildSlot(slot){
     else if(t.kind==='form')inner=`<div class="file-line">${t.fields.map(f=>`${f.label}: <b>${rec.form?rec.form[f.key]??'-':'-'}</b>`).join(' · ')}</div>`;
   }else{
     if(t.kind==='photo')inner=`<label class="btn-upload${st.preview?' has':''}"><i class="ti ti-camera"></i><span>${st.preview?'사진 변경':'사진 추가'}</span><input type="file" accept="image/*" onchange="onPick('${slot}',this)"/></label>${st.preview?`<img class="thumb" src="${st.preview}"/>`:''}`;
-    else if(t.kind==='file')inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:'파일 첨부 (PDF·이미지)'}</span><input type="file" onchange="onPick('${slot}',this)"/></label>`;
+    else if(t.kind==='file')inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:'파일 첨부 (엑셀·PDF·사진 등 모든 형식)'}</span><input type="file" onchange="onPick('${slot}',this)"/></label>`;
     else if(t.kind==='form')inner=`<div class="form-fields">${t.fields.map(f=>`<input type="${f.type==='number'?'number':'text'}" placeholder="${f.label}" value="${st.form&&st.form[f.key]!=null?st.form[f.key]:''}" oninput="onForm('${slot}','${f.key}',this.value)"/>`).join('')}</div>`;
   }
   return `<div class="slot-row${done?' done':''}">
@@ -687,6 +717,7 @@ window.submitSlots=async function(){
     }catch(e){toast(`${slot} 실패 — ${e.message&&e.message.includes('시간 초과')?'네트워크 불안정, 다시 시도':'다시 시도해 주세요'}`,true);console.error(e);}
   }
   renderSubmitBody();
+  if(done>0)await loadSiteDone(site);
   toast(`제출 완료! (${done}건)`);
 };
 
@@ -841,12 +872,13 @@ function renderDeadlineSettings(){
   GROUP_ORDER.forEach(g=>{
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
     if(!keys.length)return;
-    html+=`<div class="dl-cat"><div class="dl-cat-head"><i class="ti ${GROUP_ICON[g]}"></i> ${g}</div>`;
-    keys.forEach(k=>{
+    const setN=keys.filter(k=>DEADLINES[k]&&DEADLINES[k].date).length;
+    const id='dlc-'+sani(g);
+    const items=keys.map(k=>{
       const t=TYPES[k],r=DEADLINES[k]||{};
       const mode=r.mode||'allday';
       const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)" onclick="this.showPicker&&this.showPicker()"/>`:'';
-      html+=`<div class="dl-item">
+      return `<div class="dl-item">
         <div class="dl-item-name">${t.label}</div>
         <div class="dl-item-ctl">
           <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)" onclick="this.showPicker&&this.showPicker()"/>
@@ -857,13 +889,21 @@ function renderDeadlineSettings(){
           ${timeInput}
         </div>
       </div>`;
-    });
-    html+=`</div>`;
+    }).join('');
+    html+=`<div class="dl-cat">
+      <button class="dl-cat-head" onclick="toggleDlCat('${id}')">
+        <i class="ti ${GROUP_ICON[g]}"></i><span class="dlc-name">${g}</span>
+        ${setN?`<span class="dlc-cnt">${setN}</span>`:''}
+        <i class="ti ti-chevron-down dlc-chev"></i>
+      </button>
+      <div class="dl-cat-body" id="${id}">${items}</div>
+    </div>`;
   });
   $('deadline-settings').innerHTML=html+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장</button>`;
 }
 window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=val;};
 window.setDlMode=function(k,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k].mode=val;renderDeadlineSettings();};
+window.toggleDlCat=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.dlc-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 window.saveDl=async function(){showLoading('저장 중...');try{await saveDeadlines();hideLoading();toast('마감기한 저장 완료!');}catch(e){hideLoading();toast('저장 실패: '+e.message,true);}};
 function renderSiteSummary(){
   const sites=Object.keys(SITE_MEALS).length,mgrs=MANAGERS.length;
