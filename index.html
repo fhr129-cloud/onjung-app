@@ -468,8 +468,7 @@ window.onManagerChange=async function(){
   const mgr=MANAGERS.find(m=>m.name===name);
   (mgr.sites||[]).forEach(s=>siteSel.appendChild(new Option(s,s)));
   hint.textContent=`담당 사업장 ${mgr.sites.length}곳`;
-  if(mgr.sites.length===1){selSite=mgr.sites[0];siteSel.value=selSite;navView='browse';}
-  else navView='site';
+  navView='site';
   renderNav();
 };
 window.onContextChange=onContextChange;
