@@ -99,7 +99,9 @@ textarea{resize:vertical;min-height:64px;}
 .grid-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border:.5px solid var(--border2);border-radius:11px;background:#fafaf8;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s,background .15s;width:100%;}
 .grid-item:hover{border-color:var(--blue);background:#fff;}
 .gi-icon{width:34px;height:34px;border-radius:9px;background:#fff;border:.5px solid var(--border);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.gi-label{flex:1;font-size:14px;font-weight:500;}
+.gi-tw{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0;}
+.gi-label{font-size:14px;font-weight:500;}
+.gi-dl{align-self:flex-start;font-size:11px;font-weight:600;color:#fff;background:var(--red);padding:2px 8px;border-radius:99px;}
 .gi-arrow{color:var(--text4);font-size:16px;flex-shrink:0;}
 .grid-item.soon{cursor:default;opacity:.6;}
 .grid-item.soon:hover{border-color:var(--border2);background:#fafaf8;}
@@ -464,9 +466,11 @@ function accordionHtml(){
     const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].date).length;
     const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
     const grid=keys.map(k=>{const t=TYPES[k];
+      const dr=DEADLINES[k];
+      const dlTag=(dr&&dr.date)?`<span class="gi-dl">마감 ${Number(dr.date.split('-')[1])}/${Number(dr.date.split('-')[2])} ${dr.mode==='time'&&dr.time?dr.time:'종일'}</span>`:'';
       return t.ready
-        ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-label">${t.label}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
-        : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-label">${t.label}</span><span class="gi-soon">준비중</span></div>`;
+        ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span>${dlTag}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
+        : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span></span><span class="gi-soon">준비중</span></div>`;
     }).join('');
     return `<div class="acc${open?' open':''}" id="acc-${g}">
       <button class="acc-head" onclick="toggleGroup('${g}')">
