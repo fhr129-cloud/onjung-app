@@ -128,10 +128,20 @@ textarea{resize:vertical;min-height:64px;}
 
 /* ── 슬롯 ── */
 .slot-row{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.slot-row.done{background:#fafdf8;border-color:var(--green-border);}
+.slot-row.done{background:#f5f9fd;border-color:var(--blue-border);}
 .slot-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .slot-name{font-size:14px;font-weight:600;}
-.badge-done{font-size:11px;font-weight:600;color:var(--green);}
+.badge-done{font-size:11px;font-weight:600;color:var(--blue);display:inline-flex;align-items:center;gap:3px;}
+.badge-done i{font-size:13px;}
+.appr-dl{font-size:12px;font-weight:600;color:var(--red);display:flex;align-items:center;gap:5px;}
+.hp{background:var(--card);border:.5px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;}
+.hp-head{font-size:12px;font-weight:600;color:var(--text2);background:#fafaf8;padding:8px 12px;border-bottom:.5px solid var(--border);}
+.hl-row{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:.5px solid #f5f5f3;font-size:13px;}
+.hl-row:last-child{border-bottom:none;}
+.hl-slot{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 7px;border-radius:99px;flex-shrink:0;}
+.hl-val{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hl-val a{color:var(--blue);}
+.hl-when{font-size:11px;color:var(--text4);white-space:nowrap;flex-shrink:0;}
 .btn-upload{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:1px dashed var(--blue-border);border-radius:10px;background:var(--blue-light);color:var(--blue);font-size:13px;font-weight:500;cursor:pointer;}
 .btn-upload.has{border-style:solid;}
 .btn-upload input{display:none;}
@@ -195,7 +205,7 @@ textarea{resize:vertical;min-height:64px;}
 .dlc-chev{font-size:16px;color:var(--text4);transition:transform .2s;}
 .dl-cat-body{display:none;border-top:.5px solid var(--border);padding:4px 15px 10px;}
 .dl-cat-body.open{display:block;}
-.gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:99px;}
+.gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 8px;border-radius:99px;}
 .gi-done i{font-size:13px;}
 .cat-sec{margin-bottom:18px;}
 .cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue);margin:0 0 9px 2px;}
@@ -369,19 +379,19 @@ const TYPES={
   sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
   monthclose:{label:'월말결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
 
-  jichul:    {label:'지출결의서', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  jichul:    {label:'지출결의서', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'제목',type:'text'},{key:'amount',label:'금액(원)',type:'number'},{key:'reason',label:'사유',type:'textarea'}]},
-  taxreq:    {label:'세금계산서 발행요청', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  taxreq:    {label:'세금계산서 발행요청', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'거래처',type:'text'},{key:'amount',label:'금액(원)',type:'number'},{key:'reason',label:'내용',type:'textarea'}]},
-  daypay:    {label:'일용직 지급요청', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  daypay:    {label:'일용직 지급요청', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'성명',type:'text'},{key:'amount',label:'지급액(원)',type:'number'},{key:'reason',label:'근무내역',type:'textarea'}]},
-  vacation:  {label:'휴가신청', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  vacation:  {label:'휴가신청', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'휴가종류',type:'text'},{key:'reason',label:'기간 및 사유',type:'textarea'}]},
-  gyeongjo:  {label:'경조사 지급요청', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  gyeongjo:  {label:'경조사 지급요청', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'경조사 종류',type:'text'},{key:'amount',label:'요청액(원)',type:'number'},{key:'reason',label:'내용',type:'textarea'}]},
-  accident:  {label:'사고경위서', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  accident:  {label:'사고경위서', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'사고명',type:'text'},{key:'reason',label:'발생 일시 및 경위',type:'textarea'}]},
-  resign:    {label:'사직서', group:'결재문서', kind:'approval', period:'adhoc', ready:true,
+  resign:    {label:'사직서', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'사직 예정일',type:'text'},{key:'reason',label:'사유',type:'textarea'}]},
 
   anjeon:    {label:'안전보건교육 실시 보고서', group:'운영관리', kind:'file', period:'monthly', slot:'single', ready:true},
@@ -391,10 +401,10 @@ const TYPES={
   bozonsik:  {label:'보존식 업로드', group:'운영관리', kind:'photo', period:'daily', slot:'meals', ready:false},
   bizplan:   {label:'사업계획서', group:'운영관리', kind:'file', period:'monthly', slot:'single', ready:true},
 };
-const GROUP_ORDER=['결산관리','결재문서','운영관리'];
+const GROUP_ORDER=['결산관리','결재요청','운영관리'];
 const MATRIX_TYPES=Object.keys(TYPES).filter(k=>TYPES[k].ready&&TYPES[k].kind!=='approval');
 
-const GROUP_ICON={'결산관리':'ti-receipt-2','결재문서':'ti-file-check','운영관리':'ti-clipboard-list'};
+const GROUP_ICON={'결산관리':'ti-receipt-2','결재요청':'ti-file-check','운영관리':'ti-clipboard-list'};
 const KIND_ICON={photo:'ti-camera',file:'ti-file-text',form:'ti-pencil',approval:'ti-checkbox'};
 
 // 사업장/매니저 데이터(테스트용 기본값). config/settings 문서가 있으면 그 값으로 덮어씀.
@@ -406,7 +416,7 @@ let curType=Object.keys(TYPES).find(k=>TYPES[k].ready)||'jichul';
 let slotState={};
 let adminCache={};
 let adminRecords=[];
-let expandedGroup=null, navView='site', selSite=null, curScreen='home', siteDone={};
+let expandedGroup=null, navView='site', selSite=null, curScreen='home', siteDone={}, siteDoneAt={}, itemHistory=[], apprFile=null;
 
 // ── 공통 유틸 ──
 const todayStr=(()=>{const n=new Date();return new Date(n.getTime()+9*36e5).toISOString().slice(0,10);})();
@@ -434,6 +444,7 @@ function fmtDeadline(r){
   const tail=(r.mode==='time'&&r.time)?`${Number(r.time.split(':')[0])}시${r.time.split(':')[1]}분`:'종일';
   return `마감일: ${m}/${d}(${wd}) ${tail}`;
 }
+function fmtWhen(iso){if(!iso)return '';const d=new Date(iso);return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function expectedSlots(typeKey,site,date){
   const t=TYPES[typeKey];
   if(t.kind==='approval')return[];
@@ -508,7 +519,7 @@ function accordionHtml(){
     const grid=keys.map(k=>{const t=TYPES[k];
       const dr=DEADLINES[k];
       let dlTag='';
-      if(dr&&dr.date)dlTag=siteDone[k]?`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료</span>`:`<span class="gi-dl">${fmtDeadline(dr)}</span>`;
+      if(dr&&dr.date)dlTag=siteDone[k]?`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료${siteDoneAt[k]?' '+fmtWhen(siteDoneAt[k]):''}</span>`:`<span class="gi-dl">${fmtDeadline(dr)}</span>`;
       return t.ready
         ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span>${dlTag}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
         : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span></span><span class="gi-soon">준비중</span></div>`;
@@ -543,7 +554,7 @@ window.pickSite=async function(s){
   go({screen:'submit',view:'browse'});
 };
 async function loadSiteDone(site){
-  siteDone={};
+  siteDone={};siteDoneAt={};
   if(!site)return;
   const month=todayStr.slice(0,7);
   const recs=[];
@@ -553,12 +564,20 @@ async function loadSiteDone(site){
       snap.forEach(d=>recs.push(d.data()));
     }
   }catch(e){console.error('현황 로드 실패',e);}
+  function latest(list){const ts=list.map(r=>r.submittedAt).filter(Boolean).sort();return ts.length?ts[ts.length-1]:'';}
   Object.keys(TYPES).forEach(k=>{
-    const t=TYPES[k];if(!t.ready||t.kind==='approval')return;
+    const t=TYPES[k];if(!t.ready)return;
+    if(t.kind==='approval'){
+      const list=recs.filter(r=>r.type===k&&r.kind==='approval');
+      siteDone[k]=list.length>0;if(siteDone[k])siteDoneAt[k]=latest(list);
+      return;
+    }
     const period=t.period==='monthly'?month:todayStr;
     const slots=expectedSlots(k,site,todayStr);
     if(!slots.length){siteDone[k]=true;return;}
-    siteDone[k]=slots.every(s=>recs.some(r=>r.type===k&&r.period===period&&r.slot===s));
+    const list=recs.filter(r=>r.type===k&&r.period===period);
+    siteDone[k]=slots.every(s=>list.some(r=>r.slot===s));
+    if(siteDone[k])siteDoneAt[k]=latest(list);
   });
 }
 window.changeSite=function(){history.back();};
@@ -604,9 +623,10 @@ async function onContextChange(){
 }
 async function loadSlotRecords(){
   const site=cSite(),date=cDate(),period=periodOf(curType,date);
-  const q=query(collection(db,'records'),where('type','==',curType),where('site','==',site),where('period','==',period));
-  const snap=await getDocs(q);
-  snap.forEach(d=>{const r=d.data();slotState[r.slot]=slotState[r.slot]||{};slotState[r.slot].record=r;});
+  const snap=await getDocs(query(collection(db,'records'),where('type','==',curType),where('site','==',site)));
+  itemHistory=[];
+  snap.forEach(d=>{const r=d.data();itemHistory.push(r);if(r.period===period){slotState[r.slot]=slotState[r.slot]||{};slotState[r.slot].record=r;}});
+  itemHistory.sort((a,b)=>(b.period||'').localeCompare(a.period||'')||(b.submittedAt||'').localeCompare(a.submittedAt||''));
 }
 
 // ── 제출 화면 ──
@@ -619,9 +639,28 @@ function renderSubmitBody(){
   const slots=expectedSlots(curType,site,date);
   if(!slots.length){body.innerHTML='<div class="empty">이 날짜에 해당 항목 제출 대상이 없습니다</div>';return;}
   renderDeadlineBanner(slots);
-  body.innerHTML=slots.map(s=>buildSlot(s)).join('');
+  body.innerHTML=slots.map(s=>buildSlot(s)).join('')+renderHistory();
   wrap.style.display='block';
   updateSubmitBtn();
+}
+function renderHistory(){
+  const t=TYPES[curType],curPeriod=periodOf(curType,cDate());
+  const past=itemHistory.filter(r=>r.period!==curPeriod);
+  if(!past.length)return '';
+  const byP={};past.forEach(r=>{(byP[r.period]=byP[r.period]||[]).push(r);});
+  const periods=Object.keys(byP).sort((a,b)=>b.localeCompare(a));
+  const rows=periods.map(p=>{
+    const lines=byP[p].sort((a,b)=>(a.slot||'').localeCompare(b.slot||'')).map(r=>{
+      let val='-';
+      if(t.kind==='photo'&&r.photoURLs)val=`<a href="${r.photoURLs[0]}" target="_blank">사진 보기</a>`;
+      else if(t.kind==='file'&&r.fileURL)val=`<a href="${r.fileURL}" target="_blank">${r.fileName||'파일'}</a>`;
+      else if(t.kind==='form'&&r.form)val=t.fields.map(f=>`${f.label}: ${r.form[f.key]??'-'}`).join(', ');
+      const slot=(r.slot&&r.slot!=='기본')?`<span class="hl-slot">${r.slot}</span>`:'';
+      return `<div class="hl-row">${slot}<span class="hl-val">${val}</span><span class="hl-when">제출 ${fmtWhen(r.submittedAt)}</span></div>`;
+    }).join('');
+    return `<div class="hp"><div class="hp-head">${p}</div>${lines}</div>`;
+  }).join('');
+  return `<div class="section-title">지난 제출 이력</div>${rows}`;
 }
 function renderDeadlineBanner(slots){
   const date=cDate(),dl=deadlineOf(curType,date);
@@ -649,7 +688,7 @@ function buildSlot(slot){
     else if(t.kind==='form')inner=`<div class="form-fields">${t.fields.map(f=>`<input type="${f.type==='number'?'number':'text'}" placeholder="${f.label}" value="${st.form&&st.form[f.key]!=null?st.form[f.key]:''}" oninput="onForm('${slot}','${f.key}',this.value)"/>`).join('')}</div>`;
   }
   return `<div class="slot-row${done?' done':''}">
-    <div class="slot-head"><span class="slot-name">${slot}</span>${done?'<span class="badge-done">● 제출완료</span>':''}</div>
+    <div class="slot-head"><span class="slot-name">${slot}</span>${done?`<span class="badge-done"><i class="ti ti-circle-check"></i> 제출완료 · ${fmtWhen(rec.submittedAt)}</span>`:''}</div>
     ${inner}</div>`;
 }
 window.onPick=function(slot,input){
@@ -731,35 +770,37 @@ async function loadMyApprovals(){
 }
 function renderApprovalSubmit(){
   const t=TYPES[curType],site=cSite();
-  let form=`<div class="setting-block"><div style="font-weight:600;margin-bottom:10px;">새 ${t.label} 상신</div><div class="form-fields">`;
-  t.fields.forEach(f=>{
-    if(f.type==='textarea')form+=`<textarea id="ap-${f.key}" placeholder="${f.label}" rows="3"></textarea>`;
-    else form+=`<input type="${f.type==='number'?'number':'text'}" id="ap-${f.key}" placeholder="${f.label}"/>`;
-  });
-  form+=`</div><button class="btn-primary" style="width:100%;margin-top:12px;" onclick="submitApproval()">상신하기</button></div>`;
-  const list=(slotState.__list||[]).map(r=>{
-    const stCls=r.status==='approved'?'st-approved':r.status==='rejected'?'st-rejected':'st-pending';
-    const stTxt=r.status==='approved'?'승인':r.status==='rejected'?'반려':'대기';
-    const amt=r.form&&r.form.amount?Number(r.form.amount).toLocaleString()+'원':'';
-    return `<div class="appr-card"><div class="appr-top"><div><div class="appr-title">${r.form&&r.form.title||t.label}</div>
-      <div class="appr-meta">${r.site} · ${(r.submittedAt||'').slice(0,10)}${r.status==='rejected'&&r.rejectReason?' · 반려사유: '+r.rejectReason:''}</div></div>
-      <div style="text-align:right;"><div class="appr-amt">${amt}</div><span class="status-pill ${stCls}" style="margin-top:4px;display:inline-block;">${stTxt}</span></div></div></div>`;
+  const r=DEADLINES[curType],dlText=r&&r.date?fmtDeadline(r):'';
+  const form=`<div class="setting-block">
+    <div style="font-weight:600;margin-bottom:4px;">새 ${t.label} 상신</div>
+    ${dlText?`<div class="appr-dl"><i class="ti ti-alarm"></i> ${dlText}</div>`:''}
+    <label class="btn-upload${apprFile?' has':''}" style="margin-top:10px;"><i class="ti ti-file-upload"></i><span>${apprFile?apprFile.name:'파일 첨부 (엑셀·PDF·사진 등 모든 형식)'}</span><input type="file" onchange="onApprFile(this)"/></label>
+    <button class="btn-primary" style="width:100%;margin-top:12px;" onclick="submitApproval()">상신하기</button></div>`;
+  const list=(slotState.__list||[]).map(rr=>{
+    const stCls=rr.status==='approved'?'st-approved':rr.status==='rejected'?'st-rejected':'st-pending';
+    const stTxt=rr.status==='approved'?'승인':rr.status==='rejected'?'반려':'대기';
+    const file=rr.fileURL?`<a href="${rr.fileURL}" target="_blank"><i class="ti ti-paperclip"></i> ${rr.fileName||'첨부파일'}</a>`:(rr.form&&rr.form.title||t.label);
+    return `<div class="appr-card"><div class="appr-top"><div><div class="appr-title">${file}</div>
+      <div class="appr-meta">${rr.site} · 제출 ${fmtWhen(rr.submittedAt)}${rr.status==='rejected'&&rr.rejectReason?' · 반려사유: '+rr.rejectReason:''}</div></div>
+      <span class="status-pill ${stCls}">${stTxt}</span></div></div>`;
   }).join('')||'<div class="empty">상신 내역이 없습니다</div>';
   $('submit-body').innerHTML=(site?form:'<div class="empty">사업장을 먼저 선택하세요</div>')+`<div class="section-title">내 상신 내역</div>${list}`;
 }
+window.onApprFile=function(input){apprFile=input.files[0]||null;renderApprovalSubmit();};
 window.submitApproval=async function(){
   const t=TYPES[curType],manager=cMgr(),site=cSite();
   if(!site){toast('사업장을 선택하세요',true);return;}
-  const form={};let ok=true;
-  t.fields.forEach(f=>{const v=$('ap-'+f.key).value.trim();if(!v&&f.key==='title')ok=false;form[f.key]=v;});
-  if(!ok){toast('제목을 입력하세요',true);return;}
+  if(!apprFile){toast('파일을 첨부하세요',true);return;}
   showLoading('상신 중...');
   try{
-    const uid=Date.now().toString(36);
-    const docId=`${curType}__${sani(site)}__${uid}`;
-    await setDoc(doc(db,'records',docId),{type:curType,kind:'approval',manager,site,period:todayStr.slice(0,7),
-      form,status:'pending',submittedAt:new Date().toISOString()});
-    hideLoading();toast('상신 완료!');await loadMyApprovals();renderApprovalSubmit();
+    const uid=Date.now().toString(36),period=todayStr.slice(0,7);
+    const ext=(apprFile.name.split('.').pop()||'dat').toLowerCase();
+    const sref=ref(storage,`records/${curType}/${period}/${sani(site)}/${uid}.${ext}`);
+    await withTimeout(uploadBytes(sref,apprFile),60000,'업로드');
+    const url=await withTimeout(getDownloadURL(sref),10000,'URL');
+    await setDoc(doc(db,'records',`${curType}__${sani(site)}__${uid}`),{type:curType,kind:'approval',manager,site,period,fileURL:url,fileName:apprFile.name,status:'pending',submittedAt:new Date().toISOString()});
+    apprFile=null;
+    hideLoading();toast('상신 완료!');await loadMyApprovals();await loadSiteDone(site);renderApprovalSubmit();
   }catch(e){hideLoading();toast('상신 실패: '+e.message,true);}
 };
 
@@ -846,12 +887,12 @@ async function renderApprovalQueue(){
   items.sort((a,b)=>(a.submittedAt||'').localeCompare(b.submittedAt||''));
   if(!items.length){$('approval-wrap').innerHTML='<div class="empty">대기 중인 결재가 없습니다</div>';return;}
   $('approval-wrap').innerHTML=items.map(r=>{
-    const t=TYPES[r.type],amt=r.form&&r.form.amount?Number(r.form.amount).toLocaleString()+'원':'';
+    const t=TYPES[r.type];
+    const file=r.fileURL?`<a href="${r.fileURL}" target="_blank"><i class="ti ti-paperclip"></i> ${r.fileName||'첨부파일'}</a>`:(r.form&&r.form.title||'');
     return `<div class="appr-card"><div class="appr-top">
-      <div><div class="appr-title">${t.label} · ${r.form&&r.form.title||''}</div>
-      <div class="appr-meta">${r.site} · ${r.manager} · ${(r.submittedAt||'').slice(0,10)}</div></div>
-      <div class="appr-amt">${amt}</div></div>
-      ${r.form&&r.form.reason?`<div class="appr-reason">${r.form.reason}</div>`:''}
+      <div><div class="appr-title">${t.label}</div>
+      <div class="appr-meta">${r.site} · ${r.manager} · 제출 ${fmtWhen(r.submittedAt)}</div></div></div>
+      ${file?`<div class="appr-reason">${file}</div>`:''}
       <div class="appr-actions"><button class="btn-green" onclick="decide('${r.id}','approved')"><i class="ti ti-check"></i> 승인</button>
       <button class="btn-red" onclick="decide('${r.id}','rejected')"><i class="ti ti-x"></i> 반려</button></div></div>`;
   }).join('');
