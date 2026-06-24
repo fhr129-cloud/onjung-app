@@ -205,6 +205,20 @@ textarea{resize:vertical;min-height:64px;}
 .dlc-chev{font-size:16px;color:var(--text4);transition:transform .2s;}
 .dl-cat-body{display:none;border-top:.5px solid var(--border);padding:4px 15px 10px;}
 .dl-cat-body.open{display:block;}
+.sm-row{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px;}
+.sm-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.sm-name{font-size:14px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sm-actions{display:flex;gap:6px;flex-shrink:0;}
+.btnxs{padding:5px 9px;font-size:12px;}
+.sm-mgr{display:flex;align-items:center;gap:8px;margin-top:9px;}
+.sm-mgr>span{font-size:12px;color:var(--text3);flex-shrink:0;}
+.sm-mgr select{flex:1;}
+.sm-edit{margin-top:11px;padding-top:11px;border-top:.5px solid var(--border);display:flex;flex-direction:column;gap:9px;}
+.sm-meals{display:flex;flex-direction:column;gap:7px;}
+.meal-day{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.md-label{font-size:12px;font-weight:600;color:var(--text2);width:32px;flex-shrink:0;}
+.md-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 9px;border:.5px solid var(--border);border-radius:99px;cursor:pointer;user-select:none;}
+.md-chip input{margin:0;width:auto;}
 .gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 8px;border-radius:99px;}
 .gi-done i{font-size:13px;}
 .cat-sec{margin-bottom:18px;}
@@ -911,7 +925,7 @@ window.decide=async function(id,status){
 function renderDeadlineSettings(){
   let html='';
   GROUP_ORDER.forEach(g=>{
-    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
+    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].kind!=='approval');
     if(!keys.length)return;
     const setN=keys.filter(k=>DEADLINES[k]&&DEADLINES[k].date).length;
     const id='dlc-'+sani(g);
@@ -946,14 +960,93 @@ window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][fi
 window.setDlMode=function(k,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k].mode=val;renderDeadlineSettings();};
 window.toggleDlCat=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.dlc-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 window.saveDl=async function(){showLoading('저장 중...');try{await saveDeadlines();hideLoading();toast('마감기한 저장 완료!');}catch(e){hideLoading();toast('저장 실패: '+e.message,true);}};
-function renderSiteSummary(){
-  const sites=Object.keys(SITE_MEALS).length,mgrs=MANAGERS.length;
-  $('site-summary').innerHTML=`<div style="font-size:14px;margin-bottom:12px;">현재 등록: 사업장 <b>${sites}</b>곳 · 매니저 <b>${mgrs}</b>명</div>
-    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:6px;">데이터 가져오기 (JSON 붙여넣기)</div>
-    <div class="sub-hint" style="margin-bottom:8px;">보존식 앱 "내보내기"에서 복사한 내용을 붙여넣고 저장하면 매니저·사업장 명단이 이 명단으로 갱신됩니다.</div>
-    <textarea id="import-json" placeholder='{"managers":[...],"siteMeals":{...}}' style="height:140px;font-family:monospace;font-size:12px;"></textarea>
-    <button class="btn-primary" style="width:100%;margin-top:10px;" onclick="importConfig()"><i class="ti ti-download"></i> 가져와서 저장</button>`;
+// ── 사업장 · 매니저 관리 ──
+const MEALS4=['조식','중식','석식','야식'];
+const DAYS3=['평일','토요일','일요일'];
+let addSiteOpen=false, editSite=null;
+function siteManager(site){const m=MANAGERS.find(x=>x.sites.includes(site));return m?m.name:'';}
+function reassignSite(site,newMgr){
+  MANAGERS.forEach(m=>{m.sites=m.sites.filter(s=>s!==site);});
+  let m=MANAGERS.find(x=>x.name===newMgr);
+  if(!m){m={name:newMgr,sites:[]};MANAGERS.push(m);}
+  if(!m.sites.includes(site))m.sites.push(site);
 }
+function renameSite(oldN,newN){
+  if(oldN===newN)return;
+  SITE_MEALS[newN]=SITE_MEALS[oldN];delete SITE_MEALS[oldN];
+  MANAGERS.forEach(m=>{m.sites=m.sites.map(s=>s===oldN?newN:s);});
+}
+function deleteSite(name){delete SITE_MEALS[name];MANAGERS.forEach(m=>{m.sites=m.sites.filter(s=>s!==name);});}
+function mealCheckHtml(prefix,meals){
+  return DAYS3.map(day=>{
+    const sel=(meals&&meals[day])||[];
+    return `<div class="meal-day"><span class="md-label">${day}</span>`+
+      MEALS4.map(m=>`<label class="md-chip"><input type="checkbox" data-day="${day}" value="${m}" ${sel.includes(m)?'checked':''}/>${m}</label>`).join('')+`</div>`;
+  }).join('');
+}
+function readMeals(containerId){
+  const meals={};DAYS3.forEach(d=>meals[d]=[]);
+  document.querySelectorAll('#'+containerId+' input[type=checkbox]:checked').forEach(cb=>{meals[cb.dataset.day].push(cb.value);});
+  return meals;
+}
+function esc(s){return String(s).replace(/'/g,"\\'");}
+function renderSiteSummary(){
+  const sites=Object.keys(SITE_MEALS).sort((a,b)=>a.localeCompare(b,'ko'));
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;">
+    <div style="font-size:13px;">사업장 <b>${sites.length}</b>곳 · 매니저 <b>${MANAGERS.length}</b>명</div>
+    <button class="btn-secondary" onclick="toggleAddSite()"><i class="ti ti-plus"></i> 사업장 추가</button></div>`;
+  if(addSiteOpen){
+    html+=`<div class="sm-edit" style="border-top:none;padding-top:0;margin-bottom:10px;">
+      <input type="text" id="as-name" placeholder="사업장명"/>
+      <input type="text" id="as-mgr" list="mgr-list" placeholder="담당 매니저 이름 (없으면 새로 생성)"/>
+      <datalist id="mgr-list">${MANAGERS.map(m=>`<option value="${m.name}"></option>`).join('')}</datalist>
+      <div class="sm-meals" id="as-meals">${mealCheckHtml('as',null)}</div>
+      <div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleAddSite()">취소</button><button class="btn-primary" style="flex:1;" onclick="commitAddSite()">추가</button></div>
+    </div>`;
+  }
+  html+=sites.map(site=>{
+    const curMgr=siteManager(site),editing=editSite===site;
+    let row=`<div class="sm-row">
+      <div class="sm-top"><span class="sm-name">${site}</span>
+        <div class="sm-actions"><button class="btn-secondary btnxs" onclick="toggleEditSite('${esc(site)}')"><i class="ti ti-edit"></i></button><button class="btn-secondary btnxs" onclick="removeSiteUI('${esc(site)}')"><i class="ti ti-trash"></i></button></div></div>
+      <div class="sm-mgr"><span>담당</span><select onchange="reassignSiteUI('${esc(site)}',this.value)">${MANAGERS.map(m=>`<option value="${m.name}"${m.name===curMgr?' selected':''}>${m.name}</option>`).join('')}</select></div>`;
+    if(editing){
+      row+=`<div class="sm-edit"><input type="text" id="es-name" value="${site}"/><div class="sm-meals" id="es-meals">${mealCheckHtml('es',SITE_MEALS[site])}</div><div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleEditSite('${esc(site)}')">취소</button><button class="btn-primary" style="flex:1;" onclick="commitEditSite('${esc(site)}')">저장</button></div></div>`;
+    }
+    return row+`</div>`;
+  }).join('');
+  html+=`<button class="btn-primary" style="width:100%;margin-top:12px;" onclick="saveSiteConfig()"><i class="ti ti-device-floppy"></i> 변경사항 서버 저장</button>`;
+  html+=`<div class="sub-hint" style="margin-top:16px;">대량 변경은 JSON 가져오기로도 가능합니다.</div>
+    <textarea id="import-json" placeholder='{"managers":[...],"siteMeals":{...}}' style="height:110px;font-family:monospace;font-size:12px;margin-top:6px;"></textarea>
+    <button class="btn-secondary" style="width:100%;margin-top:8px;" onclick="importConfig()"><i class="ti ti-download"></i> JSON 가져와서 저장</button>`;
+  $('site-summary').innerHTML=html;
+}
+window.toggleAddSite=function(){addSiteOpen=!addSiteOpen;editSite=null;renderSiteSummary();};
+window.toggleEditSite=function(s){editSite=editSite===s?null:s;addSiteOpen=false;renderSiteSummary();};
+window.commitAddSite=function(){
+  const name=$('as-name').value.trim(),mgr=$('as-mgr').value.trim();
+  if(!name){toast('사업장명을 입력하세요',true);return;}
+  if(SITE_MEALS[name]){toast('이미 있는 사업장입니다',true);return;}
+  if(!mgr){toast('담당 매니저를 입력하세요',true);return;}
+  SITE_MEALS[name]=readMeals('as-meals');reassignSite(name,mgr);
+  addSiteOpen=false;refreshManagerDropdown();renderSiteSummary();toast('추가됨 — 아래 "서버 저장"을 눌러 반영하세요');
+};
+window.commitEditSite=function(old){
+  const newName=$('es-name').value.trim();if(!newName){toast('사업장명을 입력하세요',true);return;}
+  if(newName!==old&&SITE_MEALS[newName]){toast('이미 있는 사업장명입니다',true);return;}
+  const meals=readMeals('es-meals');
+  if(newName!==old)renameSite(old,newName);
+  SITE_MEALS[newName]=meals;editSite=null;renderSiteSummary();toast('수정됨 — 아래 "서버 저장"을 눌러 반영하세요');
+};
+window.removeSiteUI=function(s){if(!confirm(s+' 사업장을 삭제할까요?'))return;deleteSite(s);refreshManagerDropdown();renderSiteSummary();toast('삭제됨 — 아래 "서버 저장"을 눌러 반영하세요');};
+window.reassignSiteUI=function(s,mgr){reassignSite(s,mgr);renderSiteSummary();toast(s+' 담당 → '+mgr+' (서버 저장 필요)');};
+window.saveSiteConfig=async function(){
+  showLoading('저장 중...');
+  try{
+    await setDoc(doc(db,'config','settings'),{managers:MANAGERS,siteMeals:SITE_MEALS,updatedAt:new Date().toISOString()});
+    refreshManagerDropdown();hideLoading();toast('서버에 저장되었습니다');
+  }catch(e){hideLoading();toast('저장 실패: '+e.message,true);}
+};
 function refreshManagerDropdown(){
   const mSel=$('manager-select');const cur=mSel.value;
   mSel.innerHTML='<option value="">이름 선택</option>';
