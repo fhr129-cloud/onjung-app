@@ -92,13 +92,17 @@ textarea{resize:vertical;min-height:64px;}
 .acc-count{font-size:12px;color:var(--text4);}
 .acc-chev{font-size:18px;color:var(--text4);transition:transform .2s;flex-shrink:0;}
 .acc.open .acc-chev{transform:rotate(180deg);}
-.acc-body{display:none;border-top:.5px solid var(--border);}
+.acc-body{display:none;border-top:.5px solid var(--border);background:#fbfcfd;}
 .acc.open .acc-body{display:block;}
+.acc.open .acc-head{background:var(--blue-light);}
+.acc.open .acc-icon{background:var(--blue);color:#fff;}
 .dl-badge{min-width:20px;height:20px;padding:0 6px;margin-right:2px;border-radius:99px;background:var(--red);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
-.item-grid{display:flex;flex-direction:column;gap:8px;padding:10px 14px 14px;}
-.grid-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border:.5px solid var(--border2);border-radius:11px;background:#fafaf8;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s,background .15s;width:100%;}
-.grid-item:hover{border-color:var(--blue);background:#fff;}
-.gi-icon{width:34px;height:34px;border-radius:9px;background:#fff;border:.5px solid var(--border);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.item-grid{display:flex;flex-direction:column;gap:0;padding:4px 14px 8px 18px;position:relative;}
+.item-grid::before{content:'';position:absolute;left:22px;top:6px;bottom:14px;width:2px;background:var(--blue-border);border-radius:2px;opacity:.6;}
+.grid-item{display:flex;align-items:center;gap:11px;padding:11px 12px 11px 14px;border:none;border-bottom:.5px solid #eceae6;border-radius:0;background:transparent;cursor:pointer;font-family:inherit;text-align:left;transition:background .15s;width:100%;}
+.grid-item:last-child{border-bottom:none;}
+.grid-item:hover{background:#eef4fb;border-radius:8px;}
+.gi-icon{width:28px;height:28px;border-radius:7px;background:#fff;border:.5px solid var(--border);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
 .gi-tw{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0;}
 .gi-label{font-size:14px;font-weight:500;}
 .gi-dl{align-self:flex-start;font-size:11px;font-weight:600;color:#fff;background:var(--red);padding:2px 8px;border-radius:99px;}
@@ -183,6 +187,27 @@ textarea{resize:vertical;min-height:64px;}
 .dl-item-ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .dl-item-ctl input[type=date]{width:auto;flex:1;min-width:140px;}
 .dl-item-ctl select,.dl-item-ctl input[type=time]{width:auto;}
+.dl-cat{margin-bottom:16px;}
+.dl-cat:last-child{margin-bottom:0;}
+.dl-cat-head{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:4px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.dl-cat-head i{font-size:16px;}
+.cat-sec{margin-bottom:18px;}
+.cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue);margin:0 0 9px 2px;}
+.cat-sec-head i{font-size:18px;}
+.item-rec{background:var(--card);border:.5px solid var(--border);border-radius:11px;margin-bottom:8px;overflow:hidden;}
+.item-rec-head{width:100%;display:flex;align-items:center;gap:10px;padding:13px 15px;background:none;border:none;cursor:pointer;font-family:inherit;}
+.ir-name{flex:1;text-align:left;font-size:14px;font-weight:500;}
+.ir-cnt{font-size:12px;color:var(--text3);white-space:nowrap;}
+.ir-chev{font-size:16px;color:var(--text4);transition:transform .2s;flex-shrink:0;}
+.item-rec-body{display:none;border-top:.5px solid var(--border);background:#fbfcfd;}
+.item-rec-body.open{display:block;}
+.rec-row{display:flex;align-items:center;gap:8px;padding:10px 15px;border-bottom:.5px solid #f0f0ec;cursor:pointer;}
+.rec-row:last-child{border-bottom:none;}
+.rec-row:hover{background:#eef4fb;}
+.rec-site{font-size:13px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rec-mgr{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%;}
+.rec-cnt{font-size:12px;font-weight:600;color:var(--blue);flex-shrink:0;}
+.rec-empty{padding:13px 15px;color:var(--text4);font-size:13px;}
 
 /* ── 오버레이 ── */
 .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.78);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -282,7 +307,7 @@ textarea{resize:vertical;min-height:64px;}
           <button class="btn-secondary" onclick="loadAdmin()"><i class="ti ti-refresh"></i> 조회</button>
           <span style="font-size:12px;color:var(--text4);margin-left:auto;" id="admin-updated"></span>
         </div>
-        <div class="grid-wrap" id="matrix-wrap"><div class="empty">날짜를 선택해 조회하세요</div></div>
+        <div id="matrix-wrap"><div class="empty">날짜를 선택해 조회하세요</div></div>
         <div id="detail-wrap"></div>
         <div class="section-title">결재함 (지출 · 휴가 · 경조사 등)</div>
         <div id="approval-wrap"><div class="empty">대기 중인 결재가 없습니다</div></div>
@@ -374,6 +399,7 @@ let DEADLINES={};
 let curType=Object.keys(TYPES).find(k=>TYPES[k].ready)||'jichul';
 let slotState={};
 let adminCache={};
+let adminRecords=[];
 let expandedGroup=null, navView='site', selSite=null, curScreen='home';
 
 // ── 공통 유틸 ──
@@ -722,10 +748,10 @@ window.loadAdmin=async function(){
   const month=date.slice(0,7);
   showLoading('불러오는 중...');
   try{
-    adminCache={};
+    adminCache={};adminRecords=[];
     for(const p of [date,month]){
       const snap=await getDocs(query(collection(db,'records'),where('period','==',p)));
-      snap.forEach(d=>{const r=d.data();adminCache[`${r.type}|${r.site}|${r.period}|${r.slot||'_'}`]=r;});
+      snap.forEach(d=>{const r=d.data();adminCache[`${r.type}|${r.site}|${r.period}|${r.slot||'_'}`]=r;adminRecords.push(r);});
     }
     renderMatrix(date);
     await renderApprovalQueue();
@@ -735,30 +761,39 @@ window.loadAdmin=async function(){
 };
 function renderMatrix(date){
   const month=date.slice(0,7);
-  let html='<table class="matrix"><thead><tr><th class="site">사업장</th>';
-  MATRIX_TYPES.forEach(k=>html+=`<th>${TYPES[k].label}</th>`);
-  html+='</tr></thead><tbody>';
-  Object.keys(SITE_MEALS).forEach(site=>{
-    html+=`<tr><td class="site">${site}</td>`;
-    MATRIX_TYPES.forEach(k=>{
+  let html='';
+  GROUP_ORDER.forEach(g=>{
+    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].ready&&TYPES[k].kind!=='approval');
+    if(!keys.length)return;
+    html+=`<div class="cat-sec"><div class="cat-sec-head"><i class="ti ${GROUP_ICON[g]}"></i> ${g}</div>`;
+    keys.forEach(k=>{
       const t=TYPES[k],period=t.period==='monthly'?month:date;
-      const slots=expectedSlots(k,site,date);
-      if(!slots.length){html+=`<td class="cell-na">-</td>`;return;}
-      const done=slots.filter(s=>adminCache[`${k}|${site}|${period}|${s}`]).length;
-      const dl=deadlineOf(k,date),late=dl&&Date.now()>dl.getTime();
-      let cls,sym;
-      if(done===slots.length){cls='cell-done';sym='O';}
-      else if(done>0){cls='cell-part';sym=`${done}/${slots.length}`;}
-      else if(late){cls='cell-late';sym='지연';}
-      else{cls='cell-none';sym='·';}
-      html+=`<td class="cell ${cls}" onclick="showDetail('${k}','${site}','${period}')">${sym}</td>`;
+      const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
+      const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
+      const sites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
+      const id='ir-'+sani(k);
+      const rows=sites.length?sites.map(site=>{
+        const rs=bySite[site],mgr=rs[0].manager||'';
+        const slots=rs.map(r=>r.slot).filter(s=>s&&s!=='기본');
+        const slotTxt=slots.length?' · '+slots.join(', '):'';
+        return `<div class="rec-row" onclick="showDetail('${k}','${site.replace(/'/g,"\\'")}','${period}')">
+          <span class="rec-site">${site}</span><span class="rec-mgr">${mgr}${slotTxt}</span><span class="rec-cnt">${rs.length}건</span></div>`;
+      }).join(''):'<div class="rec-empty">아직 받은 내역이 없습니다</div>';
+      html+=`<div class="item-rec">
+        <button class="item-rec-head" onclick="toggleRec('${id}')">
+          <span class="ir-name">${t.label}</span>
+          <span class="ir-cnt">${sites.length?sites.length+'개 사업장 · '+recs.length+'건':'없음'}</span>
+          <i class="ti ti-chevron-down ir-chev"></i>
+        </button>
+        <div class="item-rec-body" id="${id}">${rows}</div>
+      </div>`;
     });
-    html+='</tr>';
+    html+=`</div>`;
   });
-  html+='</tbody></table>';
-  $('matrix-wrap').innerHTML=html;
+  $('matrix-wrap').innerHTML=html||'<div class="empty">표시할 항목이 없습니다</div>';
   $('detail-wrap').innerHTML='';
 }
+window.toggleRec=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.ir-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 window.showDetail=function(typeKey,site,period){
   const t=TYPES[typeKey],date=$('admin-date').value;
   const slots=expectedSlots(typeKey,site,date);
@@ -802,23 +837,30 @@ window.decide=async function(id,status){
 
 // ── 설정 ──
 function renderDeadlineSettings(){
-  const keys=Object.keys(TYPES);
-  $('deadline-settings').innerHTML=keys.map(k=>{
-    const t=TYPES[k],r=DEADLINES[k]||{};
-    const mode=r.mode||'allday';
-    const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)" onclick="this.showPicker&&this.showPicker()"/>`:'';
-    return `<div class="dl-item">
-      <div class="dl-item-name">${t.label}<span class="dl-item-grp">${t.group}</span></div>
-      <div class="dl-item-ctl">
-        <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)" onclick="this.showPicker&&this.showPicker()"/>
-        <select onchange="setDlMode('${k}',this.value)">
-          <option value="allday"${mode==='allday'?' selected':''}>종일</option>
-          <option value="time"${mode==='time'?' selected':''}>시간</option>
-        </select>
-        ${timeInput}
-      </div>
-    </div>`;
-  }).join('')+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장</button>`;
+  let html='';
+  GROUP_ORDER.forEach(g=>{
+    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
+    if(!keys.length)return;
+    html+=`<div class="dl-cat"><div class="dl-cat-head"><i class="ti ${GROUP_ICON[g]}"></i> ${g}</div>`;
+    keys.forEach(k=>{
+      const t=TYPES[k],r=DEADLINES[k]||{};
+      const mode=r.mode||'allday';
+      const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)" onclick="this.showPicker&&this.showPicker()"/>`:'';
+      html+=`<div class="dl-item">
+        <div class="dl-item-name">${t.label}</div>
+        <div class="dl-item-ctl">
+          <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)" onclick="this.showPicker&&this.showPicker()"/>
+          <select onchange="setDlMode('${k}',this.value)">
+            <option value="allday"${mode==='allday'?' selected':''}>종일</option>
+            <option value="time"${mode==='time'?' selected':''}>시간</option>
+          </select>
+          ${timeInput}
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  $('deadline-settings').innerHTML=html+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장</button>`;
 }
 window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=val;};
 window.setDlMode=function(k,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k].mode=val;renderDeadlineSettings();};
