@@ -31,9 +31,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .home-ic.blue{background:var(--blue-light);color:var(--blue);}
 .home-ic.amber{background:var(--amber-light);color:var(--amber);}
 .home-ic.slate{background:#EEF0F2;color:#48566B;}
-.home-tw{flex:1;min-width:0;}
-.home-tw .lbl{font-size:15px;font-weight:600;}
-.home-tw .desc{font-size:12px;color:var(--text3);margin-top:2px;}
+.home-tw{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.home-tw .lbl{display:block;font-size:15px;font-weight:600;line-height:1.3;}
+.home-tw .desc{display:block;font-size:12px;color:var(--text3);line-height:1.3;}
 .home-btn .chev{font-size:18px;color:var(--text4);flex-shrink:0;}
 .home-badge{position:absolute;top:12px;right:40px;background:var(--red);color:#fff;font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;min-width:20px;text-align:center;display:none;align-items:center;justify-content:center;}
 
@@ -786,10 +786,10 @@ function renderApprovalSubmit(){
   const t=TYPES[curType],site=cSite();
   const r=DEADLINES[curType],dlText=r&&r.date?fmtDeadline(r):'';
   const form=`<div class="setting-block">
-    <div style="font-weight:600;margin-bottom:4px;">새 ${t.label} 상신</div>
+    <div style="font-weight:600;margin-bottom:4px;">새 ${t.label} 제출</div>
     ${dlText?`<div class="appr-dl"><i class="ti ti-alarm"></i> ${dlText}</div>`:''}
     <label class="btn-upload${apprFile?' has':''}" style="margin-top:10px;"><i class="ti ti-file-upload"></i><span>${apprFile?apprFile.name:'파일 첨부 (엑셀·PDF·사진 등 모든 형식)'}</span><input type="file" onchange="onApprFile(this)"/></label>
-    <button class="btn-primary" style="width:100%;margin-top:12px;" onclick="submitApproval()">상신하기</button></div>`;
+    <button class="btn-primary" style="width:100%;margin-top:12px;" onclick="submitApproval()">제출하기</button></div>`;
   const list=(slotState.__list||[]).map(rr=>{
     const stCls=rr.status==='approved'?'st-approved':rr.status==='rejected'?'st-rejected':'st-pending';
     const stTxt=rr.status==='approved'?'승인':rr.status==='rejected'?'반려':'대기';
@@ -797,15 +797,14 @@ function renderApprovalSubmit(){
     return `<div class="appr-card"><div class="appr-top"><div><div class="appr-title">${file}</div>
       <div class="appr-meta">${rr.site} · 제출 ${fmtWhen(rr.submittedAt)}${rr.status==='rejected'&&rr.rejectReason?' · 반려사유: '+rr.rejectReason:''}</div></div>
       <span class="status-pill ${stCls}">${stTxt}</span></div></div>`;
-  }).join('')||'<div class="empty">상신 내역이 없습니다</div>';
-  $('submit-body').innerHTML=(site?form:'<div class="empty">사업장을 먼저 선택하세요</div>')+`<div class="section-title">내 상신 내역</div>${list}`;
-}
+  }).join('')||'<div class="empty">제출 내역이 없습니다</div>';
+  $('submit-body').innerHTML=(site?form:'<div class="empty">사업장을 먼저 선택하세요</div>')+`<div class="section-title">내 제출 내역</div>${list}`;
 window.onApprFile=function(input){apprFile=input.files[0]||null;renderApprovalSubmit();};
 window.submitApproval=async function(){
   const t=TYPES[curType],manager=cMgr(),site=cSite();
   if(!site){toast('사업장을 선택하세요',true);return;}
   if(!apprFile){toast('파일을 첨부하세요',true);return;}
-  showLoading('상신 중...');
+  showLoading('제출 중...');
   try{
     const uid=Date.now().toString(36),period=todayStr.slice(0,7);
     const ext=(apprFile.name.split('.').pop()||'dat').toLowerCase();
@@ -814,9 +813,8 @@ window.submitApproval=async function(){
     const url=await withTimeout(getDownloadURL(sref),10000,'URL');
     await setDoc(doc(db,'records',`${curType}__${sani(site)}__${uid}`),{type:curType,kind:'approval',manager,site,period,fileURL:url,fileName:apprFile.name,status:'pending',submittedAt:new Date().toISOString()});
     apprFile=null;
-    hideLoading();toast('상신 완료!');await loadMyApprovals();await loadSiteDone(site);renderApprovalSubmit();
-  }catch(e){hideLoading();toast('상신 실패: '+e.message,true);}
-};
+    hideLoading();toast('제출 완료!');await loadMyApprovals();await loadSiteDone(site);renderApprovalSubmit();
+  }catch(e){hideLoading();toast('제출 실패: '+e.message,true);}
 
 // ── 관리자 잠금 ──
 window.unlockAdmin=function(){
