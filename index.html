@@ -133,6 +133,11 @@ textarea{resize:vertical;min-height:64px;}
 .pp-ic{font-size:18px;color:var(--blue);flex-shrink:0;}
 .pp-row select,.pp-row input[type=date]{width:auto;flex:0 0 auto;}
 .pp-suffix{font-size:14px;font-weight:600;color:var(--text1);}
+.pp-now{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-light);border:.5px solid var(--blue-border);border-radius:8px;padding:7px 11px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.pp-now:hover{background:#d9e9fa;}
+.shared-chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--amber);background:var(--amber-light);padding:2px 8px;border-radius:99px;vertical-align:middle;}
+.dl-clear{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:.5px solid var(--border);border-radius:8px;background:#fff;color:var(--text3);cursor:pointer;flex-shrink:0;}
+.dl-clear:hover{background:#f5f5f3;color:var(--red);}
 /* ── 업로드 항목 헤더 ── */
 .form-hero{display:flex;align-items:center;gap:13px;margin-bottom:16px;}
 .fh-icon{width:46px;height:46px;border-radius:12px;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;}
@@ -434,7 +439,7 @@ const ADMIN_PW='8770';
 
 // 항목 타입 엔진 (kind: photo|file|form|approval / period: daily|monthly|adhoc / slot: meals|single)
 const TYPES={
-  ilmagam:   {label:'일마감', group:'결산관리', kind:'file', period:'weekly', slot:'single', ready:true},
+  ilmagam:   {label:'일마감', group:'결산관리', kind:'file', period:'weekly', weekKind:'last', slot:'single', ready:true},
   junggan:   {label:'중간결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
   monthclose:{label:'월말결산', group:'결산관리', kind:'file', period:'monthly', prevMonth:true, slot:'single', ready:true},
   sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:false},
@@ -455,7 +460,7 @@ const TYPES={
               fields:[{key:'title',label:'사직 예정일',type:'text'},{key:'reason',label:'사유',type:'textarea'}]},
 
   anjeon:    {label:'안전보건교육 실시 보고서', group:'운영관리', kind:'file', period:'monthly', slot:'single', ready:true},
-  menu:      {label:'식단표 업로드', group:'운영관리', kind:'file', period:'monthly', slot:'single', ready:true},
+  menu:      {label:'식단표', group:'운영관리', kind:'file', period:'weekly', weekKind:'next', shared:true, slot:'single', ready:true},
   janban:    {label:'잔반 입력', group:'운영관리', kind:'form', period:'daily', slot:'meals', ready:true,
               fields:[{key:'amount',label:'잔반량(kg)',type:'number'}]},
   bozonsik:  {label:'보존식 업로드', group:'운영관리', kind:'photo', period:'daily', slot:'meals', ready:false},
@@ -492,17 +497,36 @@ function getMeals(site,date){return (SITE_MEALS[site]&&SITE_MEALS[site][getDayTy
 function cMgr(){return $('manager-select').value;}
 function cSite(){return $('site-select').value;}
 function cDate(){const e=$('date-input');return e?e.value:todayStr;}
+const WEEKDAY=['일','월','화','수','목','금','토'];
+function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function prevMonth(ym){let [y,m]=ym.split('-').map(Number);m--;if(m<1){m=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;}
 function weekStart(dateStr){
   const d=new Date((dateStr||todayStr)+'T12:00:00');
   const day=d.getDay();const diff=(day===0?-6:1-day);
   d.setDate(d.getDate()+diff);
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return ymd(d);
 }
-function weekLabel(ws){const mon=new Date(ws+'T12:00:00');const wed=new Date(mon);wed.setDate(mon.getDate()+2);return `${wed.getMonth()+1}월 ${Math.ceil(wed.getDate()/7)}주차`;}
+function curDataWeek(dateStr){
+  const mon=new Date(weekStart(dateStr)+'T12:00:00');
+  const wed=new Date(mon);wed.setDate(mon.getDate()+2);wed.setHours(23,59,59,0);
+  const t=new Date((dateStr||todayStr)+'T12:00:00');
+  if(t.getTime()<=wed.getTime())mon.setDate(mon.getDate()-7);
+  return ymd(mon);
+}
+function ymwFromWeekStart(ws){const mon=new Date(ws+'T12:00:00');return {year:mon.getFullYear(),month:mon.getMonth()+1,week:Math.ceil(mon.getDate()/7)};}
+function weekLabel(ws){const w=ymwFromWeekStart(ws);return `${w.month}월 ${w.week}주차`;}
+function weekStartFromYMW(y,m,w){
+  const mons=[];for(let d=1;d<=31;d++){const dt=new Date(y,m-1,d,12);if(dt.getMonth()!==m-1)break;if(dt.getDay()===1)mons.push(d);}
+  let pick=mons.find(d=>Math.ceil(d/7)===w);if(!pick)pick=mons[Math.min(w-1,mons.length-1)]||mons[0]||1;
+  return ymd(new Date(y,m-1,pick,12));
+}
+function weekCount(y,m){let n=0;for(let d=1;d<=31;d++){const dt=new Date(y,m-1,d,12);if(dt.getMonth()!==m-1)break;if(dt.getDay()===1)n++;}return n||5;}
 function periodOf(typeKey,date){
   const t=TYPES[typeKey];
-  if(t.period==='weekly')return weekStart(date);
+  if(t.period==='weekly'){
+    if(t.weekKind==='next'){const mon=new Date(weekStart(date)+'T12:00:00');mon.setDate(mon.getDate()+7);return ymd(mon);}
+    return curDataWeek(date);
+  }
   if(t.period==='monthly'){let ym=date.slice(0,7);if(t.prevMonth)ym=prevMonth(ym);return ym;}
   return date;
 }
@@ -513,29 +537,19 @@ function periodLabel(typeKey,period){
   const p=period.split('-');return `${Number(p[1])}/${Number(p[2])}`;
 }
 function hasDeadline(typeKey){const t=TYPES[typeKey];return t.period==='weekly'||!!(DEADLINES[typeKey]&&DEADLINES[typeKey].date);}
-function deadlineOf(typeKey,date){
+function deadlineOf(typeKey,periodKey){
   const t=TYPES[typeKey];
   if(t.period==='weekly'){
-    const wed=new Date(weekStart(date||todayStr)+'T12:00:00');wed.setDate(wed.getDate()+2);wed.setHours(23,59,59,0);return wed;
+    const mon=new Date(periodKey+'T12:00:00');const due=new Date(mon);
+    if(t.weekKind==='next')due.setDate(mon.getDate()-1);else due.setDate(mon.getDate()+9);
+    due.setHours(23,59,59,0);return due;
   }
   const r=DEADLINES[typeKey];if(!r||!r.date)return null;
-  if(r.mode==='time'&&r.time)return new Date(r.date+'T'+r.time+':00');
   return new Date(r.date+'T23:59:59');
 }
-const WEEKDAY=['일','월','화','수','목','금','토'];
-function fmtDeadlineOf(typeKey,date){
-  const dt=deadlineOf(typeKey,date);if(!dt)return '';
-  const t=TYPES[typeKey],m=dt.getMonth()+1,d=dt.getDate(),wd=WEEKDAY[dt.getDay()];
-  let tail='종일';
-  if(t.period!=='weekly'){const r=DEADLINES[typeKey];if(r&&r.mode==='time'&&r.time)tail=`${Number(r.time.split(':')[0])}시${r.time.split(':')[1]}분`;}
-  return `마감일: ${m}/${d}(${wd}) ${tail}`;
-}
-function fmtDeadline(r){
-  if(!r||!r.date)return '';
-  const [y,m,d]=r.date.split('-').map(Number);
-  const wd=WEEKDAY[new Date(y,m-1,d).getDay()];
-  const tail=(r.mode==='time'&&r.time)?`${Number(r.time.split(':')[0])}시${r.time.split(':')[1]}분`:'종일';
-  return `마감일: ${m}/${d}(${wd}) ${tail}`;
+function fmtDeadlineOf(typeKey,periodKey){
+  const dt=deadlineOf(typeKey,periodKey);if(!dt)return '';
+  return `마감일: ${dt.getMonth()+1}/${dt.getDate()}(${WEEKDAY[dt.getDay()]})`;
 }
 function fmtWhen(iso){if(!iso)return '';const d=new Date(iso);return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function expectedSlots(typeKey,site,date){
@@ -615,7 +629,7 @@ function accordionHtml(){
     const grid=keys.map(k=>{const t=TYPES[k];
       let dlTag='';
       if(hasDeadline(k)){
-        const dt=deadlineOf(k,todayStr);
+        const pk=periodOf(k,todayStr);const dt=deadlineOf(k,pk);
         if(siteDone[k])dlTag=`<span class="gi-done"><i class="ti ti-circle-check"></i> ${siteDoneAt[k]?fmtWhen(siteDoneAt[k]):'완료'}</span>`;
         else if(dt)dlTag=`<span class="gi-dl">~${dt.getMonth()+1}/${dt.getDate()}(${WEEKDAY[dt.getDay()]})</span>`;
       }
@@ -670,7 +684,7 @@ async function loadSiteDone(site){
   }catch(e){console.error('현황 로드 실패',e);}
   function latest(list){const ts=list.map(r=>r.submittedAt).filter(Boolean).sort();return ts.length?ts[ts.length-1]:'';}
   Object.keys(TYPES).forEach(k=>{
-    const t=TYPES[k];if(!t.ready)return;
+    const t=TYPES[k];if(!t.ready||t.shared)return;
     if(t.kind==='approval'){
       const list=recs.filter(r=>r.type===k&&r.kind==='approval');
       siteDone[k]=list.length>0;if(siteDone[k])siteDoneAt[k]=latest(list);
@@ -683,6 +697,15 @@ async function loadSiteDone(site){
     siteDone[k]=slots.every(s=>list.some(r=>r.slot===s));
     if(siteDone[k])siteDoneAt[k]=latest(list);
   });
+  for(const k of Object.keys(TYPES)){
+    const t=TYPES[k];if(!t.ready||!t.shared||t.kind==='approval')continue;
+    const period=periodOf(k,todayStr);
+    try{
+      const snap=await getDocs(query(collection(db,'records'),where('type','==',k),where('period','==',period)));
+      siteDone[k]=!snap.empty;
+      if(!snap.empty){let lt='';snap.forEach(d=>{const s=d.data().submittedAt;if(s>lt)lt=s;});siteDoneAt[k]=lt;}
+    }catch(e){}
+  }
 }
 window.changeSite=function(){history.back();};
 window.toggleGroup=function(g){
@@ -693,21 +716,13 @@ window.openType=function(k){curType=k;go({screen:'submit',view:'form'});};
 function renderForm(){
   const t=TYPES[curType];
   initPeriodSel();
-  $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}</div><div class="fh-sub">${GROUP_LABEL[t.group]||t.group}</div></div></div>`;
+  $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}${t.shared?' <span class="shared-chip"><i class="ti ti-users"></i> 공유</span>':''}</div><div class="fh-sub">${GROUP_LABEL[t.group]||t.group}${t.shared?' · 모든 사업장이 함께 보는 공유 문서':''}</div></div></div>`;
   $('period-area').innerHTML=renderPeriodPicker();
   onContextChange();
 }
-function wedCount(year,month){let n=0;for(let d=1;d<=31;d++){const dt=new Date(year,month-1,d,12);if(dt.getMonth()!==month-1)break;if(dt.getDay()===3)n++;}return n||5;}
-function weekStartFromYMW(year,month,week){
-  const weds=[];for(let d=1;d<=31;d++){const dt=new Date(year,month-1,d,12);if(dt.getMonth()!==month-1)break;if(dt.getDay()===3)weds.push(d);}
-  const wd=weds[Math.min(week-1,weds.length-1)]||weds[weds.length-1]||1;
-  const wed=new Date(year,month-1,wd,12);wed.setDate(wed.getDate()-2);
-  return `${wed.getFullYear()}-${String(wed.getMonth()+1).padStart(2,'0')}-${String(wed.getDate()).padStart(2,'0')}`;
-}
-function ymwFromWeekStart(ws){const mon=new Date(ws+'T12:00:00');const wed=new Date(mon);wed.setDate(mon.getDate()+2);return {year:wed.getFullYear(),month:wed.getMonth()+1,week:Math.ceil(wed.getDate()/7)};}
 function initPeriodSel(){
   const t=TYPES[curType];const now=new Date(todayStr+'T12:00:00');
-  if(t.period==='weekly'){const ws=weekStart(todayStr);periodSel={...ymwFromWeekStart(ws),weekStart:ws};}
+  if(t.period==='weekly'){const ws=periodOf(curType,todayStr);periodSel={...ymwFromWeekStart(ws),weekStart:ws};}
   else if(t.period==='monthly'){let y=now.getFullYear(),m=now.getMonth()+1;if(t.prevMonth){m--;if(m<1){m=12;y--;}}periodSel={year:y,month:m,week:0,weekStart:''};}
 }
 function curPeriod(){
@@ -719,16 +734,18 @@ function curPeriod(){
 function renderPeriodPicker(){
   const t=TYPES[curType];
   if(t.kind==='approval')return '';
-  if(t.period==='daily')return `<div class="pp-row"><i class="ti ti-calendar pp-ic"></i><input type="date" id="date-input" value="${cDate()||todayStr}" onchange="onPeriodChange()"/></div>`;
+  const now=`<button class="pp-now" onclick="goCurrentPeriod()"><i class="ti ti-player-track-next"></i> 이번 회차</button>`;
+  if(t.period==='daily')return `<div class="pp-row"><i class="ti ti-calendar pp-ic"></i><input type="date" id="date-input" value="${cDate()||todayStr}" onchange="onPeriodChange()"/>${now}</div>`;
   const cy=new Date().getFullYear();const yrs=[];for(let y=cy-1;y<=cy+1;y++)yrs.push(y);
   const yearSel=`<select id="pp-year" onchange="onPeriodChange()">${yrs.map(y=>`<option value="${y}"${y===periodSel.year?' selected':''}>${y}년</option>`).join('')}</select>`;
   const monSel=`<select id="pp-month" onchange="onPeriodChange()">${Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}"${m===periodSel.month?' selected':''}>${m}월</option>`).join('')}</select>`;
-  if(t.period==='monthly')return `<div class="pp-row"><i class="ti ti-calendar-month pp-ic"></i>${yearSel}${monSel}<span class="pp-suffix">${t.label}</span></div>`;
-  const wc=wedCount(periodSel.year,periodSel.month);
+  if(t.period==='monthly')return `<div class="pp-row"><i class="ti ti-calendar-month pp-ic"></i>${yearSel}${monSel}<span class="pp-suffix">${t.label}</span>${now}</div>`;
+  const wc=weekCount(periodSel.year,periodSel.month);
   if(periodSel.week>wc)periodSel.week=wc;
   const weekSel=`<select id="pp-week" onchange="onPeriodChange()">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===periodSel.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
-  return `<div class="pp-row"><i class="ti ti-calendar-week pp-ic"></i>${yearSel}${monSel}${weekSel}<span class="pp-suffix">${t.label}</span></div>`;
+  return `<div class="pp-row"><i class="ti ti-calendar-week pp-ic"></i>${yearSel}${monSel}${weekSel}<span class="pp-suffix">${t.label}</span>${now}</div>`;
 }
+window.goCurrentPeriod=function(){initPeriodSel();$('period-area').innerHTML=renderPeriodPicker();onContextChange();};
 window.onPeriodChange=function(){
   const t=TYPES[curType];
   if(t.period==='weekly'){
@@ -765,8 +782,11 @@ async function onContextChange(){
   renderSubmitBody();
 }
 async function loadSlotRecords(){
-  const site=cSite(),period=curPeriod();
-  const snap=await getDocs(query(collection(db,'records'),where('type','==',curType),where('site','==',site)));
+  const t=TYPES[curType],period=curPeriod();
+  const qy=t.shared
+    ? query(collection(db,'records'),where('type','==',curType))
+    : query(collection(db,'records'),where('type','==',curType),where('site','==',cSite()));
+  const snap=await getDocs(qy);
   itemHistory=[];
   snap.forEach(d=>{const r=d.data();itemHistory.push(r);if(r.period===period){slotState[r.slot]=slotState[r.slot]||{};slotState[r.slot].record=r;}});
   itemHistory.sort((a,b)=>(b.period||'').localeCompare(a.period||'')||(b.submittedAt||'').localeCompare(a.submittedAt||''));
@@ -872,7 +892,8 @@ function compressImage(file){return new Promise(res=>{
 function withTimeout(p,ms,l){return Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(new Error((l||'작업')+' 시간 초과')),ms))]);}
 
 window.submitSlots=async function(){
-  const t=TYPES[curType],manager=cMgr(),site=cSite(),date=cDate(),period=curPeriod();
+  const t=TYPES[curType],manager=cMgr(),date=cDate(),period=curPeriod();
+  const site=t.shared?'공유':cSite();
   if(!manager){toast('매니저를 선택하세요',true);return;}
   const slots=expectedSlots(curType,site,date);
   const targets=slots.filter(s=>{const st=slotState[s];if(st&&st.record)return false;
@@ -886,7 +907,8 @@ window.submitSlots=async function(){
     try{
       const st=slotState[slot];
       const base={type:curType,kind:t.kind,manager,site,period,slot,submittedAt:new Date().toISOString(),status:'submitted',viewed:false};
-      const docId=`${curType}__${sani(site)}__${period}__${sani(slot)}`;
+      if(t.shared)base.shared=true;
+      const docId=t.shared?`${curType}__${period}__${sani(slot)}`:`${curType}__${sani(site)}__${period}__${sani(slot)}`;
       if(t.kind==='photo'){
         const blob=await compressImage(st.file);
         const sref=ref(storage,`records/${curType}/${period}/${sani(site)}/${sani(slot)}/${Date.now()}.jpg`);
@@ -906,7 +928,7 @@ window.submitSlots=async function(){
     }catch(e){toast(`${slot} 실패 — ${e.message&&e.message.includes('시간 초과')?'네트워크 불안정, 다시 시도':'다시 시도해 주세요'}`,true);console.error(e);}
   }
   renderSubmitBody();
-  if(done>0)await loadSiteDone(site);
+  if(done>0)await loadSiteDone(selSite||cSite());
   toast(`제출 완료! (${done}건)`);
 };
 
@@ -920,7 +942,7 @@ async function loadMyApprovals(){
 }
 function renderApprovalSubmit(){
   const t=TYPES[curType],site=cSite();
-  const r=DEADLINES[curType],dlText=r&&r.date?fmtDeadline(r):'';
+  const dlText='';
   const form=`<div class="setting-block">
     <div style="font-weight:600;margin-bottom:4px;">새 ${t.label} 제출</div>
     ${dlText?`<div class="appr-dl"><i class="ti ti-alarm"></i> ${dlText}</div>`:''}
@@ -1005,11 +1027,26 @@ function renderMatrix(date){
     keys.forEach(k=>{
       const t=TYPES[k],period=periodOf(k,date);
       const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
+      const id='ir-'+sani(k);
+      const newN=recs.filter(r=>r.viewed===false).length;
+      if(t.shared){
+        const r0=recs.find(r=>r.fileURL)||recs[0];
+        const att=r0&&r0.fileURL?`<a class="rec-att" href="${r0.fileURL}" target="_blank" onclick="markViewed('${r0.id}')"><i class="ti ti-paperclip"></i> 첨부</a>`:'';
+        html+=`<div class="item-rec">
+          <button class="item-rec-head" onclick="toggleRec('${id}')">
+            <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span> <span class="shared-chip"><i class="ti ti-users"></i> 공유</span></span>
+            ${newN?`<span class="ir-new">${newN}</span>`:''}
+            <span class="ir-cnt">${r0?'등록됨':'미등록'}</span>
+            <i class="ti ti-chevron-down ir-chev"></i>
+          </button>
+          <div class="item-rec-body" id="${id}"><div class="rec-row">${r0?`<span class="rec-site">${r0.manager||''} 올림${r0.viewed===false?' <span class="new-tag">NEW</span>':''}</span>${att}`:'<span class="rec-site" style="color:var(--text4)">아직 등록되지 않았습니다</span>'}</div></div>
+        </div>`;
+        return;
+      }
       const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
       const subSites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
       const misSites=allSites.filter(s=>!bySite[s]);
-      const id='ir-'+sani(k),subId=id+'-s',misId=id+'-m';
-      const newN=recs.filter(r=>r.viewed===false).length;
+      const subId=id+'-s',misId=id+'-m';
       const fileN=recs.filter(r=>r.fileURL).length;
       const subRows=subSites.length?subSites.map(site=>{
         const rs=bySite[site],isNew=rs.some(r=>r.viewed===false),r0=rs[0];
@@ -1119,17 +1156,11 @@ function renderDeadlineSettings(){
     const id='dlc-'+sani(g);
     const items=keys.map(k=>{
       const t=TYPES[k],r=DEADLINES[k]||{};
-      const mode=r.mode||'allday';
-      const timeInput=mode==='time'?`<input type="time" value="${r.time||''}" onchange="setDl('${k}','time',this.value)" onclick="this.showPicker&&this.showPicker()"/>`:'';
       return `<div class="dl-item">
         <div class="dl-item-name">${t.label}</div>
         <div class="dl-item-ctl">
           <input type="date" value="${r.date||''}" onchange="setDl('${k}','date',this.value)" onclick="this.showPicker&&this.showPicker()"/>
-          <select onchange="setDlMode('${k}',this.value)">
-            <option value="allday"${mode==='allday'?' selected':''}>종일</option>
-            <option value="time"${mode==='time'?' selected':''}>시간</option>
-          </select>
-          ${timeInput}
+          ${r.date?`<button class="dl-clear" onclick="clearDl('${k}')"><i class="ti ti-x"></i></button>`:''}
         </div>
       </div>`;
     }).join('');
@@ -1144,8 +1175,8 @@ function renderDeadlineSettings(){
   });
   $('deadline-settings').innerHTML=html+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장</button>`;
 }
-window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=val;};
-window.setDlMode=function(k,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k].mode=val;renderDeadlineSettings();};
+window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=val;renderDeadlineSettings();};
+window.clearDl=function(k){delete DEADLINES[k];renderDeadlineSettings();};
 window.toggleDlCat=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.dlc-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 window.saveDl=async function(){showLoading('저장 중...');try{await saveDeadlines();hideLoading();toast('마감기한 저장 완료!');}catch(e){hideLoading();toast('저장 실패: '+e.message,true);}};
 // ── 사업장 · 매니저 관리 ──
