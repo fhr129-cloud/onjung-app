@@ -42,6 +42,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .home-btn:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px);}
 .home-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
 .home-ic.blue{background:var(--blue-light);color:var(--blue);}
+.home-ic.green{background:var(--green-light);color:var(--green);}
 .home-ic.amber{background:var(--amber-light);color:var(--amber);}
 .home-ic.slate{background:#EEF0F2;color:#48566B;}
 .home-tw{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
@@ -126,6 +127,14 @@ textarea{resize:vertical;min-height:64px;}
 
 /* ── 업로드 헤더 ── */
 .brand-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;flex-wrap:wrap;}
+.fs-crumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--card);border:.5px solid var(--border);border-radius:11px;padding:9px 12px;margin-bottom:12px;font-size:12.5px;}
+.fs-crumb .cr-co{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--blue);}
+.fs-crumb .cr-sep{font-size:13px;color:var(--text4);}
+.fs-crumb .cr-mgr{font-weight:600;color:var(--text2);}
+.fs-crumb .cr-site{font-weight:700;color:var(--text1);}
+.site-bar2{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;border:.5px solid var(--border);border-radius:11px;background:#fafbfc;margin-bottom:14px;font-size:13px;font-weight:600;}
+.site-bar2>span{display:inline-flex;align-items:center;gap:6px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.site-bar2>span i{color:var(--blue);flex-shrink:0;}
 .bb-main{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap;}
 .bb-co{font-size:13px;font-weight:700;color:var(--blue);}
 .bb-sep{font-size:13px;color:var(--text4);}
@@ -387,6 +396,7 @@ textarea{resize:vertical;min-height:64px;}
 .list-toggle span{display:flex;align-items:center;gap:7px;}
 .list-toggle i{font-size:16px;color:var(--text3);}
 .list-toggle:active{background:#f0f0ec;}
+.sm-no{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:18px;padding:0 5px;margin-right:6px;background:var(--blue-light);color:var(--blue);border-radius:6px;font-size:11px;font-weight:700;vertical-align:middle;}
 .lock-note.done{color:var(--green);}
 .lock-note.done i{color:var(--green);}
 /* ── 액션 시트 / 공지 ── */
@@ -412,6 +422,29 @@ textarea{resize:vertical;min-height:64px;}
 .toast.error{background:var(--red);}
 
 /* iOS 입력 시 확대 방지 + 폰 최적화 */
+/* ── 게시판 ── */
+.post-card{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
+.post-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.post-title{font-size:15px;font-weight:700;line-height:1.35;flex:1;min-width:0;word-break:break-word;}
+.post-meta{font-size:11.5px;color:var(--text4);margin-top:3px;}
+.post-body{font-size:13.5px;color:var(--text1);line-height:1.6;margin-top:9px;white-space:normal;word-break:break-word;}
+.post-actions{display:flex;align-items:center;gap:14px;margin-top:11px;padding-top:10px;border-top:.5px solid #f1f1ee;}
+.post-like{display:inline-flex;align-items:center;gap:5px;background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;padding:0;}
+.post-like i{font-size:17px;}
+.post-like.on{color:var(--red);}
+.post-cmt-n{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--text3);}
+.post-cmt-n i{font-size:16px;}
+.cmt-list{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+.cmt{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;background:#fafbfc;border-radius:9px;padding:8px 10px;font-size:13px;position:relative;}
+.cmt-au{font-weight:700;color:var(--text1);}
+.cmt-tx{flex:1;min-width:0;color:var(--text1);word-break:break-word;}
+.cmt-at{font-size:10.5px;color:var(--text4);}
+.cmt-del{background:none;border:none;color:var(--text4);cursor:pointer;padding:2px;font-size:13px;}
+.cmt-add{display:flex;gap:7px;margin-top:10px;}
+.cmt-add input{flex:1;padding:9px 11px;border:.5px solid var(--border2);border-radius:9px;font-size:14px;font-family:inherit;}
+.cmt-add button{flex-shrink:0;width:42px;border:none;background:var(--blue);color:#fff;border-radius:9px;cursor:pointer;font-size:16px;}
+.sheet input[type=text],.sheet textarea{padding:10px 12px;border:.5px solid var(--border2);border-radius:9px;font-size:14px;font-family:inherit;width:100%;outline:none;}
+.sheet input[type=text]:focus,.sheet textarea:focus{border-color:var(--blue-border);}
 @media(max-width:600px){
  .screen-body{padding:14px 14px calc(28px + env(safe-area-inset-bottom));}
  input,select,textarea{font-size:16px !important;}
@@ -434,6 +467,11 @@ textarea{resize:vertical;min-height:64px;}
       <span class="home-tw"><span class="lbl">영양사 업로드</span><span class="desc">담당 사업장 문서 제출</span></span>
       <i class="ti ti-chevron-right chev"></i>
     </button>
+    <button class="home-btn" onclick="openBoard()">
+      <span class="home-ic green"><i class="ti ti-message-2"></i></span>
+      <span class="home-tw"><span class="lbl">온정 게시판</span><span class="desc">특식제공 · 서식공유 · 식단표</span></span>
+      <i class="ti ti-chevron-right chev"></i>
+    </button>
     <button class="home-btn" onclick="openAdmin()">
       <span class="home-ic amber"><i class="ti ti-layout-dashboard"></i></span>
       <span class="home-tw"><span class="lbl">관리자</span><span class="desc">제출현황 · 결재함 · 사업장</span></span>
@@ -453,6 +491,7 @@ textarea{resize:vertical;min-height:64px;}
 
     <!-- 영양사 업로드 -->
     <div class="section" id="sec-submit">
+      <div class="fs-crumb" id="fs-crumb"></div>
       <div class="form-group" id="name-group">
         <label class="field-label">내 이름 <span class="required">*</span></label>
         <select id="manager-select" onchange="onManagerChange()"><option value="">이름 선택</option></select>
@@ -520,9 +559,31 @@ textarea{resize:vertical;min-height:64px;}
       </div>
     </div>
 
+    <!-- 온정 게시판 -->
+    <div class="section" id="sec-board" style="display:none;">
+      <div class="fs-crumb"><span class="cr-co"><i class="ti ti-message-2"></i> 온정 게시판</span><i class="ti ti-chevron-right cr-sep"></i><span class="cr-mgr" id="board-who">이름 선택</span></div>
+      <div class="form-group" id="board-namebox">
+        <label class="field-label">내 이름 <span class="required">*</span></label>
+        <select id="board-mgr" onchange="onBoardMgr()"><option value="">이름 선택</option></select>
+      </div>
+      <div class="cat-chips" id="board-tabs"></div>
+      <button class="btn-primary" id="board-write-btn" style="width:100%;margin-bottom:12px;display:none;" onclick="openComposer()"><i class="ti ti-pencil"></i> 글쓰기</button>
+      <div id="board-list"></div>
+    </div>
+
   </div>
 </div>
 
+<div class="sheet-overlay" id="composer-overlay">
+  <div class="sheet">
+    <div class="sheet-head"><i class="ti ti-pencil"></i> <span id="composer-title">글쓰기</span></div>
+    <input type="text" id="composer-subject" placeholder="제목" style="width:100%;"/>
+    <textarea id="composer-content" placeholder="내용을 입력하세요" style="width:100%;min-height:120px;resize:vertical;"></textarea>
+    <label class="btn-upload" id="composer-uplabel"><i class="ti ti-paperclip"></i><span id="composer-fname">파일 첨부 (선택)</span><input type="file" id="composer-file" onchange="onComposerFile(this)"/></label>
+    <button class="btn-primary" style="width:100%;" onclick="submitPost()"><i class="ti ti-send"></i> 등록</button>
+    <button class="att-cancel" onclick="closeComposer()">취소</button>
+  </div>
+</div>
 <div class="loading" id="loading"><div class="spinner"></div><div style="font-size:14px;color:var(--text2);" id="loading-text">처리 중...</div></div>
 <div class="img-modal" id="modal" onclick="this.classList.remove('open')"><img id="modal-img" src="" /></div>
 <div class="sheet-overlay" id="notice-overlay">
@@ -589,6 +650,7 @@ const KIND_ICON={photo:'ti-camera',file:'ti-file-text',form:'ti-pencil',approval
 let MANAGERS=[{"name":"강보람","sites":["삼전순약공업"]},{"name":"곽윤정","sites":["동아전장(감곡)"]},{"name":"권은진","sites":["삼정펄프(천안)","KC글라스"]},{"name":"김미선","sites":["한온시스템(아산)"]},{"name":"김미선2","sites":["대덕농협","이구산업","G푸드(지푸드)"]},{"name":"김보라","sites":["디이엔티(오산)"]},{"name":"김신애","sites":["롯데웰푸드(수원)"]},{"name":"김은정","sites":["우진티엠씨","비씨젠(안산)"]},{"name":"김진영","sites":["동인산업"]},{"name":"김하영","sites":["신양","디오토모티브","이피에스 코리아(EPS)"]},{"name":"문민영","sites":["머크"]},{"name":"민숙희","sites":["나래산업"]},{"name":"박수연","sites":["퓨리나","수퍼빈(아이엠펙토리)"]},{"name":"박진경","sites":["퓨어앤텍","한보일렉트"]},{"name":"박진희","sites":["동천"]},{"name":"박혜리","sites":["일렉콤"]},{"name":"방진아","sites":["승우플라텍","엠아이텍","청우코아","파트라","신세대여행사"]},{"name":"방희현","sites":["한석시스템"]},{"name":"서효정","sites":["삼아알미늄"]},{"name":"신영희","sites":["우보테크","피엘에스"]},{"name":"신해인","sites":["오뚜기(논산)","두손","동아전기부품"]},{"name":"양소연","sites":["덕일산업"]},{"name":"양지윤","sites":["지에스아이","한온시스템(둔포)","미소찬"]},{"name":"양한나","sites":["HY(에치와이)"]},{"name":"오차은","sites":["티엔씨","퍼슨"]},{"name":"오희진","sites":["SK가스","진보"]},{"name":"유민지","sites":["메카로"]},{"name":"유정숙","sites":["대한송유관"]},{"name":"윤지연","sites":["그린씨알피","다원체어스"]},{"name":"윤형주","sites":["삼일엘리베이터"]},{"name":"이난희","sites":["신덕산업","한미1공장","한미2공장"]},{"name":"이신혜","sites":["바스노바"]},{"name":"이영주","sites":["오뚜기(평택)"]},{"name":"이윤진","sites":["보성정보통신","성문전자"]},{"name":"이지현","sites":["드림메카텍","유니젠","윤지양행"]},{"name":"이진희","sites":["발렉스","신한전기(엠투엔)","비와이티","대성아이엔지"]},{"name":"이현실","sites":["대코"]},{"name":"임혜민","sites":["삼양화학공업"]},{"name":"장미라","sites":["무봉산수련원"]},{"name":"정연정","sites":["솔레오"]},{"name":"정해린","sites":["세종알로이","한국바이린"]},{"name":"조아라","sites":["진성티이씨 1공장","진성티이씨 2공장"]},{"name":"조지은","sites":["오뚜기(포승)","삼영잉크제조","린데코리아"]},{"name":"조혜진","sites":["동인물산","에스아이","연암","주강로보테크"]},{"name":"조화옥","sites":["쏘나브이씨코리아"]},{"name":"최보연","sites":["한양로보틱스"]},{"name":"최영인","sites":["코오롱인더스트리"]},{"name":"황혜정","sites":["한국가스공사"]}];
 let SITE_MEALS={"그린씨알피":{"평일":["중식","석식","야식"],"토요일":["중식","석식","야식"],"일요일":["중식","석식","야식"]},"대덕농협":{"평일":["중식"],"토요일":["중식"],"일요일":["중식"]},"덕일산업":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"동인물산":{"평일":["조식","중식","석식","야식"],"토요일":[],"일요일":[]},"동천":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"드림메카텍":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"롯데웰푸드(수원)":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"메카로":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"발렉스":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"보성정보통신":{"평일":["중식","석식","야식"],"토요일":["중식","석식","야식"],"일요일":["중식","석식","야식"]},"삼양화학공업":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"삼일엘리베이터":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"삼전순약공업":{"평일":["중식"],"토요일":[],"일요일":[]},"삼정펄프(천안)":{"평일":["중식","석식"],"토요일":["중식","석식"],"일요일":["중식","석식"]},"성문전자":{"평일":["중식","석식","야식"],"토요일":[],"일요일":[]},"세종알로이":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"솔레오":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"승우플라텍":{"평일":["조식","중식","석식","야식"],"토요일":[],"일요일":[]},"신덕산업":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"신양":{"평일":["중식","석식","야식"],"토요일":[],"일요일":[]},"신한전기(엠투엔)":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"에스아이":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"엠아이텍":{"평일":["중식"],"토요일":[],"일요일":[]},"연암":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"오뚜기(평택)":{"평일":["조식","중식"],"토요일":[],"일요일":[]},"오뚜기(포승)":{"평일":["조식","중식","석식","야식"],"토요일":[],"일요일":[]},"오뚜기(논산)":{"평일":["중식"],"토요일":[],"일요일":[]},"유니젠":{"평일":["중식","석식"],"토요일":["중식"],"일요일":[]},"윤지양행":{"평일":["중식","석식"],"토요일":["중식"],"일요일":[]},"일렉콤":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"지에스아이":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":[]},"청우코아":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"코오롱인더스트리":{"평일":["중식","석식"],"토요일":[],"일요일":["중식"]},"티엔씨":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"퓨어앤텍":{"평일":["중식","석식"],"토요일":["중식","석식"],"일요일":["중식","석식"]},"한보일렉트":{"평일":["중식","석식"],"토요일":["중식","석식"],"일요일":["중식","석식"]},"한양로보틱스":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"KC글라스":{"평일":["중식","석식","야식"],"토요일":["중식","석식","야식"],"일요일":["중식","석식","야식"]},"SK가스":{"평일":["중식","석식"],"토요일":["중식","석식"],"일요일":["중식","석식"]},"동인산업":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"한석시스템":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"퍼슨":{"평일":["중식"],"토요일":["중식"],"일요일":["중식"]},"다원체어스":{"평일":["중식"],"토요일":[],"일요일":[]},"쏘나브이씨코리아":{"평일":["조식","중식"],"토요일":[],"일요일":[]},"우진티엠씨":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"우보테크":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"파트라":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"한온시스템(아산)":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"한온시스템(둔포)":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"HY(에치와이)":{"평일":["조식","중식","석식"],"토요일":["조식","중식","석식"],"일요일":["조식","중식","석식"]},"나래산업":{"평일":["중식","석식","야식"],"토요일":["중식"],"일요일":[]},"한미1공장":{"평일":["조식","중식","석식","야식"],"토요일":[],"일요일":[]},"한미2공장":{"평일":["조식","중식","석식","야식"],"토요일":[],"일요일":[]},"퓨리나":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"한국바이린":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식"]},"디이엔티(오산)":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"수퍼빈(아이엠펙토리)":{"평일":["중식"],"토요일":[],"일요일":[]},"한국가스공사":{"평일":["중식","석식"],"토요일":["중식","석식"],"일요일":["중식","석식"]},"비씨젠(안산)":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"삼영잉크제조":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"디오토모티브":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"주강로보테크":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"피엘에스":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"이구산업":{"평일":["조식","중식","석식","야식"],"토요일":["조식","중식","석식","야식"],"일요일":["조식","중식","석식","야식"]},"진보":{"평일":["조식","중식","석식"],"토요일":[],"일요일":[]},"이피에스 코리아(EPS)":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"두손":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"G푸드(지푸드)":{"평일":["중식"],"토요일":[],"일요일":[]},"머크":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"동아전기부품":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"바스노바":{"평일":["중식"],"토요일":[],"일요일":[]},"대한송유관":{"평일":["중식"],"토요일":[],"일요일":[]},"미소찬":{"평일":["중식"],"토요일":["중식"],"일요일":["중식"]},"비와이티":{"평일":["중식","석식"],"토요일":["중식","석식"],"일요일":["중식","석식"]},"대성아이엔지":{"평일":["중식","석식","야식"],"토요일":["중식","석식","야식"],"일요일":["중식","석식","야식"]},"무봉산수련원":{"평일":["조식","중식","석식"],"토요일":["조식","중식","석식"],"일요일":["조식","중식","석식"]},"진성티이씨 1공장":{"평일":["조식","중식","석식"],"토요일":["중식"],"일요일":[]},"진성티이씨 2공장":{"평일":["중식","석식"],"토요일":["중식"],"일요일":[]},"대코":{"평일":["중식","석식"],"토요일":[],"일요일":[]},"동아전장(감곡)":{"평일":["중식"],"토요일":["중식"],"일요일":[]},"린데코리아":{"평일":["중식"],"토요일":[],"일요일":[]},"신세대여행사":{"평일":["조식","중식"],"토요일":[],"일요일":[]},"삼아알미늄":{"평일":["중식","석식","야식"],"토요일":["중식","석식","야식"],"일요일":["중식","석식","야식"]}};
 let DEADLINES={};
+let SITE_NO={};
 
 let curType=Object.keys(TYPES).find(k=>TYPES[k].ready)||'jichul';
 let slotState={};
@@ -616,6 +678,8 @@ function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'
 function p2(n){return String(n).padStart(2,'0');}
 function md(d){return `${p2(d.getMonth()+1)}/${p2(d.getDate())}`;}
 function prevMonth(ym){let [y,m]=ym.split('-').map(Number);m--;if(m<1){m=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;}
+function nextMonth(ym){let [y,m]=ym.split('-').map(Number);m++;if(m>12){m=1;y++;}return `${y}-${String(m).padStart(2,'0')}`;}
+function monthlyDlDay(typeKey){const r=DEADLINES[typeKey];if(r&&r.date){const d=Number(r.date.slice(8,10));if(d>=1&&d<=28)return d;}return 3;}
 function weekStart(dateStr){
   const d=new Date((dateStr||todayStr)+'T12:00:00');
   const day=d.getDay();const diff=(day===0?-6:1-day);
@@ -643,7 +707,11 @@ function periodOf(typeKey,date){
     if(t.weekKind==='next'){const mon=new Date(weekStart(date)+'T12:00:00');mon.setDate(mon.getDate()+7);return ymd(mon);}
     return curDataWeek(date);
   }
-  if(t.period==='monthly'){let ym=date.slice(0,7);if(t.prevMonth)ym=prevMonth(ym);return ym;}
+  if(t.period==='monthly'){
+    let ym=date.slice(0,7);
+    if(t.prevMonth){const day=Number(date.slice(8,10));if(day<=monthlyDlDay(typeKey))ym=prevMonth(ym);}
+    return ym;
+  }
   if(t.period==='yearly')return date.slice(0,4);
   return date;
 }
@@ -657,7 +725,7 @@ function periodLabel(typeKey,period){
   if(t.period==='yearly')return `${period}년`;
   const p=period.split('-');return `${Number(p[1])}/${Number(p[2])}`;
 }
-function hasDeadline(typeKey){const t=TYPES[typeKey];if(t.noDeadline)return false;return t.period==='weekly'||!!(DEADLINES[typeKey]&&DEADLINES[typeKey].date);}
+function hasDeadline(typeKey){const t=TYPES[typeKey];if(t.noDeadline)return false;if(t.period==='weekly')return true;if(t.period==='monthly'&&t.prevMonth)return true;return !!(DEADLINES[typeKey]&&DEADLINES[typeKey].date);}
 function deadlineOf(typeKey,periodKey){
   const t=TYPES[typeKey];
   if(t.period==='weekly'){
@@ -667,6 +735,10 @@ function deadlineOf(typeKey,periodKey){
     const D=(DEADLINES[typeKey]&&DEADLINES[typeKey].dow!=null)?DEADLINES[typeKey].dow:defD;
     const off=(D===0?6:D-1);
     base.setDate(base.getDate()+off);base.setHours(23,59,59,0);return base;
+  }
+  if(t.period==='monthly'&&t.prevMonth){
+    const dl=monthlyDlDay(typeKey);const [y,m]=nextMonth(periodKey).split('-').map(Number);
+    return new Date(y,m-1,dl,23,59,59);
   }
   const r=DEADLINES[typeKey];if(!r||!r.date)return null;
   return new Date(r.date+'T23:59:59');
@@ -687,7 +759,7 @@ function expectedSlots(typeKey,site,date){
 async function loadConfig(){
   try{
     const s=await getDoc(doc(db,'config','settings'));
-    if(s.exists()){const d=s.data();if(d.managers)MANAGERS=d.managers;if(d.siteMeals)SITE_MEALS=d.siteMeals;}
+    if(s.exists()){const d=s.data();if(d.managers)MANAGERS=d.managers;if(d.siteMeals)SITE_MEALS=d.siteMeals;if(d.siteNos)SITE_NO=d.siteNos;}
     const dl=await getDoc(doc(db,'config','deadlines'));
     if(dl.exists())DEADLINES=dl.data().rules||{};
   }catch(e){console.error('config 로드 실패',e);}
@@ -706,6 +778,7 @@ async function init(){
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem('navState')||'null');}catch(e){}
   let start={screen:'home'};
   if(restore&&restore.screen==='admin')start={screen:'admin'};
+  else if(restore&&restore.screen==='board')start={screen:'board'};
   else if(restore&&restore.screen==='submit')start={screen:'submit',view:(restore.view==='form'?'site':(restore.view||'site'))};
   history.replaceState(start,'');
   applyState(start);
@@ -715,17 +788,118 @@ init();
 
 // ── 화면 네비게이션 (History API) ──
 function go(st){history.pushState(st,'');applyState(st);}
-window.openSubmit=function(){go({screen:'submit',view:'site'});};
+window.openSubmit=function(){go({screen:'submit',view:'site'});setTimeout(updateCrumb,0);};
 window.openAdmin=function(){go({screen:'admin'});};
+window.openBoard=function(){go({screen:'board'});};
+// ── 온정 게시판 ──
+const BOARDS=['특식제공','서식공유','식단표'];
+let boardTab='특식제공',boardUser='',boardPosts=[],composerFile=null;
+function esc2(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function initBoard(){
+  const sel=$('board-mgr');
+  if(sel.options.length<=1){[...MANAGERS].sort((a,b)=>a.name.localeCompare(b.name,'ko')).forEach(m=>sel.appendChild(new Option(m.name+(m.phone?' · '+m.phone:''),mgrKey(m))));}
+  const saved=localStorage.getItem('savedManager');
+  if(!boardUser&&saved){const m=MANAGERS.find(x=>mgrKey(x)===saved)||MANAGERS.find(x=>x.name===saved);if(m){sel.value=mgrKey(m);boardUser=m.name;}}
+  $('board-who').textContent=boardUser||'이름 선택';
+  $('board-write-btn').style.display=boardUser?'block':'none';
+  renderBoardTabs();loadPosts();
+}
+window.onBoardMgr=function(){const v=$('board-mgr').value,m=MANAGERS.find(x=>mgrKey(x)===v);boardUser=m?m.name:'';if(v)localStorage.setItem('savedManager',v);$('board-who').textContent=boardUser||'이름 선택';$('board-write-btn').style.display=boardUser?'block':'none';renderBoardList();};
+function renderBoardTabs(){$('board-tabs').innerHTML=BOARDS.map(b=>`<button class="cat-chip${boardTab===b?' active':''}" onclick="setBoardTab('${b}')">${b}</button>`).join('');}
+window.setBoardTab=function(b){boardTab=b;renderBoardTabs();renderBoardList();};
+async function loadPosts(){
+  $('board-list').innerHTML='<div class="empty" style="padding:24px;">불러오는 중...</div>';
+  try{const snap=await getDocs(collection(db,'posts'));boardPosts=[];snap.forEach(d=>boardPosts.push({id:d.id,...d.data()}));renderBoardList();}
+  catch(e){$('board-list').innerHTML='<div class="empty">불러오기 실패</div>';}
+}
+function renderBoardList(){
+  const list=boardPosts.filter(p=>p.board===boardTab).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+  $('board-list').innerHTML=list.length?list.map(postCard).join(''):'<div class="empty" style="padding:30px;">아직 게시물이 없습니다</div>';
+}
+function postCard(p){
+  const likes=p.likes||[],liked=boardUser&&likes.includes(boardUser),comments=p.comments||[];
+  const file=p.fileURL?`<button class="file-link" style="margin-top:8px;" onclick="dlPost('${p.id}')"><i class="ti ti-paperclip"></i> ${esc2(p.fileName||'첨부')}</button>`:'';
+  const canDel=boardUser&&p.author===boardUser;
+  const cmts=comments.map((c,i)=>`<div class="cmt"><span class="cmt-au">${esc2(c.author)}</span><span class="cmt-tx">${esc2(c.text)}</span><span class="cmt-at">${fmtWhen(c.at)}</span>${(boardUser&&c.author===boardUser)?`<button class="cmt-del" onclick="delComment('${p.id}',${i})"><i class="ti ti-x"></i></button>`:''}</div>`).join('');
+  return `<div class="post-card">
+    <div class="post-head"><span class="post-title">${esc2(p.title)}</span>${canDel?`<button class="hist-btn del" onclick="delPost('${p.id}')"><i class="ti ti-trash"></i></button>`:''}</div>
+    <div class="post-meta">${esc2(p.author||'')} · ${fmtWhen(p.createdAt)}</div>
+    ${p.content?`<div class="post-body">${esc2(p.content).replace(/\n/g,'<br>')}</div>`:''}
+    ${file}
+    <div class="post-actions">
+      <button class="post-like${liked?' on':''}" onclick="toggleLike('${p.id}')"><i class="ti ti-heart${liked?'-filled':''}"></i> ${likes.length}</button>
+      <span class="post-cmt-n"><i class="ti ti-message-circle"></i> ${comments.length}</span>
+    </div>
+    ${comments.length?`<div class="cmt-list">${cmts}</div>`:''}
+    ${boardUser?`<div class="cmt-add"><input type="text" id="ci-${p.id}" placeholder="댓글 달기" onkeydown="if(event.key==='Enter')addComment('${p.id}')"/><button onclick="addComment('${p.id}')"><i class="ti ti-send"></i></button></div>`:''}
+  </div>`;
+}
+window.toggleLike=async function(id){
+  if(!boardUser){toast('이름을 먼저 선택하세요',true);return;}
+  const p=boardPosts.find(x=>x.id===id);if(!p)return;
+  p.likes=p.likes||[];const i=p.likes.indexOf(boardUser);if(i>=0)p.likes.splice(i,1);else p.likes.push(boardUser);
+  renderBoardList();
+  try{await updateDoc(doc(db,'posts',id),{likes:p.likes});}catch(e){toast('실패',true);}
+};
+window.addComment=async function(id){
+  if(!boardUser)return;const inp=$('ci-'+id);const tx=(inp&&inp.value||'').trim();if(!tx)return;
+  const p=boardPosts.find(x=>x.id===id);if(!p)return;
+  p.comments=p.comments||[];p.comments.push({author:boardUser,text:tx,at:new Date().toISOString()});
+  renderBoardList();
+  try{await updateDoc(doc(db,'posts',id),{comments:p.comments});}catch(e){toast('실패',true);}
+};
+window.delComment=async function(id,idx){
+  const p=boardPosts.find(x=>x.id===id);if(!p||!p.comments)return;
+  if(!confirm('댓글을 삭제할까요?'))return;
+  p.comments.splice(idx,1);renderBoardList();
+  try{await updateDoc(doc(db,'posts',id),{comments:p.comments});}catch(e){toast('실패',true);}
+};
+window.delPost=async function(id){
+  if(!confirm('게시물을 삭제할까요?'))return;
+  try{await deleteDoc(doc(db,'posts',id));boardPosts=boardPosts.filter(p=>p.id!==id);renderBoardList();toast('삭제했습니다');}catch(e){toast('삭제 실패',true);}
+};
+window.dlPost=async function(id){
+  const p=boardPosts.find(x=>x.id===id);if(!p||!p.fileURL)return;
+  showLoading('다운로드 중...');
+  try{const blob=await fetch(p.fileURL).then(x=>{if(!x.ok)throw 0;return x.blob();});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.fileName||'file';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);hideLoading();}
+  catch(e){hideLoading();toast('다운로드 실패',true);}
+};
+window.openComposer=function(){
+  if(!boardUser){toast('이름을 먼저 선택하세요',true);return;}
+  composerFile=null;$('composer-subject').value='';$('composer-content').value='';$('composer-fname').textContent='파일 첨부 (선택)';$('composer-file').value='';
+  $('composer-title').textContent=boardTab+' 글쓰기';
+  $('composer-overlay').classList.add('open');
+};
+window.closeComposer=function(){$('composer-overlay').classList.remove('open');};
+window.onComposerFile=function(input){composerFile=input.files[0]||null;$('composer-fname').textContent=composerFile?composerFile.name:'파일 첨부 (선택)';};
+window.submitPost=async function(){
+  const title=$('composer-subject').value.trim(),content=$('composer-content').value.trim();
+  if(!title){toast('제목을 입력하세요',true);return;}
+  showLoading('등록 중...');
+  try{
+    const id='post_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    const data={board:boardTab,title,content,author:boardUser,createdAt:new Date().toISOString(),likes:[],comments:[]};
+    if(composerFile){
+      const ext=(composerFile.name.split('.').pop()||'dat').toLowerCase();
+      const sref=ref(storage,`posts/${id}/${Date.now()}.${ext}`);
+      await withTimeout(uploadBytes(sref,composerFile),60000,'업로드');
+      data.fileURL=await withTimeout(getDownloadURL(sref),10000,'URL');data.fileName=composerFile.name;
+    }
+    await setDoc(doc(db,'posts',id),data);
+    boardPosts.push({id,...data});
+    hideLoading();closeComposer();renderBoardList();toast('등록되었습니다');
+  }catch(e){hideLoading();toast('등록 실패: '+e.message,true);}
+};
 function applyState(st){
   st=st||{screen:'home'};curScreen=st.screen;
   try{sessionStorage.setItem('navState',JSON.stringify({screen:st.screen,view:st.view||(st.screen==='submit'?navView:undefined)}));}catch(e){}
   if(st.screen==='home'){$('home-screen').style.display='flex';$('screen').style.display='none';updateHomeBadge();return;}
   $('home-screen').style.display='none';$('screen').style.display='flex';
-  const titles={submit:'영양사 업로드',admin:'관리자'};
+  const titles={submit:'영양사 업로드',admin:'관리자',board:'온정 게시판'};
   $('screen-title').textContent=titles[st.screen]||'';
-  ['submit','admin'].forEach(s=>$('sec-'+s).style.display=s===st.screen?'block':'none');
+  ['submit','admin','board'].forEach(s=>$('sec-'+s).style.display=s===st.screen?'block':'none');
   if(st.screen==='submit')applySubmitView(st.view||'site');
+  if(st.screen==='board')initBoard();
   window.scrollTo({top:0,behavior:'auto'});
 }
 function applySubmitView(view){
@@ -777,6 +951,7 @@ function accordionHtml(){
   }).join('');
 }
 function renderNav(){
+  updateCrumb();
   const nav=$('nav-area');
   if(navView==='site'){
     const mgr=selectedMgr();
@@ -787,10 +962,14 @@ function renderNav(){
       sites.map(s=>`<button class="site-pick" onclick="pickSite('${s.replace(/'/g,"\\'")}')"><span class="sp-icon"><i class="ti ti-building-factory-2"></i></span><span class="sp-name">${s}</span></button>`).join('')+`</div>`;
     return;
   }
-  nav.innerHTML=`<div class="brand-bar">
-      <div class="bb-main"><span class="bb-co">온정 F&amp;B</span><i class="ti ti-chevron-right bb-sep"></i><span class="bb-site">${selSite}</span><i class="ti ti-chevron-right bb-sep"></i><span class="bb-mgr">${cMgr()}</span></div>
-      <button class="site-change" onclick="changeSite()">사업장 변경</button>
-    </div>`+accordionHtml();
+  nav.innerHTML=`<div class="site-bar2"><span><i class="ti ti-building-factory-2"></i> ${selSite}</span><button class="site-change" onclick="changeSite()">사업장 변경</button></div>`+accordionHtml();
+}
+function updateCrumb(){
+  const el=$('fs-crumb');if(!el)return;
+  const mgr=cMgr(),site=selSite||'';
+  el.innerHTML=`<span class="cr-co"><i class="ti ti-cloud-upload"></i> 온정 F&B</span>`+
+    (mgr?`<i class="ti ti-chevron-right cr-sep"></i><span class="cr-mgr">${mgr}</span>`:'')+
+    (mgr&&site?`<i class="ti ti-chevron-right cr-sep"></i><span class="cr-site">${site}</span>`:'');
 }
 window.pickSite=async function(s){
   selSite=s;$('site-select').value=s;expandedGroup=null;
@@ -834,6 +1013,7 @@ window.toggleGroup=function(g){
 window.openType=function(k){curType=k;go({screen:'submit',view:'form'});};
 function renderForm(){
   const t=TYPES[curType];
+  updateCrumb();
   initPeriodSel();
   $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}</div><div class="fh-sub">${GROUP_LABEL[t.group]||t.group}${t.viewAll?' · 사업장별 제출 + 전체 열람':''}</div></div></div>`;
   $('period-area').innerHTML=renderPeriodPicker();
@@ -852,7 +1032,7 @@ window.showFormTab=function(tab){
 function initPeriodSel(){
   const t=TYPES[curType];const now=new Date(todayStr+'T12:00:00');
   if(t.period==='weekly'){const ws=periodOf(curType,todayStr);periodSel={...ymwFromWeekStart(ws),weekStart:ws};}
-  else if(t.period==='monthly'){let y=now.getFullYear(),m=now.getMonth()+1;if(t.prevMonth){m--;if(m<1){m=12;y--;}}periodSel={year:y,month:m,week:0,weekStart:''};}
+  else if(t.period==='monthly'){const ym=periodOf(curType,todayStr);const [y,m]=ym.split('-').map(Number);periodSel={year:y,month:m,week:0,weekStart:''};}
   else if(t.period==='yearly'){periodSel={year:now.getFullYear(),month:0,week:0,weekStart:''};}
   else periodSel={year:0,month:0,week:0,weekStart:'',date:todayStr};
 }
@@ -1324,7 +1504,8 @@ function stdName(r){
   else if(t.period==='yearly'){p=`${r.period}년`;}
   else p=r.period;
   const ext=(r.fileName&&r.fileName.includes('.'))?'.'+r.fileName.split('.').pop():'';
-  return `${p} ${t.label}(${r.site})${ext}`.replace(/[\\/:*?"<>|]/g,'_');
+  const no=SITE_NO[r.site]?`(${SITE_NO[r.site]})`:'';
+  return `${no}${p} ${t.label}(${r.site})${ext}`.replace(/[\\/:*?"<>|]/g,'_');
 }
 function zipName(typeKey,period){
   const t=TYPES[typeKey];let pp='';
@@ -1472,9 +1653,10 @@ function reassignSite(site,newName,newPhone){
 function renameSite(oldN,newN){
   if(oldN===newN)return;
   SITE_MEALS[newN]=SITE_MEALS[oldN];delete SITE_MEALS[oldN];
+  if(SITE_NO[oldN]!=null){SITE_NO[newN]=SITE_NO[oldN];delete SITE_NO[oldN];}
   MANAGERS.forEach(m=>{m.sites=m.sites.map(s=>s===oldN?newN:s);});
 }
-function deleteSite(name){delete SITE_MEALS[name];MANAGERS.forEach(m=>{m.sites=m.sites.filter(s=>s!==name);});}
+function deleteSite(name){delete SITE_MEALS[name];delete SITE_NO[name];MANAGERS.forEach(m=>{m.sites=m.sites.filter(s=>s!==name);});}
 function mealCheckHtml(prefix,meals){
   return DAYS3.map(day=>{
     const sel=(meals&&meals[day])||[];
@@ -1494,13 +1676,13 @@ function siteListHtml(){
   const sites=q?all.filter(s=>s.toLowerCase().includes(q)||(siteManager(s)||'').toLowerCase().includes(q)):all;
   if(!sites.length)return `<div class="empty">검색 결과가 없습니다</div>`;
   return sites.map(site=>{
-    const curMgr=siteManagerObj(site),editing=editSite===site;
+    const curMgr=siteManagerObj(site),editing=editSite===site,no=SITE_NO[site];
     let row=`<div class="sm-row">
-      <div class="sm-top"><span class="sm-name">${site}</span>
+      <div class="sm-top"><span class="sm-name">${no!=null&&no!==''?`<span class="sm-no">${no}</span>`:''}${site}</span>
         <div class="sm-actions"><button class="btn-secondary btnxs" onclick="toggleEditSite('${esc(site)}')"><i class="ti ti-edit"></i></button><button class="btn-secondary btnxs" onclick="removeSiteUI('${esc(site)}')"><i class="ti ti-trash"></i></button></div></div>
       <div class="sm-mgr"><span>담당</span><select onchange="reassignSiteUI('${esc(site)}',this.value)">${[...MANAGERS].sort((a,b)=>a.name.localeCompare(b.name,'ko')).map(m=>`<option value="${mgrKey(m).replace(/"/g,'&quot;')}"${curMgr&&mgrKey(m)===mgrKey(curMgr)?' selected':''}>${mgrLabel(m)}</option>`).join('')}</select></div>`;
     if(editing){
-      row+=`<div class="sm-edit"><input type="text" id="es-name" value="${site}"/><div class="sm-meals" id="es-meals">${mealCheckHtml('es',SITE_MEALS[site])}</div><div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleEditSite('${esc(site)}')">취소</button><button class="btn-primary" style="flex:1;" onclick="commitEditSite('${esc(site)}')">저장</button></div></div>`;
+      row+=`<div class="sm-edit"><input type="text" id="es-name" value="${site}" placeholder="사업장명"/><input type="text" id="es-no" value="${no!=null?no:''}" placeholder="본사 부여 번호 (파일명 앞에 붙음)"/><div class="sm-meals" id="es-meals">${mealCheckHtml('es',SITE_MEALS[site])}</div><div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleEditSite('${esc(site)}')">취소</button><button class="btn-primary" style="flex:1;" onclick="commitEditSite('${esc(site)}')">저장</button></div></div>`;
     }
     return row+`</div>`;
   }).join('');
@@ -1514,6 +1696,7 @@ function renderSiteSummary(){
   if(addSiteOpen){
     html+=`<div class="sm-edit" style="border-top:none;padding-top:0;margin-bottom:10px;">
       <input type="text" id="as-name" placeholder="사업장명"/>
+      <input type="text" id="as-no" placeholder="본사 부여 번호 (파일명 앞에 붙음)"/>
       <input type="text" id="as-mgr" list="mgr-list" placeholder="담당 영양사 이름"/>
       <input type="text" id="as-mgr-phone" placeholder="담당 영양사 전화번호"/>
       <datalist id="mgr-list">${MANAGERS.map(m=>`<option value="${m.name}"></option>`).join('')}</datalist>
@@ -1540,21 +1723,25 @@ window.commitAddSite=function(){
   if(SITE_MEALS[name]){toast('이미 있는 사업장입니다',true);return;}
   if(!mgr){toast('담당 영양사 이름을 입력하세요',true);return;}
   SITE_MEALS[name]=readMeals('as-meals');reassignSite(name,mgr,mgrPhone);
+  const noV=$('as-no').value.trim();if(noV)SITE_NO[name]=noV;
   addSiteOpen=false;siteListOpen=true;refreshManagerDropdown();renderSiteSummary();toast('추가됨 — 아래 "변경사항 저장"을 눌러 반영하세요');
 };
 window.commitEditSite=function(old){
   const newName=$('es-name').value.trim();if(!newName){toast('사업장명을 입력하세요',true);return;}
   if(newName!==old&&SITE_MEALS[newName]){toast('이미 있는 사업장명입니다',true);return;}
   const meals=readMeals('es-meals');
+  const noV=$('es-no').value.trim();
   if(newName!==old)renameSite(old,newName);
-  SITE_MEALS[newName]=meals;editSite=null;renderSiteSummary();toast('수정됨 — 아래 "서버 저장"을 눌러 반영하세요');
+  SITE_MEALS[newName]=meals;
+  if(noV)SITE_NO[newName]=noV;else delete SITE_NO[newName];
+  editSite=null;renderSiteSummary();toast('수정됨 — 아래 "변경사항 저장"을 눌러 반영하세요');
 };
 window.removeSiteUI=function(s){if(!confirm(s+' 사업장을 삭제할까요?'))return;deleteSite(s);refreshManagerDropdown();renderSiteSummary();toast('삭제됨 — 아래 "서버 저장"을 눌러 반영하세요');};
 window.reassignSiteUI=function(s,key){const m=MANAGERS.find(x=>mgrKey(x)===key);if(!m)return;reassignSite(s,m.name,m.phone);renderSiteSummary();toast(s+' 담당 → '+mgrLabel(m)+' (저장 필요)');};
 window.saveSiteConfig=async function(){
   showLoading('저장 중...');
   try{
-    await setDoc(doc(db,'config','settings'),{managers:MANAGERS,siteMeals:SITE_MEALS,updatedAt:new Date().toISOString()});
+    await setDoc(doc(db,'config','settings'),{managers:MANAGERS,siteMeals:SITE_MEALS,siteNos:SITE_NO,updatedAt:new Date().toISOString()});
     refreshManagerDropdown();hideLoading();toast('서버에 저장되었습니다');
   }catch(e){hideLoading();toast('저장 실패: '+e.message,true);}
 };
