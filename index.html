@@ -291,8 +291,8 @@ textarea{resize:vertical;min-height:64px;}
 .ir-cnt{font-size:12px;color:var(--text3);white-space:nowrap;}
 .ir-period{font-size:11px;font-weight:600;color:var(--text3);background:#eef0f2;padding:1px 7px;border-radius:99px;margin-left:4px;}
 .ir-chev{font-size:16px;color:var(--text4);transition:transform .2s;flex-shrink:0;}
-.item-rec-body{display:none;border-top:.5px solid var(--border);background:#fbfcfd;}
-.item-rec-body.open{display:block;}
+.item-rec-body{max-height:0;overflow:hidden;border-top:0 solid var(--border);background:#fbfcfd;transition:max-height .26s ease,border-top-width .26s;}
+.item-rec-body.open{max-height:1600px;border-top-width:.5px;}
 .rec-row{display:flex;align-items:center;gap:8px;padding:10px 15px;border-bottom:.5px solid #f0f0ec;cursor:pointer;}
 .rec-row:last-child{border-bottom:none;}
 .rec-row:hover{background:#eef4fb;}
@@ -330,28 +330,40 @@ textarea{resize:vertical;min-height:64px;}
 .dl-toggle-chev{margin-left:auto;transition:transform .2s;color:var(--text4);}
 .dl-grp{font-size:11px;font-weight:600;color:var(--text4);background:#f0f1f3;padding:1px 7px;border-radius:99px;}
 .item-wrap{margin-bottom:8px;}
+.step-wrap{display:flex;flex-direction:column;gap:8px;}
 .step-row{display:flex;align-items:center;gap:8px;}
-.step-btn{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:.5px solid var(--border);border-radius:11px;background:#fff;color:var(--text2);cursor:pointer;flex-shrink:0;font-size:18px;}
-.step-btn:hover{background:#f2f2ef;}
-.step-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#f6f6f4;border:.5px solid var(--border);border-radius:11px;padding:6px 6px;min-width:0;}
-.step-lbl{font-size:13px;font-weight:700;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-.step-now{font-size:10.5px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;}
-.cat-chips{display:flex;gap:8px;margin-bottom:14px;}
-.cat-chip{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 8px;border:.5px solid var(--border);border-radius:11px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;}
+.step-btn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:.5px solid var(--border);border-radius:11px;background:#fff;color:var(--text2);cursor:pointer;flex-shrink:0;font-size:18px;}
+.step-btn:active{background:#e9e9e5;}
+.step-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#f6f6f4;border:.5px solid var(--border);border-radius:11px;padding:7px 6px;min-width:0;}
+.step-lbl{font-size:14px;font-weight:700;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.step-sub{font-size:11px;font-weight:600;color:var(--text4);}
+.step-now-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:9px;border:.5px solid var(--blue-border);border-radius:10px;background:var(--blue-light);color:var(--blue);font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;}
+.step-now-btn:active{background:#d9e9fa;}
+.cat-chips{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+.cat-chip{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 14px;border:.5px solid var(--border);border-radius:11px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;white-space:nowrap;}
 .cat-chip i{font-size:16px;}
 .cat-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;}
-.ip-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fbfbf9;border-bottom:.5px solid var(--border);}
-.ip-row.mv{background:#fbfbf9;border:.5px solid var(--border);border-radius:11px;margin:8px 0;padding:9px;}
-.ip-row .step-btn{width:36px;height:36px;font-size:16px;}
+.appr-chips{flex-wrap:nowrap;}
+.appr-chips .cat-chip{flex:0 0 auto;}
+.chip-n{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;background:var(--red);color:#fff;border-radius:99px;font-size:10px;font-weight:700;}
+.cat-chip.active .chip-n{background:#fff;color:var(--blue);}
+.ip-box{padding:10px 11px;background:#fbfbf9;border-bottom:.5px solid var(--border);}
+.ip-box.mv{border:.5px solid var(--border);border-radius:11px;margin:8px 0;}
+.ip-box .step-btn{width:38px;height:38px;font-size:16px;}
+.appr-group{margin-bottom:18px;}
+.appr-group-head{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--text1);padding:2px 2px 10px;border-bottom:1.5px solid #e6e8eb;margin-bottom:10px;}
+.appr-group-head i{font-size:17px;color:var(--text3);}
+.ag-n{margin-left:auto;font-size:12px;font-weight:600;color:var(--text3);}
+.appr-done-lbl{font-size:12px;font-weight:600;color:var(--text4);margin:6px 2px 8px;}
 .search-row{display:flex;align-items:center;gap:7px;padding:9px 11px;background:#f6f6f4;border:.5px solid var(--border);border-radius:9px;margin:8px 0;}
 .search-row i{font-size:15px;color:var(--text4);}
 .search-row input{flex:1;border:none;background:none;font-size:13px;padding:2px 0;outline:none;font-family:inherit;}
 .search-x{background:none;border:none;color:var(--text4);cursor:pointer;padding:2px;display:flex;}
 .edit-tag{font-size:10px;font-weight:700;color:#fff;background:var(--amber);padding:1px 6px;border-radius:99px;}
+.set-sec-title{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;color:var(--text1);margin:0 0 12px;}
+.set-sec-title i{font-size:18px;color:var(--blue);}
 .lock-note.done{color:var(--green);}
 .lock-note.done i{color:var(--green);}
-.pp-range{font-size:12px;font-weight:600;color:var(--text3);}
-.pp-rangerow{display:flex;align-items:center;gap:5px;margin-top:7px;padding-left:2px;}
 /* ── 액션 시트 / 공지 ── */
 .sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:960;align-items:flex-end;justify-content:center;}
 .sheet-overlay.open{display:flex;animation:fade .15s;}
@@ -459,14 +471,10 @@ textarea{resize:vertical;min-height:64px;}
         <div class="admin-tabs">
           <button class="admin-tab active" id="tab-status" onclick="showAdminTab('status')"><i class="ti ti-layout-dashboard"></i> 제출현황</button>
           <button class="admin-tab" id="tab-approval" onclick="showAdminTab('approval')"><i class="ti ti-checkbox"></i> 결재함 <span class="tab-badge" id="tab-badge-approval"></span></button>
-          <button class="admin-tab" id="tab-sites" onclick="showAdminTab('sites')"><i class="ti ti-building-factory-2"></i> 사업장</button>
+          <button class="admin-tab" id="tab-settings" onclick="showAdminTab('settings')"><i class="ti ti-settings"></i> 설정</button>
         </div>
 
         <div class="admin-pane" id="pane-status">
-          <div class="dl-settings-wrap">
-            <button class="dl-toggle" onclick="toggleDlSettings()"><i class="ti ti-alarm"></i> 마감기한 설정 <i class="ti ti-chevron-down dl-toggle-chev"></i></button>
-            <div class="setting-block" id="deadline-settings" style="display:none;margin-top:8px;"></div>
-          </div>
           <div id="matrix-wrap"></div>
         </div>
 
@@ -474,7 +482,10 @@ textarea{resize:vertical;min-height:64px;}
           <div id="approval-wrap"><div class="empty">대기 중인 결재가 없습니다</div></div>
         </div>
 
-        <div class="admin-pane" id="pane-sites" style="display:none;">
+        <div class="admin-pane" id="pane-settings" style="display:none;">
+          <div class="set-sec-title"><i class="ti ti-alarm"></i> 마감기한 설정</div>
+          <div class="setting-block" id="deadline-settings"></div>
+          <div class="set-sec-title" style="margin-top:22px;"><i class="ti ti-building-factory-2"></i> 사업장 설정</div>
           <div class="setting-block" id="site-summary"></div>
         </div>
       </div>
@@ -832,18 +843,21 @@ function stepSub(typeKey,period){
   if(t.period==='weekly'){const m=new Date(period+'T12:00:00'),s=new Date(m);s.setDate(m.getDate()+6);return `(${m.getMonth()+1}/${m.getDate()}~${s.getMonth()+1}/${s.getDate()})`;}
   return '';
 }
-function stepperHtml(typeKey,period,stepFn,nowFn,nowLabel){
+function stepperHtml(typeKey,period,prevExpr,nextExpr,nowExpr,nowLabel){
   const main=stepMain(typeKey,period),sub=stepSub(typeKey,period);
   const isCur=(period===periodOf(typeKey,todayStr));
-  const nowBtn=isCur?`<span class="step-now cur"><i class="ti ti-check"></i> 이번 회차</span>`:`<button class="step-now" onclick="${nowFn}">${nowLabel||'이번 회차로'}</button>`;
-  return `<button class="step-btn" onclick="${stepFn}(-1)"><i class="ti ti-chevron-left"></i></button>
-    <div class="step-mid"><span class="step-lbl">${main}${sub?` <span class="step-sub">${sub}</span>`:''}</span>${nowBtn}</div>
-    <button class="step-btn" onclick="${stepFn}(1)"><i class="ti ti-chevron-right"></i></button>`;
+  const nav=`<div class="step-row">
+    <button class="step-btn" onclick="${prevExpr}"><i class="ti ti-chevron-left"></i></button>
+    <div class="step-mid"><span class="step-lbl">${main}</span>${sub?`<span class="step-sub">${sub}</span>`:''}</div>
+    <button class="step-btn" onclick="${nextExpr}"><i class="ti ti-chevron-right"></i></button>
+  </div>`;
+  const now=isCur?'':`<button class="step-now-btn" onclick="${nowExpr}"><i class="ti ti-rotate-clockwise-2"></i> ${nowLabel||'이번 회차로 이동'}</button>`;
+  return `<div class="step-wrap">${nav}${now}</div>`;
 }
 function renderPeriodPicker(){
   const t=TYPES[curType];
   if(t.kind==='approval')return '';
-  return `<div class="step-row">${stepperHtml(curType,curPeriod(),'periodStep','goCurrentPeriod()')}</div>`;
+  return stepperHtml(curType,curPeriod(),'periodStep(-1)','periodStep(1)','goCurrentPeriod()');
 }
 window.periodStep=function(dir){
   const t=TYPES[curType];
@@ -921,7 +935,7 @@ async function renderAllMenus(){
   const el=$('extra-area');if(!el)return;
   const period=menuViewKey();
   const head=`<div class="panel-head"><span class="panel-title"><i class="ti ti-tools-kitchen-2"></i> 전체 사업장 식단표</span></div>`;
-  const step=`<div class="ip-row mv">${stepperHtml('menu',period,'mvStep','mvNow()','이번주로')}</div>`;
+  const step=`<div class="ip-box mv">${stepperHtml('menu',period,'mvStep(-1)','mvStep(1)','mvNow()','이번주로 이동')}</div>`;
   const search=`<div class="search-row"><i class="ti ti-search"></i><input type="text" id="mv-search" placeholder="사업장 · 영양사 검색" value="${esc(menuViewSearch||'')}" oninput="mvSearch(this.value)"/><button class="search-x" onclick="$('mv-search').value='';mvSearch('')"><i class="ti ti-x"></i></button></div>`;
   el.innerHTML=`<div class="panel">${head}${step}${search}<div id="mv-list"><div class="rec-empty">불러오는 중...</div></div></div>`;
   try{
@@ -1000,11 +1014,9 @@ function buildSlot(slot){
   if(t.kind==='photo')inner=`<label class="btn-upload${st.preview?' has':''}"><i class="ti ti-camera"></i><span>${st.preview?'사진 변경':'사진 추가'}</span><input type="file" accept="image/*" onchange="onPick('${slot}',this)"/></label>${st.preview?`<img class="thumb" src="${st.preview}"/>`:''}`;
   else if(t.kind==='file'){const ex=isExcelOnly(curType);inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:(ex?'엑셀 파일 첨부 (.xlsx)':'파일 첨부 (엑셀·PDF·사진 등 모든 형식)')}</span><input type="file"${ex?' accept=".xlsx,.xls,.xlsm,.xlsb,.csv"':''} onchange="onPick('${slot}',this)"/></label>`;}
   else if(t.kind==='form')inner=`<div class="form-fields">${t.fields.map(f=>`<input type="${f.type==='number'?'number':'text'}" placeholder="${f.label}" value="${st.form&&st.form[f.key]!=null?st.form[f.key]:''}" oninput="onForm('${slot}','${f.key}',this.value)"/>`).join('')}</div>`;
-  let note='';
-  if(rec&&!st.file)note=`<div class="slot-note"><i class="ti ti-circle-check"></i> 이 회차는 이미 제출됨${rec.viewed?' · 관리자 확인 완료':''} — 다시 올리면 덮어쓰기 · 자세히는 <b>제출이력</b></div>`;
   const single=(slot==='기본');
   const head=single?'':`<div class="slot-head"><span class="slot-name">${slot}</span></div>`;
-  return `<div class="slot-row${single?' single':''}">${head}${inner}${note}</div>`;
+  return `<div class="slot-row${single?' single':''}">${head}${inner}</div>`;
 }
 const EXCEL_EXT=['xlsx','xls','xlsm','xlsb','csv'];
 function isExcelOnly(typeKey){return TYPES[typeKey].group==='결산관리';}
@@ -1140,7 +1152,7 @@ window.submitApproval=async function(){
 };
 
 // ── 관리자 ──
-let adminItemPeriod={}, attRec=null, noticeCur=null, statusCat=null;
+let adminItemPeriod={}, attRec=null, noticeCur=null, statusCat=null, apprCat='all';
 window.unlockAdmin=async function(){
   if($('admin-pw').value!==ADMIN_PW){$('admin-pw-err').textContent='비밀번호가 틀렸습니다';$('admin-pw').value='';return;}
   $('admin-lock').style.display='none';$('admin-content').style.display='block';
@@ -1150,9 +1162,8 @@ window.unlockAdmin=async function(){
   showAdminTab('status');
 };
 window.showAdminTab=function(tab){
-  ['status','approval','sites'].forEach(t=>{$('pane-'+t).style.display=t===tab?'block':'none';$('tab-'+t).classList.toggle('active',t===tab);});
+  ['status','approval','settings'].forEach(t=>{$('pane-'+t).style.display=t===tab?'block':'none';$('tab-'+t).classList.toggle('active',t===tab);});
 };
-window.toggleDlSettings=function(){const el=$('deadline-settings');const open=el.style.display==='none';el.style.display=open?'block':'none';const chev=document.querySelector('.dl-toggle-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 
 function initAdminPeriod(k){
   const t=TYPES[k];
@@ -1169,7 +1180,7 @@ function adminPeriodKey(k){
   return s.date;
 }
 function adminStepper(k){
-  return stepperHtml(k,adminPeriodKey(k),`adminStep('${k}',`,`adminNow('${k}')`);
+  return stepperHtml(k,adminPeriodKey(k),`adminStep('${k}',-1)`,`adminStep('${k}',1)`,`adminNow('${k}')`);
 }
 window.adminStep=function(k,dir){
   const t=TYPES[k],s=adminItemPeriod[k];
@@ -1231,7 +1242,7 @@ function renderStatusItem(k){
   const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
   const id='ir-'+sani(k);
   const newN=recs.filter(r=>r.viewed===false).length;
-  const picker=`<div class="ip-row">${adminStepper(k)}</div>`;
+  const picker=`<div class="ip-box">${adminStepper(k)}</div>`;
   const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
   const subSites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
   const misSites=allSites.filter(s=>!bySite[s]);
@@ -1311,33 +1322,46 @@ window.downloadAll=async function(typeKey,period){
     hideLoading();toast(`${recs.length}개 파일을 받았습니다`);
   }catch(e){hideLoading();toast('다운로드 실패: '+e.message,true);console.error(e);}
 };
+function apprPendCard(r){
+  const isNew=r.viewed===false,file=r.fileURL?attLink(r):((r.form&&r.form.title)||'');
+  return `<div class="appr-card">
+    <div class="appr-meta">${r.site} · ${r.manager} · ${fmtWhen(r.submittedAt)}${isNew?' <span class="new-tag">NEW</span>':''}</div>
+    ${file?`<div class="appr-reason">${file}</div>`:''}
+    <div class="appr-actions"><button class="btn-green" onclick="decide('${r.id}','approved')"><i class="ti ti-check"></i> 승인</button>
+    <button class="btn-red" onclick="decide('${r.id}','rejected')"><i class="ti ti-x"></i> 반려</button></div></div>`;
+}
+function apprDoneCard(r){
+  const file=r.fileURL?attLink(r):((r.form&&r.form.title)||''),ok=r.status==='approved';
+  return `<div class="appr-card done">
+    <div class="appr-meta"><span class="st-pill ${ok?'ok':'no'}">${ok?'승인':'반려'}</span> ${r.site} · ${r.manager} · ${r.approvedAt?fmtWhen(r.approvedAt):fmtWhen(r.submittedAt)}</div>
+    ${file?`<div class="appr-reason">${file}</div>`:''}
+    ${(!ok&&r.rejectReason)?`<div class="appr-reason" style="color:var(--red)">사유: ${r.rejectReason}</div>`:''}
+    <div class="appr-actions"><button class="btn-secondary" onclick="undoDecision('${r.id}')"><i class="ti ti-rotate-2"></i> 결정 취소 · 다시 처리</button></div></div>`;
+}
 async function renderApprovalQueue(){
   const snap=await getDocs(query(collection(db,'records'),where('kind','==','approval')));
   const all=[];snap.forEach(d=>all.push({id:d.id,...d.data()}));
-  const pending=all.filter(r=>r.status==='pending').sort((a,b)=>(a.submittedAt||'').localeCompare(b.submittedAt||''));
-  const done=all.filter(r=>r.status==='approved'||r.status==='rejected').sort((a,b)=>(b.approvedAt||b.submittedAt||'').localeCompare(a.approvedAt||a.submittedAt||''));
-  const tb=$('tab-badge-approval');if(tb){tb.textContent=pending.length||'';tb.style.display=pending.length?'inline-flex':'none';}
-  const attBtn=r=>r.fileURL?attLink(r):((r.form&&r.form.title)||'');
-  const pendHtml=pending.length?pending.map(r=>{
-    const t=TYPES[r.type],isNew=r.viewed===false,file=attBtn(r);
-    return `<div class="appr-card"><div class="appr-top">
-      <div><div class="appr-title">${t.label}${isNew?' <span class="new-tag">NEW</span>':''}</div>
-      <div class="appr-meta">${r.site} · ${r.manager} · 제출 ${fmtWhen(r.submittedAt)}</div></div></div>
-      ${file?`<div class="appr-reason">${file}</div>`:''}
-      <div class="appr-actions"><button class="btn-green" onclick="decide('${r.id}','approved')"><i class="ti ti-check"></i> 승인</button>
-      <button class="btn-red" onclick="decide('${r.id}','rejected')"><i class="ti ti-x"></i> 반려</button></div></div>`;
-  }).join(''):'<div class="empty">대기 중인 결재가 없습니다</div>';
-  const doneHtml=done.length?done.map(r=>{
-    const t=TYPES[r.type],file=attBtn(r),ok=r.status==='approved';
-    return `<div class="appr-card done"><div class="appr-top">
-      <div><div class="appr-title">${t.label} <span class="st-pill ${ok?'ok':'no'}">${ok?'승인':'반려'}</span></div>
-      <div class="appr-meta">${r.site} · ${r.manager} · ${r.approvedAt?'처리 '+fmtWhen(r.approvedAt):'제출 '+fmtWhen(r.submittedAt)}</div></div></div>
-      ${file?`<div class="appr-reason">${file}</div>`:''}
-      ${(!ok&&r.rejectReason)?`<div class="appr-reason" style="color:var(--red)">사유: ${r.rejectReason}</div>`:''}</div>`;
-  }).join(''):'';
-  $('approval-wrap').innerHTML=`<div class="appr-sec-title">대기 ${pending.length}건</div>${pendHtml}`
-    +(done.length?`<div class="appr-sec-title" style="margin-top:18px;">처리 내역 ${done.length}건</div>${doneHtml}`:'');
+  const pendingAll=all.filter(r=>r.status==='pending');
+  const tb=$('tab-badge-approval');if(tb){tb.textContent=pendingAll.length||'';tb.style.display=pendingAll.length?'inline-flex':'none';}
+  const types=Object.keys(TYPES).filter(k=>TYPES[k].group==='결재요청'&&all.some(r=>r.type===k));
+  if(apprCat!=='all'&&!types.includes(apprCat))apprCat='all';
+  if(!types.length){$('approval-wrap').innerHTML='<div class="empty">결재 내역이 없습니다</div>';return;}
+  const chips=`<div class="cat-chips appr-chips"><button class="cat-chip${apprCat==='all'?' active':''}" onclick="setApprCat('all')">전체${pendingAll.length?` <span class="chip-n">${pendingAll.length}</span>`:''}</button>`+
+    types.map(k=>{const pc=all.filter(r=>r.type===k&&r.status==='pending').length;return `<button class="cat-chip${apprCat===k?' active':''}" onclick="setApprCat('${k}')">${TYPES[k].label}${pc?` <span class="chip-n">${pc}</span>`:''}</button>`;}).join('')+`</div>`;
+  const showTypes=apprCat==='all'?types:[apprCat];
+  let body='';
+  showTypes.forEach(k=>{
+    const recs=all.filter(r=>r.type===k);
+    const pend=recs.filter(r=>r.status==='pending').sort((a,b)=>(a.submittedAt||'').localeCompare(b.submittedAt||''));
+    const dn=recs.filter(r=>r.status!=='pending').sort((a,b)=>(b.approvedAt||b.submittedAt||'').localeCompare(a.approvedAt||a.submittedAt||''));
+    body+=`<div class="appr-group"><div class="appr-group-head"><i class="ti ti-file-text"></i> ${TYPES[k].label} <span class="ag-n">${pend.length?`대기 ${pend.length}`:'대기 없음'}</span></div>`;
+    body+=pend.map(apprPendCard).join('');
+    if(dn.length)body+=`<div class="appr-done-lbl">처리 내역 ${dn.length}</div>`+dn.map(apprDoneCard).join('');
+    body+=`</div>`;
+  });
+  $('approval-wrap').innerHTML=chips+body;
 }
+window.setApprCat=function(c){apprCat=c;renderApprovalQueue();};
 window.markViewed=async function(id){
   try{
     await updateDoc(doc(db,'records',id),{viewed:true,viewedAt:new Date().toISOString()});
@@ -1353,6 +1377,14 @@ window.decide=async function(id,status){
     await updateDoc(doc(db,'records',id),{status,viewed:true,viewedAt:new Date().toISOString(),approvedBy:'관리자',approvedAt:new Date().toISOString(),rejectReason:reason});
     hideLoading();toast(status==='approved'?'승인 완료':'반려 처리');updateHomeBadge();await renderApprovalQueue();
   }catch(e){hideLoading();toast('처리 실패: '+e.message,true);}
+};
+window.undoDecision=async function(id){
+  if(!confirm('승인/반려를 취소하고 다시 대기로 돌릴까요?'))return;
+  showLoading('처리 중...');
+  try{
+    await updateDoc(doc(db,'records',id),{status:'pending',approvedAt:null,approvedBy:null,rejectReason:''});
+    hideLoading();toast('대기로 되돌렸습니다');updateHomeBadge();await renderApprovalQueue();
+  }catch(e){hideLoading();toast('실패: '+e.message,true);}
 };
 
 // ── 설정 ──
