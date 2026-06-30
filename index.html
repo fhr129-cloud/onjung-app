@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -268,6 +269,22 @@ textarea{resize:vertical;min-height:64px;}
 .rec-mgr{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%;}
 .rec-cnt{font-size:12px;font-weight:600;color:var(--blue);flex-shrink:0;}
 .rec-empty{padding:13px 15px;color:var(--text4);font-size:13px;}
+.sub-group{border-top:.5px solid var(--border);}
+.sub-head{width:100%;display:flex;align-items:center;gap:8px;padding:11px 15px;background:#fafaf8;border:none;cursor:pointer;font-family:inherit;}
+.sg-i{font-size:16px;flex-shrink:0;}
+.sg-i.green{color:var(--green);}
+.sg-i.red{color:var(--red);}
+.sg-lbl{flex:1;text-align:left;font-size:13px;font-weight:600;}
+.sg-chev{font-size:15px;color:var(--text4);transition:transform .2s;flex-shrink:0;}
+.sub-body{display:none;}
+.sub-body.open{display:block;}
+.rec-att{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:4px 10px;border-radius:8px;flex-shrink:0;white-space:nowrap;}
+.rec-form{font-size:12px;color:var(--text2);text-align:right;flex-shrink:0;}
+.rec-row.mis{color:var(--text3);}
+.rec-row.mis .rec-site{font-weight:400;}
+.rec-wait{font-size:14px;color:var(--text4);}
+.dl-all{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#fff;background:var(--blue);padding:4px 11px;border-radius:8px;flex-shrink:0;}
+.dl-all:hover{background:var(--blue-dark);}
 
 /* ── 오버레이 ── */
 .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.78);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -419,8 +436,8 @@ const ADMIN_PW='8770';
 const TYPES={
   ilmagam:   {label:'일마감', group:'결산관리', kind:'file', period:'weekly', slot:'single', ready:true},
   junggan:   {label:'중간결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
-  sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:false},
   monthclose:{label:'월말결산', group:'결산관리', kind:'file', period:'monthly', prevMonth:true, slot:'single', ready:true},
+  sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:false},
 
   jichul:    {label:'지출결의서', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'제목',type:'text'},{key:'amount',label:'금액(원)',type:'number'},{key:'reason',label:'사유',type:'textarea'}]},
@@ -979,7 +996,7 @@ window.loadAdmin=async function(){
   hideLoading();
 };
 function renderMatrix(date){
-  const month=date.slice(0,7);
+  const allSites=Object.keys(SITE_MEALS).sort((a,b)=>a.localeCompare(b,'ko'));
   let html='';
   GROUP_ORDER.forEach(g=>{
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].ready&&TYPES[k].kind!=='approval');
@@ -989,25 +1006,38 @@ function renderMatrix(date){
       const t=TYPES[k],period=periodOf(k,date);
       const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
       const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
-      const sites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
-      const id='ir-'+sani(k);
-      const rows=sites.length?sites.map(site=>{
-        const rs=bySite[site],mgr=rs[0].manager||'';
-        const slots=rs.map(r=>r.slot).filter(s=>s&&s!=='기본');
-        const slotTxt=slots.length?' · '+slots.join(', '):'';
-        const isNew=rs.some(r=>r.viewed===false);
-        return `<div class="rec-row" onclick="showDetail('${k}','${site.replace(/'/g,"\\'")}','${period}')">
-          <span class="rec-site">${site}${isNew?' <span class="new-tag">NEW</span>':''}</span><span class="rec-mgr">${mgr}${slotTxt}</span><span class="rec-cnt">${rs.length}건</span></div>`;
-      }).join(''):'<div class="rec-empty">아직 받은 내역이 없습니다</div>';
+      const subSites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
+      const misSites=allSites.filter(s=>!bySite[s]);
+      const id='ir-'+sani(k),subId=id+'-s',misId=id+'-m';
       const newN=recs.filter(r=>r.viewed===false).length;
+      const fileN=recs.filter(r=>r.fileURL).length;
+      const subRows=subSites.length?subSites.map(site=>{
+        const rs=bySite[site],isNew=rs.some(r=>r.viewed===false),r0=rs[0];
+        let att='';
+        if(t.kind==='file'&&r0.fileURL)att=`<a class="rec-att" href="${r0.fileURL}" target="_blank" onclick="markViewed('${r0.id}')"><i class="ti ti-paperclip"></i> 첨부</a>`;
+        else if(t.kind==='photo'&&r0.photoURLs)att=`<a class="rec-att" href="${r0.photoURLs[0]}" target="_blank" onclick="markViewed('${r0.id}')"><i class="ti ti-photo"></i> 사진</a>`;
+        else if(t.kind==='form')att=`<span class="rec-form">${rs.map(r=>(r.slot&&r.slot!=='기본'?r.slot+' ':'')+(r.form?Object.values(r.form).join('/'):'')).join(' · ')}</span>`;
+        return `<div class="rec-row"><span class="rec-site">${site}${isNew?' <span class="new-tag">NEW</span>':''}</span><span class="rec-mgr">${r0.manager||''}</span>${att}</div>`;
+      }).join(''):'<div class="rec-empty">제출한 사업장이 없습니다</div>';
+      const misRows=misSites.length?misSites.map(s=>`<div class="rec-row mis"><span class="rec-site">${s}</span><i class="ti ti-clock rec-wait"></i></div>`).join(''):'<div class="rec-empty">모두 제출했습니다 🎉</div>';
+      const dlBtn=(fileN&&subSites.length)?`<span class="dl-all" onclick="event.stopPropagation();downloadAll('${k}','${period}')"><i class="ti ti-download"></i> 전체받기</span>`:'';
       html+=`<div class="item-rec">
         <button class="item-rec-head" onclick="toggleRec('${id}')">
           <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span></span>
           ${newN?`<span class="ir-new">${newN}</span>`:''}
-          <span class="ir-cnt">${sites.length?sites.length+'개 사업장 · '+recs.length+'건':'없음'}</span>
+          <span class="ir-cnt">${subSites.length}/${allSites.length}</span>
           <i class="ti ti-chevron-down ir-chev"></i>
         </button>
-        <div class="item-rec-body" id="${id}">${rows}</div>
+        <div class="item-rec-body" id="${id}">
+          <div class="sub-group">
+            <button class="sub-head" onclick="toggleRec('${subId}')"><i class="ti ti-circle-check sg-i green"></i><span class="sg-lbl">제출 ${subSites.length}곳</span>${dlBtn}<i class="ti ti-chevron-down sg-chev"></i></button>
+            <div class="sub-body" id="${subId}">${subRows}</div>
+          </div>
+          <div class="sub-group">
+            <button class="sub-head" onclick="toggleRec('${misId}')"><i class="ti ti-alert-circle sg-i red"></i><span class="sg-lbl">미제출 ${misSites.length}곳</span><i class="ti ti-chevron-down sg-chev"></i></button>
+            <div class="sub-body" id="${misId}">${misRows}</div>
+          </div>
+        </div>
       </div>`;
     });
     html+=`</div>`;
@@ -1015,22 +1045,35 @@ function renderMatrix(date){
   $('matrix-wrap').innerHTML=html||'<div class="empty">표시할 항목이 없습니다</div>';
   $('detail-wrap').innerHTML='';
 }
-window.toggleRec=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.ir-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
-window.showDetail=function(typeKey,site,period){
-  const t=TYPES[typeKey],date=$('admin-date').value;
-  const slots=expectedSlots(typeKey,site,date);
-  let rows=slots.map(s=>{
-    const r=adminCache[`${typeKey}|${site}|${period}|${s}`];
-    let v='<span class="cell-none">미제출</span>';
-    if(r){
-      if(t.kind==='photo')v=`<img class="thumb" style="max-height:120px;" src="${r.photoURLs[0]}" onclick="markViewed('${r.id}');openModal('${r.photoURLs[0]}')"/>${r.viewed===false?' <span class="new-tag">NEW</span>':''}`;
-      else if(t.kind==='file')v=`<i class="ti ti-paperclip"></i> <a href="${r.fileURL}" target="_blank" onclick="markViewed('${r.id}')">${r.fileName||'첨부'}</a>${r.viewed===false?' <span class="new-tag">NEW</span>':''}`;
-      else if(t.kind==='form')v=t.fields.map(f=>`${f.label}: <b>${r.form?r.form[f.key]??'-':'-'}</b>`).join(' · ');
+window.toggleRec=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.ir-chev,.sg-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
+function stdName(r){
+  const t=TYPES[r.type];let p='';
+  if(t.period==='weekly'){const w=ymwFromWeekStart(r.period);p=`${w.year}년${w.month}월${w.week}주차`;}
+  else if(t.period==='monthly'){const a=r.period.split('-');p=`${a[0]}년${Number(a[1])}월`;}
+  else p=r.period;
+  const ext=(r.fileName&&r.fileName.includes('.'))?'.'+r.fileName.split('.').pop():'';
+  return `${p} ${t.label}(${r.site})${ext}`.replace(/[\\/:*?"<>|]/g,'_');
+}
+window.downloadAll=async function(typeKey,period){
+  const recs=adminRecords.filter(r=>r.type===typeKey&&r.period===period&&r.fileURL);
+  if(!recs.length){toast('받을 파일이 없습니다',true);return;}
+  if(typeof JSZip==='undefined'){toast('다운로드 모듈 로딩 실패 — 새로고침 후 다시',true);return;}
+  showLoading(`파일 모으는 중... (0/${recs.length})`);
+  try{
+    const zip=new JSZip();let i=0;
+    for(const r of recs){
+      i++;$('loading-text').textContent=`파일 모으는 중... (${i}/${recs.length})`;
+      const blob=await fetch(r.fileURL).then(x=>{if(!x.ok)throw new Error('파일 받기 실패');return x.blob();});
+      let nm=stdName(r);if(zip.file(nm))nm=nm.replace(/(\.[^.]+)?$/,'_'+i+'$1');
+      zip.file(nm,blob);
+      if(r.viewed===false)markViewed(r.id);
     }
-    return `<div class="dl-row"><span class="nm">${s}</span><span style="grid-column:2/4;text-align:left;">${v}</span></div>`;
-  }).join('');
-  $('detail-wrap').innerHTML=`<div class="setting-block" style="margin-top:12px;"><div style="font-weight:600;margin-bottom:8px;">${site} · ${t.label} (${period})</div>${rows}</div>`;
-  if(t.kind==='form')slots.forEach(s=>{const r=adminCache[`${typeKey}|${site}|${period}|${s}`];if(r&&r.viewed===false)markViewed(r.id);});
+    const out=await zip.generateAsync({type:'blob'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(out);
+    a.download=`${TYPES[typeKey].label}_${periodLabel(typeKey,period)}.zip`.replace(/[\\/:*?"<>|]/g,'_');
+    document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    hideLoading();toast(`${recs.length}개 파일을 받았습니다`);
+  }catch(e){hideLoading();toast('다운로드 실패: '+e.message,true);console.error(e);}
 };
 async function renderApprovalQueue(){
   const snap=await getDocs(query(collection(db,'records'),where('status','==','pending')));
