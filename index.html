@@ -103,15 +103,36 @@ textarea{resize:vertical;min-height:64px;}
 .grid-item:last-child{border-bottom:none;}
 .grid-item:hover{background:#eef4fb;border-radius:8px;}
 .gi-icon{width:28px;height:28px;border-radius:7px;background:#fff;border:.5px solid var(--border);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-.gi-tw{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0;}
-.gi-label{font-size:14px;font-weight:500;}
-.gi-dl{align-self:flex-start;font-size:11px;font-weight:600;color:#fff;background:var(--red);padding:2px 8px;border-radius:99px;}
+.gi-label{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gi-dl{flex-shrink:0;font-size:11px;font-weight:600;color:#fff;background:var(--red);padding:2px 8px;border-radius:99px;white-space:nowrap;}
 .gi-arrow{color:var(--text4);font-size:16px;flex-shrink:0;}
 .grid-item.soon{cursor:default;opacity:.6;}
 .grid-item.soon:hover{border-color:var(--border2);background:#fafaf8;}
 .gi-soon{font-size:11px;color:var(--text4);background:#eee;padding:2px 8px;border-radius:99px;flex-shrink:0;}
 
 /* ── 업로드 헤더 ── */
+.brand-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;flex-wrap:wrap;}
+.bb-main{display:flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap;}
+.bb-co{font-size:13px;font-weight:700;color:var(--blue);}
+.bb-sep{font-size:13px;color:var(--text4);}
+.bb-site{font-size:14px;font-weight:600;}
+.bb-mgr{font-size:13px;color:var(--text2);font-weight:500;}
+.site-change{background:#fff;border:.5px solid #ccc;border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;font-family:inherit;flex-shrink:0;}
+.cnt-dot{min-width:22px;height:22px;padding:0 6px;border-radius:99px;color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:3px;}
+.cnt-dot.red{background:var(--red);}
+.cnt-dot.green{background:var(--green);}
+.panel{background:var(--card);border:.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.panel-title{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;}
+.panel-title i{font-size:18px;color:var(--blue);}
+.dl-inline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dl-inline:empty{display:none;}
+.dl-txt{font-size:12px;color:var(--text2);}
+.pp-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.pp-ic{font-size:18px;color:var(--blue);flex-shrink:0;}
+.pp-row select,.pp-row input[type=date]{width:auto;flex:0 0 auto;}
+.pp-suffix{font-size:14px;font-weight:600;color:var(--text1);}
+/* ── 업로드 항목 헤더 ── */
 .form-hero{display:flex;align-items:center;gap:13px;margin-bottom:16px;}
 .fh-icon{width:46px;height:46px;border-radius:12px;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;}
 .fh-title{font-size:18px;font-weight:600;}
@@ -129,6 +150,8 @@ textarea{resize:vertical;min-height:64px;}
 /* ── 슬롯 ── */
 .slot-row{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
 .slot-row.done{background:#f6faef;border-color:var(--green-border);}
+.slot-row.single{background:transparent;border:none;padding:0;margin-bottom:0;}
+.slot-row.single .slot-head{margin-bottom:8px;}
 .slot-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .slot-name{font-size:14px;font-weight:600;}
 .badge-done{font-size:11px;font-weight:600;color:var(--green);display:inline-flex;align-items:center;gap:3px;}
@@ -225,7 +248,7 @@ textarea{resize:vertical;min-height:64px;}
 .md-label{font-size:12px;font-weight:600;color:var(--text2);width:32px;flex-shrink:0;}
 .md-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 9px;border:.5px solid var(--border);border-radius:99px;cursor:pointer;user-select:none;}
 .md-chip input{margin:0;width:auto;}
-.gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:99px;}
+.gi-done{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:99px;white-space:nowrap;}
 .gi-done i{font-size:13px;}
 .cat-sec{margin-bottom:18px;}
 .cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue);margin:0 0 9px 2px;}
@@ -301,7 +324,7 @@ textarea{resize:vertical;min-height:64px;}
 
     <!-- 영양사 업로드 -->
     <div class="section" id="sec-submit">
-      <div class="form-group">
+      <div class="form-group" id="name-group">
         <label class="field-label">내 이름 <span class="required">*</span></label>
         <select id="manager-select" onchange="onManagerChange()"><option value="">이름 선택</option></select>
         <div class="sub-hint" id="site-hint"></div>
@@ -312,16 +335,15 @@ textarea{resize:vertical;min-height:64px;}
 
       <div id="form-area" style="display:none;">
         <div id="form-header"></div>
-        <div class="two-col">
-          <div><label class="field-label">사업장</label><div class="static-field" id="form-site"></div></div>
-          <div><label class="field-label" id="period-label">날짜 <span class="required">*</span></label>
-            <input type="date" id="date-input" onchange="onContextChange()" /></div>
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title"><i class="ti ti-upload"></i> 제출</span><span class="dl-inline" id="dl-inline"></span></div>
+          <div id="period-area"></div>
+          <div id="submit-body"></div>
+          <div class="submit-wrap" id="submit-wrap" style="display:none;">
+            <button class="btn-submit" id="btn-submit" onclick="submitSlots()">제출</button>
+          </div>
         </div>
-        <div class="deadline-banner" id="deadline-banner"></div>
-        <div id="submit-body"></div>
-        <div class="submit-wrap" id="submit-wrap" style="display:none;">
-          <button class="btn-submit" id="btn-submit" onclick="submitSlots()">모두 제출</button>
-        </div>
+        <div id="history-area"></div>
       </div>
     </div>
 
@@ -426,6 +448,7 @@ const GROUP_ORDER=['결산관리','결재요청','운영관리'];
 const MATRIX_TYPES=Object.keys(TYPES).filter(k=>TYPES[k].ready&&TYPES[k].kind!=='approval');
 
 const GROUP_ICON={'결산관리':'ti-receipt-2','결재요청':'ti-file-check','운영관리':'ti-clipboard-list'};
+const GROUP_LABEL={'결산관리':'결산','결재요청':'결재','운영관리':'운영'};
 const KIND_ICON={photo:'ti-camera',file:'ti-file-text',form:'ti-pencil',approval:'ti-checkbox'};
 
 // 사업장/매니저 데이터(테스트용 기본값). config/settings 문서가 있으면 그 값으로 덮어씀.
@@ -438,6 +461,7 @@ let slotState={};
 let adminCache={};
 let adminRecords=[];
 let expandedGroup=null, navView='site', selSite=null, curScreen='home', siteDone={}, siteDoneAt={}, itemHistory=[], apprFile=null;
+let periodSel={year:0,month:0,week:0,weekStart:''};
 
 // ── 공통 유틸 ──
 const todayStr=(()=>{const n=new Date();return new Date(n.getTime()+9*36e5).toISOString().slice(0,10);})();
@@ -450,7 +474,7 @@ function getDayType(d){const g=new Date(d).getDay();return g===6?'토요일':g==
 function getMeals(site,date){return (SITE_MEALS[site]&&SITE_MEALS[site][getDayType(date)])||[];}
 function cMgr(){return $('manager-select').value;}
 function cSite(){return $('site-select').value;}
-function cDate(){return $('date-input').value;}
+function cDate(){const e=$('date-input');return e?e.value:todayStr;}
 function prevMonth(ym){let [y,m]=ym.split('-').map(Number);m--;if(m<1){m=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;}
 function weekStart(dateStr){
   const d=new Date((dateStr||todayStr)+'T12:00:00');
@@ -547,6 +571,7 @@ function applyState(st){
 }
 function applySubmitView(view){
   navView=view;
+  $('name-group').style.display=(view==='site')?'block':'none';
   if(view==='form'){$('nav-area').style.display='none';$('form-area').style.display='block';if(curType)renderForm();}
   else{$('form-area').style.display='none';$('nav-area').style.display='block';renderNav();}
 }
@@ -566,26 +591,26 @@ function accordionHtml(){
     const open=expandedGroup===g;
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
     const readyN=keys.filter(k=>TYPES[k].ready).length;
-    const dlCount=keys.filter(k=>TYPES[k].ready&&hasDeadline(k)&&!siteDone[k]).length;
-    const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
+    const dlKeys=keys.filter(k=>TYPES[k].ready&&hasDeadline(k));
+    const redN=dlKeys.filter(k=>!siteDone[k]).length;
+    const greenN=dlKeys.filter(k=>siteDone[k]).length;
+    const badges=`${greenN>0?`<span class="cnt-dot green">${greenN}</span>`:''}${redN>0?`<span class="cnt-dot red">${redN}</span>`:''}`;
     const grid=keys.map(k=>{const t=TYPES[k];
       let dlTag='';
       if(hasDeadline(k)){
-        if(siteDone[k]){
-          const dt=deadlineOf(k,todayStr);
-          const dlMD=dt?` (마감 ${dt.getMonth()+1}/${dt.getDate()})`:'';
-          dlTag=`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료${siteDoneAt[k]?' '+fmtWhen(siteDoneAt[k]):''}${dlMD}</span>`;
-        }else dlTag=`<span class="gi-dl">${fmtDeadlineOf(k,todayStr)}</span>`;
+        const dt=deadlineOf(k,todayStr);
+        if(siteDone[k])dlTag=`<span class="gi-done"><i class="ti ti-circle-check"></i> ${siteDoneAt[k]?fmtWhen(siteDoneAt[k]):'완료'}</span>`;
+        else if(dt)dlTag=`<span class="gi-dl">~${dt.getMonth()+1}/${dt.getDate()}(${WEEKDAY[dt.getDay()]})</span>`;
       }
       return t.ready
-        ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span>${dlTag}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
-        : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span></span><span class="gi-soon">준비중</span></div>`;
+        ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-label">${t.label}</span>${dlTag}<i class="ti ti-chevron-right gi-arrow"></i></button>`
+        : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-label">${t.label}</span><span class="gi-soon">준비중</span></div>`;
     }).join('');
     return `<div class="acc${open?' open':''}" id="acc-${g}">
       <button class="acc-head" onclick="toggleGroup('${g}')">
         <span class="acc-icon"><i class="ti ${GROUP_ICON[g]}"></i></span>
-        <span class="acc-tw"><span class="acc-name">${g}</span><span class="acc-count">${readyN}개 항목</span></span>
-        ${dlBadge}
+        <span class="acc-tw"><span class="acc-name">${GROUP_LABEL[g]||g}</span><span class="acc-count">${readyN}개 항목</span></span>
+        ${badges}
         <i class="ti ti-chevron-down acc-chev"></i>
       </button>
       <div class="acc-body"><div class="item-grid">${grid}</div></div>
@@ -603,7 +628,10 @@ function renderNav(){
       sites.map(s=>`<button class="site-pick" onclick="pickSite('${s.replace(/'/g,"\\'")}')"><span class="sp-icon"><i class="ti ti-building-factory-2"></i></span><span class="sp-name">${s}</span></button>`).join('')+`</div>`;
     return;
   }
-  nav.innerHTML=`<div class="site-bar"><span class="sb-left"><i class="ti ti-map-pin"></i>${selSite}</span><button class="site-change" onclick="changeSite()">변경</button></div>`+accordionHtml();
+  nav.innerHTML=`<div class="brand-bar">
+      <div class="bb-main"><span class="bb-co">온정 F&amp;B</span><i class="ti ti-chevron-right bb-sep"></i><span class="bb-site">${selSite}</span><i class="ti ti-chevron-right bb-sep"></i><span class="bb-mgr">${cMgr()}</span></div>
+      <button class="site-change" onclick="changeSite()">사업장 변경</button>
+    </div>`+accordionHtml();
 }
 window.pickSite=async function(s){
   selSite=s;$('site-select').value=s;expandedGroup=null;
@@ -647,17 +675,54 @@ window.toggleGroup=function(g){
 window.openType=function(k){curType=k;go({screen:'submit',view:'form'});};
 function renderForm(){
   const t=TYPES[curType];
-  $('form-site').innerHTML='<i class="ti ti-map-pin fs-pin"></i>'+(selSite||'-');
-  let sub=t.group;
-  if(t.kind!=='approval'){const pl=periodLabel(curType,periodOf(curType,cDate()||todayStr));if(pl)sub+=` · 이번 제출: ${pl}`;}
-  $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}</div><div class="fh-sub">${sub}</div></div></div>`;
-  syncPeriodLabel();
+  initPeriodSel();
+  $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}</div><div class="fh-sub">${GROUP_LABEL[t.group]||t.group}</div></div></div>`;
+  $('period-area').innerHTML=renderPeriodPicker();
   onContextChange();
 }
-function syncPeriodLabel(){
-  const t=TYPES[curType];
-  $('period-label').innerHTML=(t.period==='weekly'?'제출일(주간)':t.period==='monthly'?'제출일':t.period==='adhoc'?'기준일':'날짜')+' <span class="required">*</span>';
+function wedCount(year,month){let n=0;for(let d=1;d<=31;d++){const dt=new Date(year,month-1,d,12);if(dt.getMonth()!==month-1)break;if(dt.getDay()===3)n++;}return n||5;}
+function weekStartFromYMW(year,month,week){
+  const weds=[];for(let d=1;d<=31;d++){const dt=new Date(year,month-1,d,12);if(dt.getMonth()!==month-1)break;if(dt.getDay()===3)weds.push(d);}
+  const wd=weds[Math.min(week-1,weds.length-1)]||weds[weds.length-1]||1;
+  const wed=new Date(year,month-1,wd,12);wed.setDate(wed.getDate()-2);
+  return `${wed.getFullYear()}-${String(wed.getMonth()+1).padStart(2,'0')}-${String(wed.getDate()).padStart(2,'0')}`;
 }
+function ymwFromWeekStart(ws){const mon=new Date(ws+'T12:00:00');const wed=new Date(mon);wed.setDate(mon.getDate()+2);return {year:wed.getFullYear(),month:wed.getMonth()+1,week:Math.ceil(wed.getDate()/7)};}
+function initPeriodSel(){
+  const t=TYPES[curType];const now=new Date(todayStr+'T12:00:00');
+  if(t.period==='weekly'){const ws=weekStart(todayStr);periodSel={...ymwFromWeekStart(ws),weekStart:ws};}
+  else if(t.period==='monthly'){let y=now.getFullYear(),m=now.getMonth()+1;if(t.prevMonth){m--;if(m<1){m=12;y--;}}periodSel={year:y,month:m,week:0,weekStart:''};}
+}
+function curPeriod(){
+  const t=TYPES[curType];
+  if(t.period==='weekly')return periodSel.weekStart;
+  if(t.period==='monthly')return `${periodSel.year}-${String(periodSel.month).padStart(2,'0')}`;
+  return cDate();
+}
+function renderPeriodPicker(){
+  const t=TYPES[curType];
+  if(t.kind==='approval')return '';
+  if(t.period==='daily')return `<div class="pp-row"><i class="ti ti-calendar pp-ic"></i><input type="date" id="date-input" value="${cDate()||todayStr}" onchange="onPeriodChange()"/></div>`;
+  const cy=new Date().getFullYear();const yrs=[];for(let y=cy-1;y<=cy+1;y++)yrs.push(y);
+  const yearSel=`<select id="pp-year" onchange="onPeriodChange()">${yrs.map(y=>`<option value="${y}"${y===periodSel.year?' selected':''}>${y}년</option>`).join('')}</select>`;
+  const monSel=`<select id="pp-month" onchange="onPeriodChange()">${Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}"${m===periodSel.month?' selected':''}>${m}월</option>`).join('')}</select>`;
+  if(t.period==='monthly')return `<div class="pp-row"><i class="ti ti-calendar-month pp-ic"></i>${yearSel}${monSel}<span class="pp-suffix">${t.label}</span></div>`;
+  const wc=wedCount(periodSel.year,periodSel.month);
+  if(periodSel.week>wc)periodSel.week=wc;
+  const weekSel=`<select id="pp-week" onchange="onPeriodChange()">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===periodSel.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
+  return `<div class="pp-row"><i class="ti ti-calendar-week pp-ic"></i>${yearSel}${monSel}${weekSel}<span class="pp-suffix">${t.label}</span></div>`;
+}
+window.onPeriodChange=function(){
+  const t=TYPES[curType];
+  if(t.period==='weekly'){
+    periodSel.year=+$('pp-year').value;periodSel.month=+$('pp-month').value;periodSel.week=+$('pp-week').value;
+    periodSel.weekStart=weekStartFromYMW(periodSel.year,periodSel.month,periodSel.week);
+    $('period-area').innerHTML=renderPeriodPicker();
+  }else if(t.period==='monthly'){
+    periodSel.year=+$('pp-year').value;periodSel.month=+$('pp-month').value;
+  }
+  onContextChange();
+};
 
 // ── 매니저/사업장 ──
 window.onManagerChange=function(){
@@ -683,7 +748,7 @@ async function onContextChange(){
   renderSubmitBody();
 }
 async function loadSlotRecords(){
-  const site=cSite(),date=cDate(),period=periodOf(curType,date);
+  const site=cSite(),period=curPeriod();
   const snap=await getDocs(query(collection(db,'records'),where('type','==',curType),where('site','==',site)));
   itemHistory=[];
   snap.forEach(d=>{const r=d.data();itemHistory.push(r);if(r.period===period){slotState[r.slot]=slotState[r.slot]||{};slotState[r.slot].record=r;}});
@@ -692,22 +757,23 @@ async function loadSlotRecords(){
 
 // ── 제출 화면 ──
 function renderSubmitBody(){
-  const t=TYPES[curType],body=$('submit-body'),wrap=$('submit-wrap'),banner=$('deadline-banner');
-  banner.innerHTML='';wrap.style.display='none';
+  const t=TYPES[curType],body=$('submit-body'),wrap=$('submit-wrap'),dlInline=$('dl-inline'),hist=$('history-area');
+  dlInline.innerHTML='';wrap.style.display='none';hist.innerHTML='';
   if(t.kind==='approval'){renderApprovalSubmit();return;}
-  const site=cSite(),date=cDate();
+  const site=cSite();
   if(!site){body.innerHTML='<div class="empty">사업장을 선택하세요</div>';return;}
-  const slots=expectedSlots(curType,site,date);
-  if(!slots.length){body.innerHTML='<div class="empty">이 날짜에 해당 항목 제출 대상이 없습니다</div>';return;}
+  const slots=expectedSlots(curType,site,cDate());
+  if(!slots.length){body.innerHTML='<div class="empty">이 기간에 제출 대상이 없습니다</div>';hist.innerHTML=renderHistory();return;}
   renderDeadlineBanner(slots);
-  body.innerHTML=slots.map(s=>buildSlot(s)).join('')+renderHistory();
+  body.innerHTML=slots.map(s=>buildSlot(s)).join('');
   wrap.style.display='block';
+  hist.innerHTML=renderHistory();
   updateSubmitBtn();
 }
 function renderHistory(){
-  const t=TYPES[curType],curPeriod=periodOf(curType,cDate());
-  const past=itemHistory.filter(r=>r.period!==curPeriod);
-  if(!past.length)return '';
+  const t=TYPES[curType],cp=curPeriod();
+  const past=itemHistory.filter(r=>r.period!==cp);
+  if(!past.length)return '<div class="panel"><div class="panel-head"><span class="panel-title"><i class="ti ti-history"></i> 제출 이력</span></div><div class="empty" style="padding:20px;">지난 제출 내역이 없습니다</div></div>';
   const byP={};past.forEach(r=>{(byP[r.period]=byP[r.period]||[]).push(r);});
   const periods=Object.keys(byP).sort((a,b)=>b.localeCompare(a));
   const rows=periods.map(p=>{
@@ -721,18 +787,18 @@ function renderHistory(){
     }).join('');
     return `<div class="hp"><div class="hp-head">${periodLabel(curType,p)}</div>${lines}</div>`;
   }).join('');
-  return `<div class="section-title">지난 제출 이력</div>${rows}`;
+  return `<div class="panel"><div class="panel-head"><span class="panel-title"><i class="ti ti-history"></i> 제출 이력</span></div>${rows}</div>`;
 }
 function renderDeadlineBanner(slots){
-  const date=cDate(),dl=deadlineOf(curType,date);
+  const dl=deadlineOf(curType,curPeriod());
   const done=slots.filter(s=>slotState[s]&&slotState[s].record).length;
   let pill,cls;
   if(done===slots.length){cls='dl-done';pill='제출완료';}
   else if(dl&&Date.now()>dl.getTime()){cls='dl-late';pill='마감 지남';}
   else if(dl&&dl.getTime()-Date.now()<6*36e5){cls='dl-soon';pill='마감 임박';}
   else{cls='dl-open';pill=done>0?`진행 ${done}/${slots.length}`:'미제출';}
-  const dlText=dl?fmtDeadlineOf(curType,date):'마감 미설정';
-  $('deadline-banner').innerHTML=`<span>${dlText}</span><span class="dl-pill ${cls}">${pill}</span>`;
+  const dlText=dl?fmtDeadlineOf(curType,curPeriod()):'마감 미설정';
+  $('dl-inline').innerHTML=`<span class="dl-pill ${cls}">${pill}</span><span class="dl-txt">${dlText}</span>`;
 }
 function buildSlot(slot){
   const t=TYPES[curType],st=slotState[slot]||{},rec=st.record;
@@ -750,9 +816,12 @@ function buildSlot(slot){
     else if(t.kind==='file')inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:'파일 첨부 (엑셀·PDF·사진 등 모든 형식)'}</span><input type="file" onchange="onPick('${slot}',this)"/></label>`;
     else if(t.kind==='form')inner=`<div class="form-fields">${t.fields.map(f=>`<input type="${f.type==='number'?'number':'text'}" placeholder="${f.label}" value="${st.form&&st.form[f.key]!=null?st.form[f.key]:''}" oninput="onForm('${slot}','${f.key}',this.value)"/>`).join('')}</div>`;
   }
-  return `<div class="slot-row${done?' done':''}">
-    <div class="slot-head"><span class="slot-name">${slot}</span>${done?`<span class="badge-done"><i class="ti ti-circle-check"></i> 제출완료 · ${fmtWhen(rec.submittedAt)}</span>`:''}</div>
-    ${inner}</div>`;
+  const single=(slot==='기본');
+  const badge=done?`<span class="badge-done"><i class="ti ti-circle-check"></i> 제출완료 · ${fmtWhen(rec.submittedAt)}</span>`:'';
+  const head = single
+    ? (done?`<div class="slot-head" style="justify-content:flex-end;">${badge}</div>`:'')
+    : `<div class="slot-head"><span class="slot-name">${slot}</span>${badge}</div>`;
+  return `<div class="slot-row${done?' done':''}${single?' single':''}">${head}${inner}</div>`;
 }
 window.redoSlot=function(slot){slotState[slot]={};renderSubmitBody();updateSubmitBtn();};
 window.onPick=function(slot,input){
@@ -771,7 +840,7 @@ function updateSubmitBtn(){
     if(t.kind==='form')return st&&st.form&&t.fields.some(f=>st.form[f.key]!=null&&st.form[f.key]!=='');
     return st&&st.file;}).length;
   const btn=$('btn-submit');btn.disabled=pending===0;
-  btn.textContent=pending>0?`모두 제출 (${pending}건)`:(slots.every(s=>slotState[s]&&slotState[s].record)?'제출 완료 ✓':'제출할 내용 없음');
+  btn.textContent=pending>0?`제출 (${pending}건)`:(slots.every(s=>slotState[s]&&slotState[s].record)?'제출 완료 ✓':'제출할 내용 없음');
 }
 
 function compressImage(file){return new Promise(res=>{
@@ -786,7 +855,7 @@ function compressImage(file){return new Promise(res=>{
 function withTimeout(p,ms,l){return Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(new Error((l||'작업')+' 시간 초과')),ms))]);}
 
 window.submitSlots=async function(){
-  const t=TYPES[curType],manager=cMgr(),site=cSite(),date=cDate(),period=periodOf(curType,date);
+  const t=TYPES[curType],manager=cMgr(),site=cSite(),date=cDate(),period=curPeriod();
   if(!manager){toast('매니저를 선택하세요',true);return;}
   const slots=expectedSlots(curType,site,date);
   const targets=slots.filter(s=>{const st=slotState[s];if(st&&st.record)return false;
@@ -915,7 +984,7 @@ function renderMatrix(date){
   GROUP_ORDER.forEach(g=>{
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].ready&&TYPES[k].kind!=='approval');
     if(!keys.length)return;
-    html+=`<div class="cat-sec"><div class="cat-sec-head"><i class="ti ${GROUP_ICON[g]}"></i> ${g}</div>`;
+    html+=`<div class="cat-sec"><div class="cat-sec-head"><i class="ti ${GROUP_ICON[g]}"></i> ${GROUP_LABEL[g]||g}</div>`;
     keys.forEach(k=>{
       const t=TYPES[k],period=periodOf(k,date);
       const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
@@ -1023,7 +1092,7 @@ function renderDeadlineSettings(){
     }).join('');
     html+=`<div class="dl-cat">
       <button class="dl-cat-head" onclick="toggleDlCat('${id}')">
-        <i class="ti ${GROUP_ICON[g]}"></i><span class="dlc-name">${g}</span>
+        <i class="ti ${GROUP_ICON[g]}"></i><span class="dlc-name">${GROUP_LABEL[g]||g}</span>
         ${setN?`<span class="dlc-cnt">${setN}</span>`:''}
         <i class="ti ti-chevron-down dlc-chev"></i>
       </button>
