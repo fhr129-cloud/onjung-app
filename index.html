@@ -167,6 +167,10 @@ textarea{resize:vertical;min-height:64px;}
 .ir-new{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;}
 .redo-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 12px;border:.5px solid var(--blue-border);border-radius:8px;background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
 .redo-btn:hover{background:#d9e9fa;}
+.edit-row{display:flex;gap:8px;margin-top:10px;}
+.edit-row .redo-btn{margin-top:0;}
+.del-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border:.5px solid var(--red-border);border-radius:8px;background:var(--red-light);color:var(--red);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+.del-btn:hover{background:#fbe0e0;}
 .lock-note{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:12px;color:var(--text4);}
 .lock-note i{font-size:14px;}
 .appr-dl{font-size:12px;font-weight:600;color:var(--red);display:flex;align-items:center;gap:5px;}
@@ -311,14 +315,19 @@ textarea{resize:vertical;min-height:64px;}
 .dl-toggle-chev{margin-left:auto;transition:transform .2s;color:var(--text4);}
 .dl-grp{font-size:11px;font-weight:600;color:var(--text4);background:#f0f1f3;padding:1px 7px;border-radius:99px;}
 .item-wrap{margin-bottom:8px;}
-.ip-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 11px;background:#f6f6f4;border-bottom:.5px solid var(--border);}
-.ip-row::before{content:'조회';font-size:11px;font-weight:600;color:var(--text4);}
-.ip-row.mv{background:#f6f6f4;border:.5px solid var(--border);border-radius:9px;margin:6px 0;}
-.ip-row.mv::before{content:'주차';}
-.ip-row .ip-ic{font-size:14px;color:var(--text3);}
-.ip-row select,.ip-row input[type=date]{padding:5px 7px;font-size:12.5px;border-radius:7px;}
-.ip-now{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:600;color:var(--text2);background:#fff;border:.5px solid var(--border);border-radius:7px;padding:5px 9px;cursor:pointer;font-family:inherit;margin-left:auto;}
-.ip-now:hover{background:#efefec;}
+.step-row{display:flex;align-items:center;gap:8px;}
+.step-btn{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:.5px solid var(--border);border-radius:11px;background:#fff;color:var(--text2);cursor:pointer;flex-shrink:0;font-size:18px;}
+.step-btn:hover{background:#f2f2ef;}
+.step-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#f6f6f4;border:.5px solid var(--border);border-radius:11px;padding:6px 6px;min-width:0;}
+.step-lbl{font-size:13px;font-weight:700;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.step-now{font-size:10.5px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;}
+.cat-chips{display:flex;gap:8px;margin-bottom:14px;}
+.cat-chip{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 8px;border:.5px solid var(--border);border-radius:11px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;}
+.cat-chip i{font-size:16px;}
+.cat-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.ip-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fbfbf9;border-bottom:.5px solid var(--border);}
+.ip-row.mv{background:#fbfbf9;border:.5px solid var(--border);border-radius:11px;margin:8px 0;padding:9px;}
+.ip-row .step-btn{width:36px;height:36px;font-size:16px;}
 .search-row{display:flex;align-items:center;gap:7px;padding:9px 11px;background:#f6f6f4;border:.5px solid var(--border);border-radius:9px;margin:8px 0;}
 .search-row i{font-size:15px;color:var(--text4);}
 .search-row input{flex:1;border:none;background:none;font-size:13px;padding:2px 0;outline:none;font-family:inherit;}
@@ -462,14 +471,6 @@ textarea{resize:vertical;min-height:64px;}
     <button class="btn-primary" style="width:100%;" onclick="dismissNotice()">확인했어요</button>
   </div>
 </div>
-<div class="sheet-overlay" id="att-overlay" onclick="if(event.target===this)closeAtt()">
-  <div class="sheet">
-    <div class="sheet-head" id="att-name"><i class="ti ti-paperclip"></i> 첨부파일</div>
-    <button class="btn-secondary att-btn" onclick="attOpen()"><i class="ti ti-external-link"></i> 열기</button>
-    <button class="btn-primary att-btn" onclick="attSave()"><i class="ti ti-download"></i> 저장</button>
-    <button class="att-cancel" onclick="closeAtt()">취소</button>
-  </div>
-</div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -546,7 +547,7 @@ function getDayType(d){const g=new Date(d).getDay();return g===6?'토요일':g==
 function getMeals(site,date){return (SITE_MEALS[site]&&SITE_MEALS[site][getDayType(date)])||[];}
 function cMgr(){return $('manager-select').value;}
 function cSite(){return $('site-select').value;}
-function cDate(){const e=$('date-input');return e?e.value:todayStr;}
+function cDate(){return periodSel.date||todayStr;}
 const WEEKDAY=['일','월','화','수','목','금','토'];
 function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function prevMonth(ym){let [y,m]=ym.split('-').map(Number);m--;if(m<1){m=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;}
@@ -635,7 +636,6 @@ async function init(){
   hideLoading();
   const mSel=$('manager-select');
   [...MANAGERS].sort((a,b)=>a.name.localeCompare(b.name,'ko')).forEach(m=>mSel.appendChild(new Option(m.name,m.name)));
-  $('date-input')&&($('date-input').value=todayStr);
   const saved=localStorage.getItem('savedManager');
   if(saved&&MANAGERS.find(m=>m.name===saved)){mSel.value=saved;onManagerChange();}
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem('navState')||'null');}catch(e){}
@@ -779,6 +779,7 @@ function initPeriodSel(){
   if(t.period==='weekly'){const ws=periodOf(curType,todayStr);periodSel={...ymwFromWeekStart(ws),weekStart:ws};}
   else if(t.period==='monthly'){let y=now.getFullYear(),m=now.getMonth()+1;if(t.prevMonth){m--;if(m<1){m=12;y--;}}periodSel={year:y,month:m,week:0,weekStart:''};}
   else if(t.period==='yearly'){periodSel={year:now.getFullYear(),month:0,week:0,weekStart:''};}
+  else periodSel={year:0,month:0,week:0,weekStart:'',date:todayStr};
 }
 function curPeriod(){
   const t=TYPES[curType];
@@ -787,37 +788,33 @@ function curPeriod(){
   if(t.period==='yearly')return String(periodSel.year);
   return cDate();
 }
+function stepLabel(typeKey,period){
+  const t=TYPES[typeKey];
+  if(t.period==='daily'){const d=new Date(period+'T12:00:00');return `${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()} (${WEEKDAY[d.getDay()]})`;}
+  if(t.period==='weekly'){const m=new Date(period+'T12:00:00'),s=new Date(m);s.setDate(m.getDate()+6);const w=ymwFromWeekStart(period);return `${w.year}년 ${w.month}월 ${w.week}주차 · ${m.getMonth()+1}/${m.getDate()}~${s.getMonth()+1}/${s.getDate()}`;}
+  if(t.period==='monthly'){const a=period.split('-');return `${a[0]}년 ${Number(a[1])}월`;}
+  if(t.period==='yearly')return `${period}년`;
+  return period;
+}
+function stepperHtml(label,stepFn,nowFn,nowLabel){
+  return `<button class="step-btn" onclick="${stepFn}(-1)"><i class="ti ti-chevron-left"></i></button>
+    <div class="step-mid"><span class="step-lbl">${label}</span><button class="step-now" onclick="${nowFn}">${nowLabel||'이번 회차'}</button></div>
+    <button class="step-btn" onclick="${stepFn}(1)"><i class="ti ti-chevron-right"></i></button>`;
+}
 function renderPeriodPicker(){
   const t=TYPES[curType];
   if(t.kind==='approval')return '';
-  const now=`<button class="pp-now" onclick="goCurrentPeriod()"><i class="ti ti-player-track-next"></i> 이번 회차</button>`;
-  if(t.period==='daily')return `<div class="pp-row"><i class="ti ti-calendar pp-ic"></i><input type="date" id="date-input" value="${cDate()||todayStr}" onchange="onPeriodChange()"/>${now}</div>`;
-  const cy=new Date().getFullYear();const yrs=[];for(let y=cy-3;y<=cy+1;y++)yrs.push(y);
-  const yearSel=`<select id="pp-year" onchange="onPeriodChange()">${yrs.map(y=>`<option value="${y}"${y===periodSel.year?' selected':''}>${y}년</option>`).join('')}</select>`;
-  if(t.period==='yearly')return `<div class="pp-row"><i class="ti ti-calendar pp-ic"></i>${yearSel}<span class="pp-suffix">${t.label}</span>${now}</div>`;
-  const monSel=`<select id="pp-month" onchange="onPeriodChange()">${Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}"${m===periodSel.month?' selected':''}>${m}월</option>`).join('')}</select>`;
-  if(t.period==='monthly')return `<div class="pp-row"><i class="ti ti-calendar-month pp-ic"></i>${yearSel}${monSel}<span class="pp-suffix">${t.label}</span>${now}</div>`;
-  const wc=weekCount(periodSel.year,periodSel.month);
-  if(periodSel.week>wc)periodSel.week=wc;
-  const weekSel=`<select id="pp-week" onchange="onPeriodChange()">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===periodSel.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
-  const ws=periodSel.weekStart,mon=new Date(ws+'T12:00:00'),sun=new Date(mon);sun.setDate(mon.getDate()+6);
-  const range=`<div class="pp-rangerow"><i class="ti ti-arrow-right pp-ic"></i><span class="pp-range">${mon.getMonth()+1}/${mon.getDate()} ~ ${sun.getMonth()+1}/${sun.getDate()} 분</span></div>`;
-  return `<div class="pp-row"><i class="ti ti-calendar-week pp-ic"></i>${yearSel}${monSel}${weekSel}<span class="pp-suffix">${t.label}</span>${now}</div>${range}`;
+  return `<div class="step-row">${stepperHtml(stepLabel(curType,curPeriod()),'periodStep','goCurrentPeriod()')}</div>`;
 }
-window.goCurrentPeriod=function(){initPeriodSel();$('period-area').innerHTML=renderPeriodPicker();onContextChange();};
-window.onPeriodChange=function(){
+window.periodStep=function(dir){
   const t=TYPES[curType];
-  if(t.period==='weekly'){
-    periodSel.year=+$('pp-year').value;periodSel.month=+$('pp-month').value;periodSel.week=+$('pp-week').value;
-    periodSel.weekStart=weekStartFromYMW(periodSel.year,periodSel.month,periodSel.week);
-    $('period-area').innerHTML=renderPeriodPicker();
-  }else if(t.period==='monthly'){
-    periodSel.year=+$('pp-year').value;periodSel.month=+$('pp-month').value;
-  }else if(t.period==='yearly'){
-    periodSel.year=+$('pp-year').value;
-  }
-  onContextChange();
+  if(t.period==='daily'){const d=new Date(cDate()+'T12:00:00');d.setDate(d.getDate()+dir);periodSel.date=ymd(d);}
+  else if(t.period==='weekly'){const m=new Date(periodSel.weekStart+'T12:00:00');m.setDate(m.getDate()+7*dir);periodSel={...ymwFromWeekStart(ymd(m)),weekStart:ymd(m)};}
+  else if(t.period==='monthly'){let y=periodSel.year,mo=periodSel.month+dir;if(mo<1){mo=12;y--;}if(mo>12){mo=1;y++;}periodSel.year=y;periodSel.month=mo;}
+  else if(t.period==='yearly'){periodSel.year+=dir;}
+  $('period-area').innerHTML=renderPeriodPicker();onContextChange();
 };
+window.goCurrentPeriod=function(){initPeriodSel();$('period-area').innerHTML=renderPeriodPicker();onContextChange();};
 
 // ── 매니저/사업장 ──
 window.onManagerChange=function(){
@@ -870,34 +867,31 @@ function menuViewKey(){
   if(!menuViewPeriod)menuViewPeriod=periodOf('menu',todayStr);
   return menuViewPeriod;
 }
-function menuViewPicker(){
-  const ws=menuViewKey(),s=ymwFromWeekStart(ws);
-  const cy=new Date().getFullYear();const yrs=[];for(let y=cy-1;y<=cy+1;y++)yrs.push(y);
-  const yS=`<select onchange="mvSet('year',this.value)">${yrs.map(y=>`<option value="${y}"${y===s.year?' selected':''}>${y}년</option>`).join('')}</select>`;
-  const mS=`<select onchange="mvSet('month',this.value)">${Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}"${m===s.month?' selected':''}>${m}월</option>`).join('')}</select>`;
-  const wc=weekCount(s.year,s.month);const wS=`<select onchange="mvSet('week',this.value)">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===s.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
-  return `<div class="ip-row mv">${yS}${mS}${wS}<button class="ip-now" onclick="mvNow()">이번주</button></div>`;
-}
-window.mvSet=function(f,v){const s=ymwFromWeekStart(menuViewKey());s[f]=+v;const wc=weekCount(s.year,s.month);if(s.week>wc)s.week=wc;menuViewPeriod=weekStartFromYMW(s.year,s.month,s.week);renderAllMenus();};
+window.mvStep=function(dir){const m=new Date(menuViewKey()+'T12:00:00');m.setDate(m.getDate()+7*dir);menuViewPeriod=ymd(m);renderAllMenus();};
 window.mvNow=function(){menuViewPeriod=periodOf('menu',todayStr);renderAllMenus();};
-window.mvSearch=function(v){menuViewSearch=v;renderAllMenus();};
+window.mvSearch=function(v){menuViewSearch=v;renderMenuList();};
+let menuViewCache=[];
+function renderMenuList(){
+  const box=$('mv-list');if(!box)return;
+  const q=(menuViewSearch||'').trim().toLowerCase();
+  let list=menuViewCache.slice();
+  if(q)list=list.filter(r=>(r.site||'').toLowerCase().includes(q)||(r.manager||'').toLowerCase().includes(q));
+  box.innerHTML=list.length?list.map(r=>`<div class="rec-row"><span class="rec-site">${r.site}</span><span class="rec-mgr">${r.manager||''}</span>${attLink(r)}</div>`).join(''):`<div class="rec-empty">${q?'검색 결과가 없습니다':'아직 올라온 식단표가 없습니다'}</div>`;
+}
 async function renderAllMenus(){
   const el=$('extra-area');if(!el)return;
-  const tk='menu',period=menuViewKey();
-  const q=(menuViewSearch||'').trim().toLowerCase();
-  const head=`<div class="panel-head"><span class="panel-title"><i class="ti ti-tools-kitchen-2"></i> 전체 사업장 식단표</span><span class="dl-txt">${periodLabel('menu',period)}</span></div>`;
-  const controls=menuViewPicker()+`<div class="search-row"><i class="ti ti-search"></i><input type="text" id="mv-search" placeholder="사업장 · 영양사 검색" value="${esc(menuViewSearch||'')}" oninput="mvSearch(this.value)"/>${menuViewSearch?`<button class="search-x" onclick="mvSearch('')"><i class="ti ti-x"></i></button>`:''}</div>`;
-  el.innerHTML=`<div class="panel">${head}${controls}<div class="rec-empty">불러오는 중...</div></div>`;
+  const period=menuViewKey();
+  const head=`<div class="panel-head"><span class="panel-title"><i class="ti ti-tools-kitchen-2"></i> 전체 사업장 식단표</span></div>`;
+  const step=`<div class="ip-row mv">${stepperHtml(stepLabel('menu',period),'mvStep','mvNow()','이번주')}</div>`;
+  const search=`<div class="search-row"><i class="ti ti-search"></i><input type="text" id="mv-search" placeholder="사업장 · 영양사 검색" value="${esc(menuViewSearch||'')}" oninput="mvSearch(this.value)"/><button class="search-x" onclick="$('mv-search').value='';mvSearch('')"><i class="ti ti-x"></i></button></div>`;
+  el.innerHTML=`<div class="panel">${head}${step}${search}<div id="mv-list"><div class="rec-empty">불러오는 중...</div></div></div>`;
   try{
-    const snap=await getDocs(query(collection(db,'records'),where('type','==',tk),where('period','==',period)));
+    const snap=await getDocs(query(collection(db,'records'),where('type','==','menu'),where('period','==',period)));
     if(menuViewKey()!==period)return;
-    let list=[];snap.forEach(d=>{const r=d.data();r.id=d.id;if(r.fileURL)list.push(r);});
-    list.sort((a,b)=>(a.site||'').localeCompare(b.site||'','ko'));
-    if(q)list=list.filter(r=>(r.site||'').toLowerCase().includes(q)||(r.manager||'').toLowerCase().includes(q));
-    const rows=list.length?list.map(r=>`<div class="rec-row"><span class="rec-site">${r.site}</span><span class="rec-mgr">${r.manager||''}</span>${attLink(r)}</div>`).join(''):`<div class="rec-empty">${q?'검색 결과가 없습니다':'아직 올라온 식단표가 없습니다'}</div>`;
-    el.innerHTML=`<div class="panel">${head}${controls}<div style="padding:4px 0;">${rows}</div></div>`;
-    const mi=$('mv-search');if(mi&&menuViewSearch){mi.focus();mi.setSelectionRange(mi.value.length,mi.value.length);}
-  }catch(e){el.innerHTML='';}
+    menuViewCache=[];snap.forEach(d=>{const r=d.data();r.id=d.id;if(r.fileURL)menuViewCache.push(r);});
+    menuViewCache.sort((a,b)=>(a.site||'').localeCompare(b.site||'','ko'));
+    renderMenuList();
+  }catch(e){const box=$('mv-list');if(box)box.innerHTML='<div class="rec-empty">불러오기 실패</div>';}
 }
 function renderHistory(){
   const t=TYPES[curType],cp=curPeriod();
@@ -939,7 +933,10 @@ function buildSlot(slot){
     else if(t.kind==='file')inner=`<div class="file-line"><i class="ti ti-paperclip"></i> ${rec.fileName||'첨부파일'} ${attLink(rec)}</div>`;
     else if(t.kind==='form')inner=`<div class="file-line">${t.fields.map(f=>`${f.label}: <b>${rec.form?rec.form[f.key]??'-':'-'}</b>`).join(' · ')}</div>`;
     if(rec.viewed)inner+=`<div class="lock-note done"><i class="ti ti-circle-check"></i> 관리자 확인 완료 — 수정하면 다시 검토됩니다</div>`;
-    inner+=`<button class="redo-btn" onclick="redoSlot('${slot}')"><i class="ti ti-refresh"></i> 다시 올리기</button>`;
+    let editBtn;
+    if(t.kind==='form')editBtn=`<button class="redo-btn" onclick="editForm('${slot}')"><i class="ti ti-edit"></i> 수정</button>`;
+    else{const acc=(t.kind==='photo')?' accept="image/*"':(isExcelOnly(curType)?' accept=".xlsx,.xls,.xlsm,.xlsb,.csv"':'');editBtn=`<label class="redo-btn"><i class="ti ti-edit"></i> 수정<input type="file"${acc} hidden onchange="onPick('${slot}',this)"/></label>`;}
+    inner+=`<div class="edit-row">${editBtn}<button class="del-btn" onclick="delSlot('${slot}')"><i class="ti ti-trash"></i> 삭제</button></div>`;
   }else{
     if(t.kind==='photo')inner=`<label class="btn-upload${st.preview?' has':''}"><i class="ti ti-camera"></i><span>${st.preview?'사진 변경':'사진 추가'}</span><input type="file" accept="image/*" onchange="onPick('${slot}',this)"/></label>${st.preview?`<img class="thumb" src="${st.preview}"/>`:''}`;
     else if(t.kind==='file'){const ex=isExcelOnly(curType);inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:(ex?'엑셀 파일 첨부 (.xlsx)':'파일 첨부 (엑셀·PDF·사진 등 모든 형식)')}</span><input type="file"${ex?' accept=".xlsx,.xls,.xlsm,.xlsb,.csv"':''} onchange="onPick('${slot}',this)"/></label>`;}
@@ -952,7 +949,6 @@ function buildSlot(slot){
     : `<div class="slot-head"><span class="slot-name">${slot}</span>${badge}</div>`;
   return `<div class="slot-row${done?' done':''}${single?' single':''}">${head}${inner}</div>`;
 }
-window.redoSlot=function(slot){const prev=slotState[slot]&&slotState[slot].record;slotState[slot]={prevViewed:!!(prev&&prev.viewed)};renderSubmitBody();updateSubmitBtn();};
 const EXCEL_EXT=['xlsx','xls','xlsm','xlsb','csv'];
 function isExcelOnly(typeKey){return TYPES[typeKey].group==='결산관리';}
 window.onPick=function(slot,input){
@@ -961,11 +957,28 @@ window.onPick=function(slot,input){
     const ext=(f.name.split('.').pop()||'').toLowerCase();
     if(!EXCEL_EXT.includes(ext)){toast('결산 항목은 엑셀 파일(.xlsx)만 올릴 수 있습니다',true);input.value='';return;}
   }
-  slotState[slot]=slotState[slot]||{};
-  slotState[slot].file=f;
+  const st=slotState[slot]||{};
+  const prevViewed=st.record?!!st.record.viewed:(st.prevViewed||false);
+  slotState[slot]={file:f,prevViewed};
   if(TYPES[curType].kind==='photo'){const r=new FileReader();r.onload=e=>{slotState[slot].preview=e.target.result;renderSubmitBody();};r.readAsDataURL(f);}
   else renderSubmitBody();
   updateSubmitBtn();
+};
+window.editForm=function(slot){const st=slotState[slot]||{},rec=st.record;slotState[slot]={form:rec&&rec.form?{...rec.form}:{},prevViewed:!!(rec&&rec.viewed)};renderSubmitBody();updateSubmitBtn();};
+window.delSlot=async function(slot){
+  const st=slotState[slot],rec=st&&st.record;
+  if(!rec){slotState[slot]={};renderSubmitBody();updateSubmitBtn();return;}
+  if(!confirm('제출한 내용을 삭제할까요? 되돌릴 수 없습니다.'))return;
+  showLoading('삭제 중...');
+  try{
+    const docId=`${curType}__${sani(cSite())}__${curPeriod()}__${sani(slot)}`;
+    await deleteDoc(doc(db,'records',docId));
+    hideLoading();
+    await onContextChange();
+    await loadSiteDone(selSite||cSite());
+    updateHomeBadge();
+    toast('삭제했습니다');
+  }catch(e){hideLoading();toast('삭제 실패: '+e.message,true);}
 };
 window.onForm=function(slot,key,val){slotState[slot]=slotState[slot]||{};slotState[slot].form=slotState[slot].form||{};slotState[slot].form[key]=val;updateSubmitBtn();};
 function updateSubmitBtn(){
@@ -1087,7 +1100,7 @@ window.submitApproval=async function(){
 };
 
 // ── 관리자 ──
-let adminItemPeriod={}, attRec=null, noticeCur=null;
+let adminItemPeriod={}, attRec=null, noticeCur=null, statusCat=null;
 window.unlockAdmin=async function(){
   if($('admin-pw').value!==ADMIN_PW){$('admin-pw-err').textContent='비밀번호가 틀렸습니다';$('admin-pw').value='';return;}
   $('admin-lock').style.display='none';$('admin-content').style.display='block';
@@ -1115,19 +1128,17 @@ function adminPeriodKey(k){
   if(t.period==='yearly')return String(s.year);
   return s.date;
 }
-function adminPicker(k){
-  const t=TYPES[k],s=adminItemPeriod[k];
-  if(t.period==='daily')return `<input type="date" value="${s.date}" onchange="adminSetDate('${k}',this.value)"/>`;
-  const cy=new Date().getFullYear();const yrs=[];for(let y=cy-3;y<=cy+1;y++)yrs.push(y);
-  const yS=`<select onchange="adminSetYM('${k}','year',this.value)">${yrs.map(y=>`<option value="${y}"${y===s.year?' selected':''}>${y}년</option>`).join('')}</select>`;
-  if(t.period==='yearly')return yS;
-  const mS=`<select onchange="adminSetYM('${k}','month',this.value)">${Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}"${m===s.month?' selected':''}>${m}월</option>`).join('')}</select>`;
-  if(t.period==='monthly')return yS+mS;
-  const wc=weekCount(s.year,s.month);const wS=`<select onchange="adminSetYM('${k}','week',this.value)">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===s.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
-  return yS+mS+wS;
+function adminStepper(k){
+  return stepperHtml(stepLabel(k,adminPeriodKey(k)),`adminStep('${k}',`,`adminNow('${k}')`);
 }
-window.adminSetDate=function(k,v){adminItemPeriod[k].date=v;reloadItem(k);};
-window.adminSetYM=function(k,f,v){const s=adminItemPeriod[k];s[f]=+v;if(TYPES[k].period==='weekly'){const wc=weekCount(s.year,s.month);if(s.week>wc)s.week=wc;s.weekStart=weekStartFromYMW(s.year,s.month,s.week);}reloadItem(k);};
+window.adminStep=function(k,dir){
+  const t=TYPES[k],s=adminItemPeriod[k];
+  if(t.period==='daily'){const d=new Date(s.date+'T12:00:00');d.setDate(d.getDate()+dir);s.date=ymd(d);}
+  else if(t.period==='weekly'){const m=new Date(s.weekStart+'T12:00:00');m.setDate(m.getDate()+7*dir);adminItemPeriod[k]={...ymwFromWeekStart(ymd(m)),weekStart:ymd(m)};}
+  else if(t.period==='monthly'){let y=s.year,mo=s.month+dir;if(mo<1){mo=12;y--;}if(mo>12){mo=1;y++;}s.year=y;s.month=mo;}
+  else if(t.period==='yearly'){s.year+=dir;}
+  reloadItem(k);
+};
 window.adminNow=function(k){initAdminPeriod(k);reloadItem(k);};
 async function fetchAdminPeriod(k,period){
   try{
@@ -1147,30 +1158,40 @@ async function loadStatus(){
   hideLoading();renderStatus();
 }
 function renderStatus(){
-  let html='';
-  GROUP_ORDER.forEach(g=>{
-    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].ready&&TYPES[k].kind!=='approval');
-    if(!keys.length)return;
-    html+=`<div class="cat-sec"><div class="cat-sec-head"><i class="ti ${GROUP_ICON[g]}"></i> ${GROUP_LABEL[g]||g}</div>`;
-    keys.forEach(k=>{html+=`<div class="item-wrap" id="iw-${sani(k)}">${renderStatusItem(k)}</div>`;});
-    html+=`</div>`;
-  });
-  $('matrix-wrap').innerHTML=html||'<div class="empty">표시할 항목이 없습니다</div>';
+  const cats=GROUP_ORDER.filter(g=>Object.keys(TYPES).some(k=>TYPES[k].group===g&&TYPES[k].ready&&TYPES[k].kind!=='approval'));
+  if(!cats.includes(statusCat))statusCat=cats[0];
+  if(!statusCat){$('matrix-wrap').innerHTML='<div class="empty">표시할 항목이 없습니다</div>';return;}
+  const chips=cats.map(g=>`<button class="cat-chip${g===statusCat?' active':''}" onclick="setStatusCat('${g}')"><i class="ti ${GROUP_ICON[g]}"></i> ${GROUP_LABEL[g]||g}</button>`).join('');
+  const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===statusCat&&TYPES[k].ready&&TYPES[k].kind!=='approval').sort((a,b)=>(TYPES[a].ready?0:1)-(TYPES[b].ready?0:1));
+  const items=keys.map(k=>`<div class="item-wrap" id="iw-${sani(k)}">${renderStatusItem(k)}</div>`).join('');
+  $('matrix-wrap').innerHTML=`<div class="cat-chips">${chips}</div>${items||'<div class="empty">표시할 항목이 없습니다</div>'}`;
 }
+window.setStatusCat=function(g){statusCat=g;renderStatus();};
 let attLookup={};
 function attLink(r){
   const url=r.fileURL||(r.photoURLs&&r.photoURLs[0]);if(!url)return '';
   attLookup[r.id]=r;
-  const ic=r.fileURL?'ti-paperclip':'ti-photo',lbl=r.fileURL?'첨부':'사진';
-  return `<button class="rec-att" onclick="openAtt('${r.id}')"><i class="ti ${ic}"></i> ${lbl}</button>`;
+  const ic=r.fileURL?'ti-download':'ti-photo',lbl=r.fileURL?'다운로드':'사진';
+  return `<button class="rec-att" onclick="dlAtt('${r.id}')"><i class="ti ${ic}"></i> ${lbl}</button>`;
 }
+window.dlAtt=async function(id){
+  const r=attLookup[id]||adminRecords.find(x=>x.id===id);if(!r)return;
+  const url=r.fileURL||(r.photoURLs&&r.photoURLs[0]);if(!url)return;
+  showLoading('다운로드 중...');
+  try{
+    const blob=await fetch(url).then(x=>{if(!x.ok)throw new Error('받기 실패');return x.blob();});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=stdName(r);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    if(r.viewed===false)markViewed(r.id);
+    hideLoading();
+  }catch(e){hideLoading();toast('다운로드 실패: '+e.message,true);}
+};
 function renderStatusItem(k){
   const t=TYPES[k],allSites=Object.keys(SITE_MEALS).sort((a,b)=>a.localeCompare(b,'ko'));
   const period=adminPeriodKey(k);
   const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
   const id='ir-'+sani(k);
   const newN=recs.filter(r=>r.viewed===false).length;
-  const picker=`<div class="ip-row">${adminPicker(k)}<button class="ip-now" onclick="adminNow('${k}')">이번 회차</button></div>`;
+  const picker=`<div class="ip-row">${adminStepper(k)}</div>`;
   const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
   const subSites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
   const misSites=allSites.filter(s=>!bySite[s]);
@@ -1199,20 +1220,6 @@ function renderStatusItem(k){
     </div>
   </div>`;
 }
-// 첨부 열기/저장
-window.openAtt=function(id){const r=attLookup[id]||adminRecords.find(x=>x.id===id);if(!r)return;attRec=r;$('att-name').innerHTML=`<i class="ti ti-paperclip"></i> ${r.fileName||'첨부파일'}`;$('att-overlay').classList.add('open');};
-window.closeAtt=function(){$('att-overlay').classList.remove('open');attRec=null;};
-window.attOpen=function(){if(!attRec)return;const url=attRec.fileURL||(attRec.photoURLs&&attRec.photoURLs[0]);if(attRec.viewed===false)markViewed(attRec.id);window.open(url,'_blank');closeAtt();};
-window.attSave=async function(){
-  if(!attRec)return;const r=attRec,url=r.fileURL||(r.photoURLs&&r.photoURLs[0]);
-  showLoading('저장 준비 중...');
-  try{
-    const blob=await fetch(url).then(x=>{if(!x.ok)throw new Error('받기 실패');return x.blob();});
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=stdName(r);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-    if(r.viewed===false)markViewed(r.id);
-    hideLoading();closeAtt();toast('저장했습니다');
-  }catch(e){hideLoading();toast('저장 실패: '+e.message,true);}
-};
 // 공지
 async function checkNotice(){
   try{
@@ -1400,24 +1407,12 @@ function readMeals(containerId){
   return meals;
 }
 function esc(s){return String(s).replace(/'/g,"\\'");}
-function renderSiteSummary(){
+function siteListHtml(){
   const q=(siteSearch||'').trim().toLowerCase();
   const all=Object.keys(SITE_MEALS).sort((a,b)=>a.localeCompare(b,'ko'));
   const sites=q?all.filter(s=>s.toLowerCase().includes(q)||(siteManager(s)||'').toLowerCase().includes(q)):all;
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;">
-    <div style="font-size:13px;">사업장 <b>${all.length}</b>곳 · 매니저 <b>${MANAGERS.length}</b>명</div>
-    <button class="btn-secondary" onclick="toggleAddSite()"><i class="ti ti-plus"></i> 사업장 추가</button></div>`;
-  html+=`<div class="search-row"><i class="ti ti-search"></i><input type="text" id="site-search" placeholder="사업장 · 영양사 이름 검색" value="${esc(siteSearch||'')}" oninput="onSiteSearch(this.value)"/>${siteSearch?`<button class="search-x" onclick="onSiteSearch('')"><i class="ti ti-x"></i></button>`:''}</div>`;
-  if(addSiteOpen){
-    html+=`<div class="sm-edit" style="border-top:none;padding-top:0;margin-bottom:10px;">
-      <input type="text" id="as-name" placeholder="사업장명"/>
-      <input type="text" id="as-mgr" list="mgr-list" placeholder="담당 매니저 이름 (없으면 새로 생성)"/>
-      <datalist id="mgr-list">${MANAGERS.map(m=>`<option value="${m.name}"></option>`).join('')}</datalist>
-      <div class="sm-meals" id="as-meals">${mealCheckHtml('as',null)}</div>
-      <div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleAddSite()">취소</button><button class="btn-primary" style="flex:1;" onclick="commitAddSite()">추가</button></div>
-    </div>`;
-  }
-  html+=(sites.length?sites.map(site=>{
+  if(!sites.length)return `<div class="empty">검색 결과가 없습니다</div>`;
+  return sites.map(site=>{
     const curMgr=siteManager(site),editing=editSite===site;
     let row=`<div class="sm-row">
       <div class="sm-top"><span class="sm-name">${site}</span>
@@ -1427,15 +1422,32 @@ function renderSiteSummary(){
       row+=`<div class="sm-edit"><input type="text" id="es-name" value="${site}"/><div class="sm-meals" id="es-meals">${mealCheckHtml('es',SITE_MEALS[site])}</div><div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleEditSite('${esc(site)}')">취소</button><button class="btn-primary" style="flex:1;" onclick="commitEditSite('${esc(site)}')">저장</button></div></div>`;
     }
     return row+`</div>`;
-  }).join(''):`<div class="empty">검색 결과가 없습니다</div>`);
+  }).join('');
+}
+function renderSiteList(){const box=$('sm-list');if(box)box.innerHTML=siteListHtml();}
+function renderSiteSummary(){
+  const all=Object.keys(SITE_MEALS).length;
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;">
+    <div style="font-size:13px;">사업장 <b>${all}</b>곳 · 매니저 <b>${MANAGERS.length}</b>명</div>
+    <button class="btn-secondary" onclick="toggleAddSite()"><i class="ti ti-plus"></i> 사업장 추가</button></div>`;
+  html+=`<div class="search-row"><i class="ti ti-search"></i><input type="text" id="site-search" placeholder="사업장 · 영양사 이름 검색" value="${esc(siteSearch||'')}" oninput="onSiteSearch(this.value)"/><button class="search-x" onclick="$('site-search').value='';onSiteSearch('')"><i class="ti ti-x"></i></button></div>`;
+  if(addSiteOpen){
+    html+=`<div class="sm-edit" style="border-top:none;padding-top:0;margin-bottom:10px;">
+      <input type="text" id="as-name" placeholder="사업장명"/>
+      <input type="text" id="as-mgr" list="mgr-list" placeholder="담당 매니저 이름 (없으면 새로 생성)"/>
+      <datalist id="mgr-list">${MANAGERS.map(m=>`<option value="${m.name}"></option>`).join('')}</datalist>
+      <div class="sm-meals" id="as-meals">${mealCheckHtml('as',null)}</div>
+      <div style="display:flex;gap:8px;"><button class="btn-secondary" style="flex:1;" onclick="toggleAddSite()">취소</button><button class="btn-primary" style="flex:1;" onclick="commitAddSite()">추가</button></div>
+    </div>`;
+  }
+  html+=`<div id="sm-list">${siteListHtml()}</div>`;
   html+=`<button class="btn-primary" style="width:100%;margin-top:12px;" onclick="saveSiteConfig()"><i class="ti ti-device-floppy"></i> 변경사항 서버 저장</button>`;
   html+=`<div class="sub-hint" style="margin-top:16px;">대량 변경은 JSON 가져오기로도 가능합니다.</div>
     <textarea id="import-json" placeholder='{"managers":[...],"siteMeals":{...}}' style="height:110px;font-family:monospace;font-size:12px;margin-top:6px;"></textarea>
     <button class="btn-secondary" style="width:100%;margin-top:8px;" onclick="importConfig()"><i class="ti ti-download"></i> JSON 가져와서 저장</button>`;
   $('site-summary').innerHTML=html;
-  const si=$('site-search');if(si&&siteSearch){si.focus();si.setSelectionRange(si.value.length,si.value.length);}
 }
-window.onSiteSearch=function(v){siteSearch=v;renderSiteSummary();};
+window.onSiteSearch=function(v){siteSearch=v;renderSiteList();};
 window.toggleAddSite=function(){addSiteOpen=!addSiteOpen;editSite=null;renderSiteSummary();};
 window.toggleEditSite=function(s){editSite=editSite===s?null:s;addSiteOpen=false;renderSiteSummary();};
 window.commitAddSite=function(){
