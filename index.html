@@ -186,21 +186,24 @@ textarea{resize:vertical;min-height:64px;}
 .lock-note{display:flex;align-items:center;gap:5px;margin-top:10px;font-size:12px;color:var(--text4);}
 .lock-note i{font-size:14px;}
 .appr-dl{font-size:12px;font-weight:600;color:var(--red);display:flex;align-items:center;gap:5px;}
-.hp{background:var(--card);border:.5px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;}
-.hp-head{font-size:12px;font-weight:600;color:var(--text2);background:#fafaf8;padding:8px 12px;border-bottom:.5px solid var(--border);}
-.hp-now{font-size:10px;font-weight:700;color:#fff;background:var(--green);padding:1px 7px;border-radius:99px;margin-left:6px;}
-.hl-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:11px 12px;border-bottom:.5px solid #f5f5f3;font-size:13px;}
-.hl-row:last-child{border-bottom:none;}
-.hl-info{display:flex;align-items:center;gap:8px;flex:1;min-width:0;flex-wrap:wrap;}
-.hl-slot{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 7px;border-radius:99px;flex-shrink:0;}
-.hl-val{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;font-weight:500;}
-.hl-when{font-size:11px;color:var(--text4);white-space:nowrap;width:100%;}
-.hl-ok{color:var(--green);font-weight:600;}
-.hl-edit{color:var(--amber);font-weight:600;}
-.hl-wait{color:var(--text4);}
-.hl-acts{display:flex;gap:6px;flex-shrink:0;}
-.hist-btn{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:600;color:var(--text2);background:#f4f4f1;border:.5px solid var(--border);border-radius:7px;padding:6px 9px;cursor:pointer;font-family:inherit;}
-.hist-btn:hover{background:#eaeae6;}
+.hist-grp{margin-bottom:16px;}
+.hist-grp:last-child{margin-bottom:0;}
+.hist-grp-head{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text2);margin:0 2px 9px;padding-bottom:7px;border-bottom:1px solid var(--border);}
+.hp-now{font-size:10px;font-weight:700;color:#fff;background:var(--green);padding:1px 7px;border-radius:99px;}
+.hi-card{background:#fafbfc;border:.5px solid var(--border);border-radius:11px;padding:11px 12px;margin-bottom:8px;}
+.hi-card:last-child{margin-bottom:0;}
+.hi-row1{display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+.hi-ic{font-size:17px;color:var(--blue);flex-shrink:0;}
+.hi-name{flex:1;min-width:0;font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hl-slot{font-size:10.5px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 7px;border-radius:99px;flex-shrink:0;}
+.hi-row2{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.hi-when{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:var(--text4);white-space:nowrap;}
+.hi-when i{font-size:13px;}
+.hi-acts{display:flex;gap:6px;flex-shrink:0;}
+.st-pill.edit{background:var(--amber-light);color:var(--amber);}
+.st-pill.wait{background:#eef0f3;color:var(--text3);}
+.hist-btn{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:600;color:var(--text2);background:#fff;border:.5px solid var(--border);border-radius:8px;padding:6px 9px;cursor:pointer;font-family:inherit;}
+.hist-btn:active{background:#eaeae6;}
 .hist-btn.del{color:var(--red);}
 .slot-note{display:flex;align-items:center;gap:5px;margin-top:9px;font-size:12px;color:var(--text3);background:#f6f7f5;border-radius:8px;padding:8px 10px;}
 .slot-note i{color:var(--green);}
@@ -349,8 +352,10 @@ textarea{resize:vertical;min-height:64px;}
 .step-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#f6f6f4;border:.5px solid var(--border);border-radius:10px;padding:6px;min-width:0;}
 .step-lbl{font-size:13.5px;font-weight:700;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
 .step-sub{font-size:11px;font-weight:600;color:var(--text4);}
-.step-now-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:8px;border:.5px solid var(--blue-border);border-radius:9px;background:var(--blue-light);color:var(--blue);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;}
-.step-now-btn:active{background:#d9e9fa;}
+.step-now-chip{display:inline-flex;align-items:center;gap:3px;height:40px;padding:0 9px;border:.5px solid var(--blue-border);border-radius:9px;background:var(--blue-light);color:var(--blue);font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.step-now-chip:active{background:#d9e9fa;}
+.step-now-chip i{font-size:13px;}
+.ip-box .step-now-chip{height:36px;}
 .cat-chips{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
 .cat-chip{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 13px;border:.5px solid var(--border);border-radius:9px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;white-space:nowrap;}
 .cat-chip i{font-size:15px;}
@@ -598,6 +603,8 @@ function cSite(){return $('site-select').value;}
 function cDate(){return periodSel.date||todayStr;}
 const WEEKDAY=['일','월','화','수','목','금','토'];
 function ymd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function p2(n){return String(n).padStart(2,'0');}
+function md(d){return `${p2(d.getMonth()+1)}/${p2(d.getDate())}`;}
 function prevMonth(ym){let [y,m]=ym.split('-').map(Number);m--;if(m<1){m=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;}
 function weekStart(dateStr){
   const d=new Date((dateStr||todayStr)+'T12:00:00');
@@ -634,7 +641,7 @@ function periodLabel(typeKey,period){
   const t=TYPES[typeKey];
   if(t.period==='weekly'){
     const mon=new Date(period+'T12:00:00'),sun=new Date(mon);sun.setDate(mon.getDate()+6);
-    return `${weekLabel(period)} (${mon.getMonth()+1}/${mon.getDate()}~${sun.getMonth()+1}/${sun.getDate()})`;
+    return `${weekLabel(period)} (${md(mon)}~${md(sun)})`;
   }
   if(t.period==='monthly')return `${Number(period.split('-')[1])}월`;
   if(t.period==='yearly')return `${period}년`;
@@ -656,9 +663,9 @@ function deadlineOf(typeKey,periodKey){
 }
 function fmtDeadlineOf(typeKey,periodKey){
   const dt=deadlineOf(typeKey,periodKey);if(!dt)return '';
-  return `마감일: ${dt.getMonth()+1}/${dt.getDate()}(${WEEKDAY[dt.getDay()]})`;
+  return `마감일: ${md(dt)}(${WEEKDAY[dt.getDay()]})`;
 }
-function fmtWhen(iso){if(!iso)return '';const d=new Date(iso);return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function fmtWhen(iso){if(!iso)return '';const d=new Date(iso);return `${md(d)} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function expectedSlots(typeKey,site,date){
   const t=TYPES[typeKey];
   if(t.kind==='approval')return[];
@@ -742,7 +749,7 @@ function accordionHtml(){
       if(hasDeadline(k)){
         const pk=periodOf(k,todayStr);const dt=deadlineOf(k,pk);
         if(siteDone[k])dlTag=`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료${siteDoneAt[k]?' '+fmtWhen(siteDoneAt[k]):''}</span>`;
-        else if(dt)dlTag=`<span class="gi-dl">미제출 ~${dt.getMonth()+1}/${dt.getDate()}(${WEEKDAY[dt.getDay()]})</span>`;
+        else if(dt)dlTag=`<span class="gi-dl">미제출 ~${md(dt)}(${WEEKDAY[dt.getDay()]})</span>`;
       }
       return t.ready
         ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-label">${t.label}</span>${dlTag}<i class="ti ti-chevron-right gi-arrow"></i></button>`
@@ -848,7 +855,7 @@ function curPeriod(){
 }
 function stepMain(typeKey,period){
   const t=TYPES[typeKey];
-  if(t.period==='daily'){const d=new Date(period+'T12:00:00');return `${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()} (${WEEKDAY[d.getDay()]})`;}
+  if(t.period==='daily'){const d=new Date(period+'T12:00:00');return `${d.getFullYear()}. ${p2(d.getMonth()+1)}. ${p2(d.getDate())} (${WEEKDAY[d.getDay()]})`;}
   if(t.period==='weekly'){const w=ymwFromWeekStart(period);return `${w.month}월 ${w.week}주차`;}
   if(t.period==='monthly'){const a=period.split('-');return `${a[0]}년 ${Number(a[1])}월`;}
   if(t.period==='yearly')return `${period}년`;
@@ -856,19 +863,20 @@ function stepMain(typeKey,period){
 }
 function stepSub(typeKey,period){
   const t=TYPES[typeKey];
-  if(t.period==='weekly'){const m=new Date(period+'T12:00:00'),s=new Date(m);s.setDate(m.getDate()+6);return `(${m.getMonth()+1}/${m.getDate()}~${s.getMonth()+1}/${s.getDate()})`;}
+  if(t.period==='weekly'){const m=new Date(period+'T12:00:00'),s=new Date(m);s.setDate(m.getDate()+6);return `(${md(m)}~${md(s)})`;}
   return '';
 }
+function stepShort(typeKey){const t=TYPES[typeKey];return t.period==='weekly'?'이번 주':t.period==='monthly'?'이번 달':t.period==='yearly'?'올해':'오늘';}
 function stepperHtml(typeKey,period,prevExpr,nextExpr,nowExpr,nowLabel){
   const main=stepMain(typeKey,period),sub=stepSub(typeKey,period);
   const isCur=(period===periodOf(typeKey,todayStr));
-  const nav=`<div class="step-row">
+  const nowChip=isCur?'':`<button class="step-now-chip" onclick="${nowExpr}"><i class="ti ti-rotate-clockwise-2"></i> ${nowLabel||stepShort(typeKey)}</button>`;
+  return `<div class="step-wrap"><div class="step-row">
     <button class="step-btn" onclick="${prevExpr}"><i class="ti ti-chevron-left"></i></button>
     <div class="step-mid"><span class="step-lbl">${main}</span>${sub?`<span class="step-sub">${sub}</span>`:''}</div>
+    ${nowChip}
     <button class="step-btn" onclick="${nextExpr}"><i class="ti ti-chevron-right"></i></button>
-  </div>`;
-  const now=isCur?'':`<button class="step-now-btn" onclick="${nowExpr}"><i class="ti ti-rotate-clockwise-2"></i> ${nowLabel||'이번 회차로 이동'}</button>`;
-  return `<div class="step-wrap">${nav}${now}</div>`;
+  </div></div>`;
 }
 function renderPeriodPicker(){
   const t=TYPES[curType];
@@ -951,7 +959,7 @@ async function renderAllMenus(){
   const el=$('extra-area');if(!el)return;
   const period=menuViewKey();
   const head=`<div class="panel-head"><span class="panel-title"><i class="ti ti-tools-kitchen-2"></i> 전체 사업장 식단표</span></div>`;
-  const step=`<div class="ip-box mv">${stepperHtml('menu',period,'mvStep(-1)','mvStep(1)','mvNow()','이번주로 이동')}</div>`;
+  const step=`<div class="ip-box mv">${stepperHtml('menu',period,'mvStep(-1)','mvStep(1)','mvNow()')}</div>`;
   const search=`<div class="search-row"><i class="ti ti-search"></i><input type="text" id="mv-search" placeholder="사업장 · 영양사 검색" value="${esc(menuViewSearch||'')}" oninput="mvSearch(this.value)"/><button class="search-x" onclick="$('mv-search').value='';mvSearch('')"><i class="ti ti-x"></i></button></div>`;
   el.innerHTML=`<div class="panel">${head}${step}${search}<div id="mv-list"><div class="rec-empty">불러오는 중...</div></div></div>`;
   try{
@@ -968,24 +976,25 @@ function renderHistory(){
   if(!all.length)return '<div class="panel"><div class="panel-head"><span class="panel-title"><i class="ti ti-history"></i> 제출 이력</span></div><div class="empty" style="padding:20px;">제출 내역이 없습니다</div></div>';
   const byP={};all.forEach(r=>{(byP[r.period]=byP[r.period]||[]).push(r);});
   const periods=Object.keys(byP).sort((a,b)=>b.localeCompare(a));
+  const icon=t.kind==='photo'?'ti-photo':t.kind==='form'?'ti-clipboard-text':'ti-file-text';
   const rows=periods.map(p=>{
-    const lines=byP[p].sort((a,b)=>(a.slot||'').localeCompare(b.slot||'')).map(r=>{
+    const items=byP[p].sort((a,b)=>(a.slot||'').localeCompare(b.slot||'')).map(r=>{
       const slot=(r.slot&&r.slot!=='기본')?`<span class="hl-slot">${r.slot}</span>`:'';
       let val;
       if(t.kind==='form'&&r.form)val=t.fields.map(f=>`${f.label}: ${r.form[f.key]??'-'}`).join(', ');
       else val=r.fileName||(r.photoURLs?'사진':'첨부');
-      const status=r.viewed?'<span class="hl-ok">확인됨</span>':(r.wasEdited?'<span class="hl-edit">수정됨</span>':'<span class="hl-wait">검토 대기</span>');
+      const status=r.viewed?'<span class="st-pill ok">확인됨</span>':(r.wasEdited?'<span class="st-pill edit">수정됨</span>':'<span class="st-pill wait">검토 대기</span>');
       const dl=(t.kind==='file'||t.kind==='photo')?attLink(r):'';
       const acc=(t.kind==='photo')?' accept="image/*"':(isExcelOnly(curType)?' accept=".xlsx,.xls,.xlsm,.xlsb,.csv"':'');
       const editBtn=(t.kind==='form')?'':`<label class="hist-btn"><i class="ti ti-edit"></i> 수정<input type="file"${acc} hidden onchange="onHistoryEdit(this,'${r.id}')"/></label>`;
       const delBtn=`<button class="hist-btn del" onclick="delHistoryRec('${r.id}')"><i class="ti ti-trash"></i> 삭제</button>`;
-      return `<div class="hl-row">
-        <div class="hl-info">${slot}<span class="hl-val">${val}</span><span class="hl-when">${fmtWhen(r.submittedAt)} 제출 · ${status}</span></div>
-        <div class="hl-acts">${dl}${editBtn}${delBtn}</div>
+      return `<div class="hi-card">
+        <div class="hi-row1"><i class="ti ${icon} hi-ic"></i><span class="hi-name">${val}</span>${slot}${status}</div>
+        <div class="hi-row2"><span class="hi-when"><i class="ti ti-clock"></i> ${fmtWhen(r.submittedAt)} 제출</span><div class="hi-acts">${dl}${editBtn}${delBtn}</div></div>
       </div>`;
     }).join('');
-    const nowTag=(p===cp)?' <span class="hp-now">이번 회차</span>':'';
-    return `<div class="hp"><div class="hp-head">${periodLabel(curType,p)}${nowTag}</div>${lines}</div>`;
+    const nowTag=(p===cp)?'<span class="hp-now">이번 회차</span>':'';
+    return `<div class="hist-grp"><div class="hist-grp-head">${periodLabel(curType,p)}${nowTag}</div>${items}</div>`;
   }).join('');
   return `<div class="panel"><div class="panel-head"><span class="panel-title"><i class="ti ti-history"></i> 제출 이력</span></div>${rows}</div>`;
 }
@@ -1027,8 +1036,8 @@ function renderDeadlineBanner(slots){
 function buildSlot(slot){
   const t=TYPES[curType],st=slotState[slot]||{},rec=st.record;
   let inner='';
-  if(t.kind==='photo')inner=`<label class="btn-upload${st.preview?' has':''}"><i class="ti ti-camera"></i><span>${st.preview?'사진 변경':'사진 추가'}</span><input type="file" accept="image/*" onchange="onPick('${slot}',this)"/></label>${st.preview?`<img class="thumb" src="${st.preview}"/>`:''}`;
-  else if(t.kind==='file'){const ex=isExcelOnly(curType);inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:(ex?'엑셀 파일 첨부 (.xlsx)':'파일 첨부 (엑셀·PDF·사진 등 모든 형식)')}</span><input type="file"${ex?' accept=".xlsx,.xls,.xlsm,.xlsb,.csv"':''} onchange="onPick('${slot}',this)"/></label>`;}
+  if(t.kind==='photo')inner=`<label class="btn-upload${st.preview?' has':''}"><i class="ti ti-camera"></i><span>${st.preview?'사진 변경':'사진을 첨부하세요'}</span><input type="file" accept="image/*" onchange="onPick('${slot}',this)"/></label>${st.preview?`<img class="thumb" src="${st.preview}"/>`:''}`;
+  else if(t.kind==='file'){const ex=isExcelOnly(curType);inner=`<label class="btn-upload${st.file?' has':''}"><i class="ti ti-file-upload"></i><span>${st.file?st.file.name:(ex?'엑셀 파일을 첨부하세요 (.xlsx)':'파일을 첨부하세요 (엑셀·PDF·사진 등)')}</span><input type="file"${ex?' accept=".xlsx,.xls,.xlsm,.xlsb,.csv"':''} onchange="onPick('${slot}',this)"/></label>`;}
   else if(t.kind==='form')inner=`<div class="form-fields">${t.fields.map(f=>`<input type="${f.type==='number'?'number':'text'}" placeholder="${f.label}" value="${st.form&&st.form[f.key]!=null?st.form[f.key]:''}" oninput="onForm('${slot}','${f.key}',this.value)"/>`).join('')}</div>`;
   const single=(slot==='기본');
   const head=single?'':`<div class="slot-head"><span class="slot-name">${slot}</span></div>`;
@@ -1125,7 +1134,7 @@ function renderApprovalSubmit(){
   const form=`<div class="setting-block">
     <div style="font-weight:600;margin-bottom:4px;">새 ${t.label} 제출</div>
     ${dlText?`<div class="appr-dl"><i class="ti ti-alarm"></i> ${dlText}</div>`:''}
-    <label class="btn-upload${apprFile?' has':''}" style="margin-top:10px;"><i class="ti ti-file-upload"></i><span>${apprFile?apprFile.name:'파일 첨부 (엑셀·PDF·사진 등 모든 형식)'}</span><input type="file" onchange="onApprFile(this)"/></label>
+    <label class="btn-upload${apprFile?' has':''}" style="margin-top:10px;"><i class="ti ti-file-upload"></i><span>${apprFile?apprFile.name:'파일을 첨부하세요 (엑셀·PDF·사진 등)'}</span><input type="file" onchange="onApprFile(this)"/></label>
     <button class="btn-primary" style="width:100%;margin-top:12px;" onclick="submitApproval()">제출하기</button></div>`;
   const list=(slotState.__list||[]).map(rr=>{
     const stCls=rr.status==='approved'?'st-approved':rr.status==='rejected'?'st-rejected':'st-pending';
