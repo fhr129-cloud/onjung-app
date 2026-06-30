@@ -128,10 +128,10 @@ textarea{resize:vertical;min-height:64px;}
 
 /* ── 슬롯 ── */
 .slot-row{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.slot-row.done{background:#f5f9fd;border-color:var(--blue-border);}
+.slot-row.done{background:#f6faef;border-color:var(--green-border);}
 .slot-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .slot-name{font-size:14px;font-weight:600;}
-.badge-done{font-size:11px;font-weight:600;color:var(--blue);display:inline-flex;align-items:center;gap:3px;}
+.badge-done{font-size:11px;font-weight:600;color:var(--green);display:inline-flex;align-items:center;gap:3px;}
 .badge-done i{font-size:13px;}
 .new-tag{display:inline-flex;align-items:center;font-size:10px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:99px;vertical-align:middle;letter-spacing:.3px;}
 .ir-new{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;}
@@ -225,7 +225,7 @@ textarea{resize:vertical;min-height:64px;}
 .md-label{font-size:12px;font-weight:600;color:var(--text2);width:32px;flex-shrink:0;}
 .md-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 9px;border:.5px solid var(--border);border-radius:99px;cursor:pointer;user-select:none;}
 .md-chip input{margin:0;width:auto;}
-.gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 8px;border-radius:99px;}
+.gi-done{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:99px;}
 .gi-done i{font-size:13px;}
 .cat-sec{margin-bottom:18px;}
 .cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue);margin:0 0 9px 2px;}
@@ -234,6 +234,7 @@ textarea{resize:vertical;min-height:64px;}
 .item-rec-head{width:100%;display:flex;align-items:center;gap:10px;padding:13px 15px;background:none;border:none;cursor:pointer;font-family:inherit;}
 .ir-name{flex:1;text-align:left;font-size:14px;font-weight:500;}
 .ir-cnt{font-size:12px;color:var(--text3);white-space:nowrap;}
+.ir-period{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:1px 7px;border-radius:99px;margin-left:4px;}
 .ir-chev{font-size:16px;color:var(--text4);transition:transform .2s;flex-shrink:0;}
 .item-rec-body{display:none;border-top:.5px solid var(--border);background:#fbfcfd;}
 .item-rec-body.open{display:block;}
@@ -394,10 +395,10 @@ const ADMIN_PW='8770';
 
 // 항목 타입 엔진 (kind: photo|file|form|approval / period: daily|monthly|adhoc / slot: meals|single)
 const TYPES={
-  ilmagam:   {label:'일마감', group:'결산관리', kind:'file', period:'daily', slot:'single', ready:true},
+  ilmagam:   {label:'일마감', group:'결산관리', kind:'file', period:'weekly', slot:'single', ready:true},
   junggan:   {label:'중간결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
-  sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
-  monthclose:{label:'월말결산', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:true},
+  sonik:     {label:'손익사유서', group:'결산관리', kind:'file', period:'monthly', slot:'single', ready:false},
+  monthclose:{label:'월말결산', group:'결산관리', kind:'file', period:'monthly', prevMonth:true, slot:'single', ready:true},
 
   jichul:    {label:'지출결의서', group:'결재요청', kind:'approval', period:'adhoc', ready:true,
               fields:[{key:'title',label:'제목',type:'text'},{key:'amount',label:'금액(원)',type:'number'},{key:'reason',label:'사유',type:'textarea'}]},
@@ -450,13 +451,44 @@ function getMeals(site,date){return (SITE_MEALS[site]&&SITE_MEALS[site][getDayTy
 function cMgr(){return $('manager-select').value;}
 function cSite(){return $('site-select').value;}
 function cDate(){return $('date-input').value;}
-function periodOf(typeKey,date){const t=TYPES[typeKey];if(t.period==='monthly')return date.slice(0,7);return date;}
-function deadlineOf(typeKey){
+function prevMonth(ym){let [y,m]=ym.split('-').map(Number);m--;if(m<1){m=12;y--;}return `${y}-${String(m).padStart(2,'0')}`;}
+function weekStart(dateStr){
+  const d=new Date((dateStr||todayStr)+'T12:00:00');
+  const day=d.getDay();const diff=(day===0?-6:1-day);
+  d.setDate(d.getDate()+diff);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function weekLabel(ws){const mon=new Date(ws+'T12:00:00');const wed=new Date(mon);wed.setDate(mon.getDate()+2);return `${wed.getMonth()+1}월 ${Math.ceil(wed.getDate()/7)}주차`;}
+function periodOf(typeKey,date){
+  const t=TYPES[typeKey];
+  if(t.period==='weekly')return weekStart(date);
+  if(t.period==='monthly'){let ym=date.slice(0,7);if(t.prevMonth)ym=prevMonth(ym);return ym;}
+  return date;
+}
+function periodLabel(typeKey,period){
+  const t=TYPES[typeKey];
+  if(t.period==='weekly')return weekLabel(period);
+  if(t.period==='monthly')return `${Number(period.split('-')[1])}월`;
+  const p=period.split('-');return `${Number(p[1])}/${Number(p[2])}`;
+}
+function hasDeadline(typeKey){const t=TYPES[typeKey];return t.period==='weekly'||!!(DEADLINES[typeKey]&&DEADLINES[typeKey].date);}
+function deadlineOf(typeKey,date){
+  const t=TYPES[typeKey];
+  if(t.period==='weekly'){
+    const wed=new Date(weekStart(date||todayStr)+'T12:00:00');wed.setDate(wed.getDate()+2);wed.setHours(23,59,59,0);return wed;
+  }
   const r=DEADLINES[typeKey];if(!r||!r.date)return null;
   if(r.mode==='time'&&r.time)return new Date(r.date+'T'+r.time+':00');
   return new Date(r.date+'T23:59:59');
 }
 const WEEKDAY=['일','월','화','수','목','금','토'];
+function fmtDeadlineOf(typeKey,date){
+  const dt=deadlineOf(typeKey,date);if(!dt)return '';
+  const t=TYPES[typeKey],m=dt.getMonth()+1,d=dt.getDate(),wd=WEEKDAY[dt.getDay()];
+  let tail='종일';
+  if(t.period!=='weekly'){const r=DEADLINES[typeKey];if(r&&r.mode==='time'&&r.time)tail=`${Number(r.time.split(':')[0])}시${r.time.split(':')[1]}분`;}
+  return `마감일: ${m}/${d}(${wd}) ${tail}`;
+}
 function fmtDeadline(r){
   if(!r||!r.date)return '';
   const [y,m,d]=r.date.split('-').map(Number);
@@ -534,12 +566,17 @@ function accordionHtml(){
     const open=expandedGroup===g;
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g);
     const readyN=keys.filter(k=>TYPES[k].ready).length;
-    const dlCount=keys.filter(k=>TYPES[k].ready&&DEADLINES[k]&&DEADLINES[k].date&&!siteDone[k]).length;
+    const dlCount=keys.filter(k=>TYPES[k].ready&&hasDeadline(k)&&!siteDone[k]).length;
     const dlBadge=dlCount>0?`<span class="dl-badge">${dlCount}</span>`:'';
     const grid=keys.map(k=>{const t=TYPES[k];
-      const dr=DEADLINES[k];
       let dlTag='';
-      if(dr&&dr.date)dlTag=siteDone[k]?`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료${siteDoneAt[k]?' '+fmtWhen(siteDoneAt[k]):''}</span>`:`<span class="gi-dl">${fmtDeadline(dr)}</span>`;
+      if(hasDeadline(k)){
+        if(siteDone[k]){
+          const dt=deadlineOf(k,todayStr);
+          const dlMD=dt?` (마감 ${dt.getMonth()+1}/${dt.getDate()})`:'';
+          dlTag=`<span class="gi-done"><i class="ti ti-circle-check"></i> 제출완료${siteDoneAt[k]?' '+fmtWhen(siteDoneAt[k]):''}${dlMD}</span>`;
+        }else dlTag=`<span class="gi-dl">${fmtDeadlineOf(k,todayStr)}</span>`;
+      }
       return t.ready
         ? `<button class="grid-item" onclick="openType('${k}')"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span>${dlTag}</span><i class="ti ti-chevron-right gi-arrow"></i></button>`
         : `<div class="grid-item soon"><span class="gi-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><span class="gi-tw"><span class="gi-label">${t.label}</span></span><span class="gi-soon">준비중</span></div>`;
@@ -577,9 +614,11 @@ async function loadSiteDone(site){
   siteDone={};siteDoneAt={};
   if(!site)return;
   const month=todayStr.slice(0,7);
+  const periods=new Set([month]);
+  Object.keys(TYPES).forEach(k=>{const t=TYPES[k];if(t.ready&&t.kind!=='approval')periods.add(periodOf(k,todayStr));});
   const recs=[];
   try{
-    for(const p of [todayStr,month]){
+    for(const p of periods){
       const snap=await getDocs(query(collection(db,'records'),where('site','==',site),where('period','==',p)));
       snap.forEach(d=>recs.push(d.data()));
     }
@@ -592,7 +631,7 @@ async function loadSiteDone(site){
       siteDone[k]=list.length>0;if(siteDone[k])siteDoneAt[k]=latest(list);
       return;
     }
-    const period=t.period==='monthly'?month:todayStr;
+    const period=periodOf(k,todayStr);
     const slots=expectedSlots(k,site,todayStr);
     if(!slots.length){siteDone[k]=true;return;}
     const list=recs.filter(r=>r.type===k&&r.period===period);
@@ -609,13 +648,15 @@ window.openType=function(k){curType=k;go({screen:'submit',view:'form'});};
 function renderForm(){
   const t=TYPES[curType];
   $('form-site').innerHTML='<i class="ti ti-map-pin fs-pin"></i>'+(selSite||'-');
-  $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}</div><div class="fh-sub">${t.group}</div></div></div>`;
+  let sub=t.group;
+  if(t.kind!=='approval'){const pl=periodLabel(curType,periodOf(curType,cDate()||todayStr));if(pl)sub+=` · 이번 제출: ${pl}`;}
+  $('form-header').innerHTML=`<div class="form-hero"><span class="fh-icon"><i class="ti ${KIND_ICON[t.kind]}"></i></span><div><div class="fh-title">${t.label}</div><div class="fh-sub">${sub}</div></div></div>`;
   syncPeriodLabel();
   onContextChange();
 }
 function syncPeriodLabel(){
   const t=TYPES[curType];
-  $('period-label').innerHTML=(t.period==='monthly'?'해당 월':t.period==='adhoc'?'기준일':'날짜')+' <span class="required">*</span>';
+  $('period-label').innerHTML=(t.period==='weekly'?'제출일(주간)':t.period==='monthly'?'제출일':t.period==='adhoc'?'기준일':'날짜')+' <span class="required">*</span>';
 }
 
 // ── 매니저/사업장 ──
@@ -678,7 +719,7 @@ function renderHistory(){
       const slot=(r.slot&&r.slot!=='기본')?`<span class="hl-slot">${r.slot}</span>`:'';
       return `<div class="hl-row">${slot}<span class="hl-val">${val}</span><span class="hl-when">제출 ${fmtWhen(r.submittedAt)}</span></div>`;
     }).join('');
-    return `<div class="hp"><div class="hp-head">${p}</div>${lines}</div>`;
+    return `<div class="hp"><div class="hp-head">${periodLabel(curType,p)}</div>${lines}</div>`;
   }).join('');
   return `<div class="section-title">지난 제출 이력</div>${rows}`;
 }
@@ -690,8 +731,7 @@ function renderDeadlineBanner(slots){
   else if(dl&&Date.now()>dl.getTime()){cls='dl-late';pill='마감 지남';}
   else if(dl&&dl.getTime()-Date.now()<6*36e5){cls='dl-soon';pill='마감 임박';}
   else{cls='dl-open';pill=done>0?`진행 ${done}/${slots.length}`:'미제출';}
-  const r=DEADLINES[curType];
-  const dlText=dl?fmtDeadline(r):'마감 미설정';
+  const dlText=dl?fmtDeadlineOf(curType,date):'마감 미설정';
   $('deadline-banner').innerHTML=`<span>${dlText}</span><span class="dl-pill ${cls}">${pill}</span>`;
 }
 function buildSlot(slot){
@@ -857,7 +897,9 @@ window.loadAdmin=async function(){
   showLoading('불러오는 중...');
   try{
     adminCache={};adminRecords=[];
-    for(const p of [date,month]){
+    const periods=new Set([date,month]);
+    Object.keys(TYPES).forEach(k=>{if(TYPES[k].ready&&TYPES[k].kind!=='approval')periods.add(periodOf(k,date));});
+    for(const p of periods){
       const snap=await getDocs(query(collection(db,'records'),where('period','==',p)));
       snap.forEach(d=>{const r=d.data();r.id=d.id;adminCache[`${r.type}|${r.site}|${r.period}|${r.slot||'_'}`]=r;adminRecords.push(r);});
     }
@@ -875,7 +917,7 @@ function renderMatrix(date){
     if(!keys.length)return;
     html+=`<div class="cat-sec"><div class="cat-sec-head"><i class="ti ${GROUP_ICON[g]}"></i> ${g}</div>`;
     keys.forEach(k=>{
-      const t=TYPES[k],period=t.period==='monthly'?month:date;
+      const t=TYPES[k],period=periodOf(k,date);
       const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
       const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
       const sites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
@@ -891,7 +933,7 @@ function renderMatrix(date){
       const newN=recs.filter(r=>r.viewed===false).length;
       html+=`<div class="item-rec">
         <button class="item-rec-head" onclick="toggleRec('${id}')">
-          <span class="ir-name">${t.label}</span>
+          <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span></span>
           ${newN?`<span class="ir-new">${newN}</span>`:''}
           <span class="ir-cnt">${sites.length?sites.length+'개 사업장 · '+recs.length+'건':'없음'}</span>
           <i class="ti ti-chevron-down ir-chev"></i>
@@ -959,7 +1001,7 @@ window.decide=async function(id,status){
 function renderDeadlineSettings(){
   let html='';
   GROUP_ORDER.forEach(g=>{
-    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].kind!=='approval');
+    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].kind!=='approval'&&TYPES[k].period!=='weekly');
     if(!keys.length)return;
     const setN=keys.filter(k=>DEADLINES[k]&&DEADLINES[k].date).length;
     const id='dlc-'+sani(g);
