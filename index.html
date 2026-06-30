@@ -86,6 +86,7 @@ textarea{resize:vertical;min-height:64px;}
 
 /* ── 아코디언 ── */
 .acc{background:var(--card);border:.5px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.acc.open{border-color:var(--blue-border);box-shadow:0 4px 16px rgba(43,108,176,.10);margin:6px 0 18px;}
 .acc-head{width:100%;display:flex;align-items:center;gap:12px;padding:15px 16px;background:none;border:none;cursor:pointer;font-family:inherit;}
 .acc-icon{width:38px;height:38px;border-radius:10px;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .acc-tw{flex:1;text-align:left;min-width:0;}
@@ -256,8 +257,8 @@ textarea{resize:vertical;min-height:64px;}
 .md-chip input{margin:0;width:auto;}
 .gi-done{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:99px;white-space:nowrap;}
 .gi-done i{font-size:13px;}
-.cat-sec{margin-bottom:18px;}
-.cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue);margin:0 0 9px 2px;}
+.cat-sec{margin-bottom:22px;background:#f4f6f9;border:.5px solid #e3e7ec;border-radius:16px;padding:12px 12px 4px;}
+.cat-sec-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--blue);margin:2px 2px 12px;padding-bottom:9px;border-bottom:2px solid #dde3ea;}
 .cat-sec-head i{font-size:18px;}
 .item-rec{background:var(--card);border:.5px solid var(--border);border-radius:11px;margin-bottom:8px;overflow:hidden;}
 .item-rec-head{width:100%;display:flex;align-items:center;gap:10px;padding:13px 15px;background:none;border:none;cursor:pointer;font-family:inherit;}
@@ -290,6 +291,35 @@ textarea{resize:vertical;min-height:64px;}
 .rec-wait{font-size:14px;color:var(--text4);}
 .dl-all{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#fff;background:var(--blue);padding:4px 11px;border-radius:8px;flex-shrink:0;}
 .dl-all:hover{background:var(--blue-dark);}
+
+/* ── 관리자 탭 ── */
+.admin-tabs{display:flex;gap:6px;margin-bottom:16px;background:#eef0f3;padding:5px;border-radius:12px;}
+.admin-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 6px;border:none;background:none;border-radius:9px;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;white-space:nowrap;}
+.admin-tab.active{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.admin-tab i{font-size:16px;}
+.tab-badge{display:none;align-items:center;justify-content:center;min-width:17px;height:17px;padding:0 5px;background:var(--red);color:#fff;border-radius:99px;font-size:10px;font-weight:700;}
+.admin-pane{animation:fade .2s;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.dl-settings-wrap{margin-bottom:16px;}
+.dl-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:13px 15px;background:var(--card);border:.5px solid var(--border);border-radius:11px;font-family:inherit;font-size:14px;font-weight:600;color:var(--text1);cursor:pointer;}
+.dl-toggle-chev{margin-left:auto;transition:transform .2s;color:var(--text4);}
+.dl-grp{font-size:11px;font-weight:600;color:var(--text4);background:#f0f1f3;padding:1px 7px;border-radius:99px;}
+.item-wrap{margin-bottom:8px;}
+.ip-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:11px 13px;background:#eef4fb;border-bottom:.5px solid var(--border);}
+.ip-row .ip-ic{font-size:16px;color:var(--blue);}
+.ip-row select,.ip-row input[type=date]{padding:7px 9px;font-size:13px;}
+.ip-now{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--blue);background:#fff;border:.5px solid var(--blue-border);border-radius:8px;padding:6px 10px;cursor:pointer;font-family:inherit;margin-left:auto;}
+.pp-range{font-size:12px;font-weight:600;color:var(--text3);}
+.pp-rangerow{display:flex;align-items:center;gap:5px;margin-top:7px;padding-left:2px;}
+/* ── 액션 시트 / 공지 ── */
+.sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:960;align-items:flex-end;justify-content:center;}
+.sheet-overlay.open{display:flex;animation:fade .15s;}
+.sheet{width:100%;max-width:480px;background:#fff;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;animation:sheetup .2s;}
+@keyframes sheetup{from{transform:translateY(40px);}to{transform:translateY(0);}}
+.sheet-head{font-size:15px;font-weight:700;display:flex;align-items:center;gap:7px;margin-bottom:4px;word-break:break-all;}
+.sheet-body{font-size:14px;color:var(--text2);max-height:50vh;overflow:auto;}
+.att-btn{width:100%;justify-content:center;}
+.att-cancel{width:100%;padding:12px;background:none;border:none;color:var(--text3);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;}
 
 /* ── 오버레이 ── */
 .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.78);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
@@ -324,13 +354,8 @@ textarea{resize:vertical;min-height:64px;}
     </button>
     <button class="home-btn" onclick="openAdmin()">
       <span class="home-ic amber"><i class="ti ti-layout-dashboard"></i></span>
-      <span class="home-tw"><span class="lbl">관리자 · 현황</span><span class="desc">제출 현황 · 결재함</span></span>
+      <span class="home-tw"><span class="lbl">관리자</span><span class="desc">제출현황 · 결재함 · 사업장</span></span>
       <span class="home-badge" id="home-badge-admin"></span>
-      <i class="ti ti-chevron-right chev"></i>
-    </button>
-    <button class="home-btn" onclick="openSettings()">
-      <span class="home-ic slate"><i class="ti ti-settings"></i></span>
-      <span class="home-tw"><span class="lbl">관리자 · 설정</span><span class="desc">마감기한 · 사업장 명단</span></span>
       <i class="ti ti-chevron-right chev"></i>
     </button>
   </div>
@@ -369,11 +394,11 @@ textarea{resize:vertical;min-height:64px;}
       </div>
     </div>
 
-    <!-- 관리자 · 현황 -->
+    <!-- 관리자 -->
     <div class="section" id="sec-admin">
       <div id="admin-lock">
         <div class="lock-box">
-          <div style="font-size:16px;font-weight:600;margin-bottom:6px;">관리자 · 현황</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px;">관리자</div>
           <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">비밀번호를 입력하세요.</div>
           <div style="display:flex;gap:8px;">
             <input type="password" id="admin-pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter')unlockAdmin()" />
@@ -383,36 +408,27 @@ textarea{resize:vertical;min-height:64px;}
         </div>
       </div>
       <div id="admin-content" style="display:none;">
-        <div class="admin-controls">
-          <input type="date" id="admin-date" onchange="loadAdmin()" />
-          <button class="btn-secondary" onclick="loadAdmin()"><i class="ti ti-refresh"></i> 조회</button>
-          <span style="font-size:12px;color:var(--text4);margin-left:auto;" id="admin-updated"></span>
+        <div class="admin-tabs">
+          <button class="admin-tab active" id="tab-status" onclick="showAdminTab('status')"><i class="ti ti-layout-dashboard"></i> 제출현황</button>
+          <button class="admin-tab" id="tab-approval" onclick="showAdminTab('approval')"><i class="ti ti-checkbox"></i> 결재함 <span class="tab-badge" id="tab-badge-approval"></span></button>
+          <button class="admin-tab" id="tab-sites" onclick="showAdminTab('sites')"><i class="ti ti-building-factory-2"></i> 사업장</button>
         </div>
-        <div id="matrix-wrap"><div class="empty">날짜를 선택해 조회하세요</div></div>
-        <div id="detail-wrap"></div>
-        <div class="section-title">결재함 (지출 · 휴가 · 경조사 등)</div>
-        <div id="approval-wrap"><div class="empty">대기 중인 결재가 없습니다</div></div>
-      </div>
-    </div>
 
-    <!-- 관리자 · 설정 -->
-    <div class="section" id="sec-settings">
-      <div id="settings-lock">
-        <div class="lock-box">
-          <div style="font-size:16px;font-weight:600;margin-bottom:6px;">관리자 · 설정</div>
-          <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">비밀번호를 입력하세요.</div>
-          <div style="display:flex;gap:8px;">
-            <input type="password" id="settings-pw" placeholder="비밀번호" onkeydown="if(event.key==='Enter')unlockSettings()" />
-            <button class="btn-primary" onclick="unlockSettings()">확인</button>
+        <div class="admin-pane" id="pane-status">
+          <div class="dl-settings-wrap">
+            <button class="dl-toggle" onclick="toggleDlSettings()"><i class="ti ti-alarm"></i> 마감기한 설정 <i class="ti ti-chevron-down dl-toggle-chev"></i></button>
+            <div class="setting-block" id="deadline-settings" style="display:none;margin-top:8px;"></div>
           </div>
-          <div id="settings-pw-err" style="font-size:12px;color:var(--red);margin-top:8px;min-height:16px;"></div>
+          <div id="matrix-wrap"></div>
         </div>
-      </div>
-      <div id="settings-content" style="display:none;">
-        <div class="section-title" style="margin-top:0;">항목별 마감기한</div>
-        <div class="setting-block" id="deadline-settings"></div>
-        <div class="section-title">사업장 · 매니저</div>
-        <div class="setting-block" id="site-summary"></div>
+
+        <div class="admin-pane" id="pane-approval" style="display:none;">
+          <div id="approval-wrap"><div class="empty">대기 중인 결재가 없습니다</div></div>
+        </div>
+
+        <div class="admin-pane" id="pane-sites" style="display:none;">
+          <div class="setting-block" id="site-summary"></div>
+        </div>
       </div>
     </div>
 
@@ -421,6 +437,21 @@ textarea{resize:vertical;min-height:64px;}
 
 <div class="loading" id="loading"><div class="spinner"></div><div style="font-size:14px;color:var(--text2);" id="loading-text">처리 중...</div></div>
 <div class="img-modal" id="modal" onclick="this.classList.remove('open')"><img id="modal-img" src="" /></div>
+<div class="sheet-overlay" id="notice-overlay">
+  <div class="sheet">
+    <div class="sheet-head"><i class="ti ti-bell"></i> 마감기한 공지</div>
+    <div class="sheet-body" id="notice-body"></div>
+    <button class="btn-primary" style="width:100%;" onclick="dismissNotice()">확인했어요</button>
+  </div>
+</div>
+<div class="sheet-overlay" id="att-overlay" onclick="if(event.target===this)closeAtt()">
+  <div class="sheet">
+    <div class="sheet-head" id="att-name"><i class="ti ti-paperclip"></i> 첨부파일</div>
+    <button class="btn-secondary att-btn" onclick="attOpen()"><i class="ti ti-external-link"></i> 열기 (새 탭)</button>
+    <button class="btn-primary att-btn" onclick="attSave()"><i class="ti ti-download"></i> 저장 (통일 이름)</button>
+    <button class="att-cancel" onclick="closeAtt()">취소</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -532,7 +563,10 @@ function periodOf(typeKey,date){
 }
 function periodLabel(typeKey,period){
   const t=TYPES[typeKey];
-  if(t.period==='weekly')return weekLabel(period);
+  if(t.period==='weekly'){
+    const mon=new Date(period+'T12:00:00'),sun=new Date(mon);sun.setDate(mon.getDate()+6);
+    return `${weekLabel(period)} (${mon.getMonth()+1}/${mon.getDate()}~${sun.getMonth()+1}/${sun.getDate()})`;
+  }
   if(t.period==='monthly')return `${Number(period.split('-')[1])}월`;
   const p=period.split('-');return `${Number(p[1])}/${Number(p[2])}`;
 }
@@ -540,9 +574,12 @@ function hasDeadline(typeKey){const t=TYPES[typeKey];return t.period==='weekly'|
 function deadlineOf(typeKey,periodKey){
   const t=TYPES[typeKey];
   if(t.period==='weekly'){
-    const mon=new Date(periodKey+'T12:00:00');const due=new Date(mon);
-    if(t.weekKind==='next')due.setDate(mon.getDate()-1);else due.setDate(mon.getDate()+9);
-    due.setHours(23,59,59,0);return due;
+    const ws=new Date(periodKey+'T12:00:00');
+    const base=new Date(ws);base.setDate(ws.getDate()+(t.weekKind==='next'?-7:7));
+    const defD=(t.weekKind==='next'?0:3);
+    const D=(DEADLINES[typeKey]&&DEADLINES[typeKey].dow!=null)?DEADLINES[typeKey].dow:defD;
+    const off=(D===0?6:D-1);
+    base.setDate(base.getDate()+off);base.setHours(23,59,59,0);return base;
   }
   const r=DEADLINES[typeKey];if(!r||!r.date)return null;
   return new Date(r.date+'T23:59:59');
@@ -577,11 +614,12 @@ async function init(){
   hideLoading();
   const mSel=$('manager-select');
   [...MANAGERS].sort((a,b)=>a.name.localeCompare(b.name,'ko')).forEach(m=>mSel.appendChild(new Option(m.name,m.name)));
-  $('date-input').value=todayStr;$('admin-date').value=todayStr;
+  $('date-input')&&($('date-input').value=todayStr);
   const saved=localStorage.getItem('savedManager');
   if(saved&&MANAGERS.find(m=>m.name===saved)){mSel.value=saved;onManagerChange();}
   history.replaceState({screen:'home'},'');
   applyState({screen:'home'});
+  checkNotice();
 }
 init();
 
@@ -589,14 +627,13 @@ init();
 function go(st){history.pushState(st,'');applyState(st);}
 window.openSubmit=function(){go({screen:'submit',view:'site'});};
 window.openAdmin=function(){go({screen:'admin'});};
-window.openSettings=function(){go({screen:'settings'});};
 function applyState(st){
   st=st||{screen:'home'};curScreen=st.screen;
   if(st.screen==='home'){$('home-screen').style.display='flex';$('screen').style.display='none';updateHomeBadge();return;}
   $('home-screen').style.display='none';$('screen').style.display='flex';
-  const titles={submit:'영양사 업로드',admin:'관리자 · 현황',settings:'관리자 · 설정'};
+  const titles={submit:'영양사 업로드',admin:'관리자'};
   $('screen-title').textContent=titles[st.screen]||'';
-  ['submit','admin','settings'].forEach(s=>$('sec-'+s).style.display=s===st.screen?'block':'none');
+  ['submit','admin'].forEach(s=>$('sec-'+s).style.display=s===st.screen?'block':'none');
   if(st.screen==='submit')applySubmitView(st.view||'site');
   window.scrollTo({top:0,behavior:'auto'});
 }
@@ -743,7 +780,9 @@ function renderPeriodPicker(){
   const wc=weekCount(periodSel.year,periodSel.month);
   if(periodSel.week>wc)periodSel.week=wc;
   const weekSel=`<select id="pp-week" onchange="onPeriodChange()">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===periodSel.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
-  return `<div class="pp-row"><i class="ti ti-calendar-week pp-ic"></i>${yearSel}${monSel}${weekSel}<span class="pp-suffix">${t.label}</span>${now}</div>`;
+  const ws=periodSel.weekStart,mon=new Date(ws+'T12:00:00'),sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  const range=`<div class="pp-rangerow"><i class="ti ti-arrow-right pp-ic"></i><span class="pp-range">${mon.getMonth()+1}/${mon.getDate()} ~ ${sun.getMonth()+1}/${sun.getDate()} 분</span></div>`;
+  return `<div class="pp-row"><i class="ti ti-calendar-week pp-ic"></i>${yearSel}${monSel}${weekSel}<span class="pp-suffix">${t.label}</span>${now}</div>${range}`;
 }
 window.goCurrentPeriod=function(){initPeriodSel();$('period-area').innerHTML=renderPeriodPicker();onContextChange();};
 window.onPeriodChange=function(){
@@ -988,100 +1027,151 @@ window.submitApproval=async function(){
   }catch(e){hideLoading();toast('제출 실패: '+e.message,true);}
 };
 
-// ── 관리자 잠금 ──
-window.unlockAdmin=function(){
-  if($('admin-pw').value===ADMIN_PW){$('admin-lock').style.display='none';$('admin-content').style.display='block';loadAdmin();}
-  else{$('admin-pw-err').textContent='비밀번호가 틀렸습니다';$('admin-pw').value='';}
+// ── 관리자 ──
+let adminItemPeriod={}, attRec=null, noticeCur=null;
+window.unlockAdmin=async function(){
+  if($('admin-pw').value!==ADMIN_PW){$('admin-pw-err').textContent='비밀번호가 틀렸습니다';$('admin-pw').value='';return;}
+  $('admin-lock').style.display='none';$('admin-content').style.display='block';
+  renderDeadlineSettings();renderSiteSummary();
+  await loadStatus();
+  await renderApprovalQueue();
+  showAdminTab('status');
 };
-window.unlockSettings=function(){
-  if($('settings-pw').value===ADMIN_PW){$('settings-lock').style.display='none';$('settings-content').style.display='block';renderDeadlineSettings();renderSiteSummary();}
-  else{$('settings-pw-err').textContent='비밀번호가 틀렸습니다';$('settings-pw').value='';}
+window.showAdminTab=function(tab){
+  ['status','approval','sites'].forEach(t=>{$('pane-'+t).style.display=t===tab?'block':'none';$('tab-'+t).classList.toggle('active',t===tab);});
 };
+window.toggleDlSettings=function(){const el=$('deadline-settings');const open=el.style.display==='none';el.style.display=open?'block':'none';const chev=document.querySelector('.dl-toggle-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 
-// ── 현황 ──
-window.loadAdmin=async function(){
-  const date=$('admin-date').value;if(!date){toast('날짜를 선택하세요',true);return;}
-  const month=date.slice(0,7);
-  showLoading('불러오는 중...');
+function initAdminPeriod(k){
+  const t=TYPES[k];
+  if(t.period==='weekly'){const ws=periodOf(k,todayStr);adminItemPeriod[k]={...ymwFromWeekStart(ws),weekStart:ws};}
+  else if(t.period==='monthly'){const ym=periodOf(k,todayStr);const [y,m]=ym.split('-');adminItemPeriod[k]={year:+y,month:+m};}
+  else adminItemPeriod[k]={date:todayStr};
+}
+function adminPeriodKey(k){
+  const t=TYPES[k],s=adminItemPeriod[k];
+  if(t.period==='weekly')return s.weekStart;
+  if(t.period==='monthly')return `${s.year}-${String(s.month).padStart(2,'0')}`;
+  return s.date;
+}
+function adminPicker(k){
+  const t=TYPES[k],s=adminItemPeriod[k];
+  if(t.period==='daily')return `<input type="date" value="${s.date}" onchange="adminSetDate('${k}',this.value)"/>`;
+  const cy=new Date().getFullYear();const yrs=[];for(let y=cy-1;y<=cy+1;y++)yrs.push(y);
+  const yS=`<select onchange="adminSetYM('${k}','year',this.value)">${yrs.map(y=>`<option value="${y}"${y===s.year?' selected':''}>${y}년</option>`).join('')}</select>`;
+  const mS=`<select onchange="adminSetYM('${k}','month',this.value)">${Array.from({length:12},(_,i)=>i+1).map(m=>`<option value="${m}"${m===s.month?' selected':''}>${m}월</option>`).join('')}</select>`;
+  if(t.period==='monthly')return yS+mS;
+  const wc=weekCount(s.year,s.month);const wS=`<select onchange="adminSetYM('${k}','week',this.value)">${Array.from({length:wc},(_,i)=>i+1).map(w=>`<option value="${w}"${w===s.week?' selected':''}>${w}주차</option>`).join('')}</select>`;
+  return yS+mS+wS;
+}
+window.adminSetDate=function(k,v){adminItemPeriod[k].date=v;reloadItem(k);};
+window.adminSetYM=function(k,f,v){const s=adminItemPeriod[k];s[f]=+v;if(TYPES[k].period==='weekly'){const wc=weekCount(s.year,s.month);if(s.week>wc)s.week=wc;s.weekStart=weekStartFromYMW(s.year,s.month,s.week);}reloadItem(k);};
+window.adminNow=function(k){initAdminPeriod(k);reloadItem(k);};
+async function fetchAdminPeriod(k,period){
   try{
-    adminCache={};adminRecords=[];
-    const periods=new Set([date,month]);
-    Object.keys(TYPES).forEach(k=>{if(TYPES[k].ready&&TYPES[k].kind!=='approval')periods.add(periodOf(k,date));});
-    for(const p of periods){
-      const snap=await getDocs(query(collection(db,'records'),where('period','==',p)));
-      snap.forEach(d=>{const r=d.data();r.id=d.id;adminCache[`${r.type}|${r.site}|${r.period}|${r.slot||'_'}`]=r;adminRecords.push(r);});
-    }
-    renderMatrix(date);
-    await renderApprovalQueue();
-    $('admin-updated').textContent='업데이트 '+new Date().toLocaleTimeString('ko-KR');
-  }catch(e){toast('조회 실패: '+e.message,true);console.error(e);}
-  hideLoading();
-};
-function renderMatrix(date){
-  const allSites=Object.keys(SITE_MEALS).sort((a,b)=>a.localeCompare(b,'ko'));
+    const snap=await getDocs(query(collection(db,'records'),where('type','==',k),where('period','==',period)));
+    adminRecords=adminRecords.filter(r=>!(r.type===k&&r.period===period));
+    snap.forEach(d=>{const r=d.data();r.id=d.id;adminRecords.push(r);});
+  }catch(e){console.error('조회 실패',e);}
+}
+async function reloadItem(k){
+  showLoading('불러오는 중...');await fetchAdminPeriod(k,adminPeriodKey(k));hideLoading();
+  const wrap=$('iw-'+sani(k));if(wrap){wrap.innerHTML=renderStatusItem(k);const body=$('ir-'+sani(k));if(body){body.classList.add('open');const chev=body.previousElementSibling.querySelector('.ir-chev');if(chev)chev.style.transform='rotate(180deg)';}}
+}
+async function loadStatus(){
+  adminRecords=[];
+  showLoading('불러오는 중...');
+  for(const k of Object.keys(TYPES)){const t=TYPES[k];if(!t.ready||t.kind==='approval')continue;if(!adminItemPeriod[k])initAdminPeriod(k);await fetchAdminPeriod(k,adminPeriodKey(k));}
+  hideLoading();renderStatus();
+}
+function renderStatus(){
   let html='';
   GROUP_ORDER.forEach(g=>{
     const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].ready&&TYPES[k].kind!=='approval');
     if(!keys.length)return;
     html+=`<div class="cat-sec"><div class="cat-sec-head"><i class="ti ${GROUP_ICON[g]}"></i> ${GROUP_LABEL[g]||g}</div>`;
-    keys.forEach(k=>{
-      const t=TYPES[k],period=periodOf(k,date);
-      const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
-      const id='ir-'+sani(k);
-      const newN=recs.filter(r=>r.viewed===false).length;
-      if(t.shared){
-        const r0=recs.find(r=>r.fileURL)||recs[0];
-        const att=r0&&r0.fileURL?`<a class="rec-att" href="${r0.fileURL}" target="_blank" onclick="markViewed('${r0.id}')"><i class="ti ti-paperclip"></i> 첨부</a>`:'';
-        html+=`<div class="item-rec">
-          <button class="item-rec-head" onclick="toggleRec('${id}')">
-            <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span> <span class="shared-chip"><i class="ti ti-users"></i> 공유</span></span>
-            ${newN?`<span class="ir-new">${newN}</span>`:''}
-            <span class="ir-cnt">${r0?'등록됨':'미등록'}</span>
-            <i class="ti ti-chevron-down ir-chev"></i>
-          </button>
-          <div class="item-rec-body" id="${id}"><div class="rec-row">${r0?`<span class="rec-site">${r0.manager||''} 올림${r0.viewed===false?' <span class="new-tag">NEW</span>':''}</span>${att}`:'<span class="rec-site" style="color:var(--text4)">아직 등록되지 않았습니다</span>'}</div></div>
-        </div>`;
-        return;
-      }
-      const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
-      const subSites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
-      const misSites=allSites.filter(s=>!bySite[s]);
-      const subId=id+'-s',misId=id+'-m';
-      const fileN=recs.filter(r=>r.fileURL).length;
-      const subRows=subSites.length?subSites.map(site=>{
-        const rs=bySite[site],isNew=rs.some(r=>r.viewed===false),r0=rs[0];
-        let att='';
-        if(t.kind==='file'&&r0.fileURL)att=`<a class="rec-att" href="${r0.fileURL}" target="_blank" onclick="markViewed('${r0.id}')"><i class="ti ti-paperclip"></i> 첨부</a>`;
-        else if(t.kind==='photo'&&r0.photoURLs)att=`<a class="rec-att" href="${r0.photoURLs[0]}" target="_blank" onclick="markViewed('${r0.id}')"><i class="ti ti-photo"></i> 사진</a>`;
-        else if(t.kind==='form')att=`<span class="rec-form">${rs.map(r=>(r.slot&&r.slot!=='기본'?r.slot+' ':'')+(r.form?Object.values(r.form).join('/'):'')).join(' · ')}</span>`;
-        return `<div class="rec-row"><span class="rec-site">${site}${isNew?' <span class="new-tag">NEW</span>':''}</span><span class="rec-mgr">${r0.manager||''}</span>${att}</div>`;
-      }).join(''):'<div class="rec-empty">제출한 사업장이 없습니다</div>';
-      const misRows=misSites.length?misSites.map(s=>`<div class="rec-row mis"><span class="rec-site">${s}</span><i class="ti ti-clock rec-wait"></i></div>`).join(''):'<div class="rec-empty">모두 제출했습니다 🎉</div>';
-      const dlBtn=(fileN&&subSites.length)?`<span class="dl-all" onclick="event.stopPropagation();downloadAll('${k}','${period}')"><i class="ti ti-download"></i> 전체받기</span>`:'';
-      html+=`<div class="item-rec">
-        <button class="item-rec-head" onclick="toggleRec('${id}')">
-          <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span></span>
-          ${newN?`<span class="ir-new">${newN}</span>`:''}
-          <span class="ir-cnt">${subSites.length}/${allSites.length}</span>
-          <i class="ti ti-chevron-down ir-chev"></i>
-        </button>
-        <div class="item-rec-body" id="${id}">
-          <div class="sub-group">
-            <button class="sub-head" onclick="toggleRec('${subId}')"><i class="ti ti-circle-check sg-i green"></i><span class="sg-lbl">제출 ${subSites.length}곳</span>${dlBtn}<i class="ti ti-chevron-down sg-chev"></i></button>
-            <div class="sub-body" id="${subId}">${subRows}</div>
-          </div>
-          <div class="sub-group">
-            <button class="sub-head" onclick="toggleRec('${misId}')"><i class="ti ti-alert-circle sg-i red"></i><span class="sg-lbl">미제출 ${misSites.length}곳</span><i class="ti ti-chevron-down sg-chev"></i></button>
-            <div class="sub-body" id="${misId}">${misRows}</div>
-          </div>
-        </div>
-      </div>`;
-    });
+    keys.forEach(k=>{html+=`<div class="item-wrap" id="iw-${sani(k)}">${renderStatusItem(k)}</div>`;});
     html+=`</div>`;
   });
   $('matrix-wrap').innerHTML=html||'<div class="empty">표시할 항목이 없습니다</div>';
-  $('detail-wrap').innerHTML='';
 }
+function attLink(r){
+  const url=r.fileURL||(r.photoURLs&&r.photoURLs[0]);if(!url)return '';
+  const ic=r.fileURL?'ti-paperclip':'ti-photo',lbl=r.fileURL?'첨부':'사진';
+  return `<button class="rec-att" onclick="openAtt('${r.id}')"><i class="ti ${ic}"></i> ${lbl}</button>`;
+}
+function renderStatusItem(k){
+  const t=TYPES[k],allSites=Object.keys(SITE_MEALS).sort((a,b)=>a.localeCompare(b,'ko'));
+  const period=adminPeriodKey(k);
+  const recs=adminRecords.filter(r=>r.type===k&&r.period===period);
+  const id='ir-'+sani(k);
+  const newN=recs.filter(r=>r.viewed===false).length;
+  const picker=`<div class="ip-row"><i class="ti ti-calendar-week ip-ic"></i>${adminPicker(k)}<button class="ip-now" onclick="adminNow('${k}')">이번 회차</button></div>`;
+  if(t.shared){
+    const r0=recs.find(r=>r.fileURL)||recs[0];
+    const att=r0&&r0.fileURL?attLink(r0):'';
+    return `<div class="item-rec">
+      <button class="item-rec-head" onclick="toggleRec('${id}')">
+        <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span> <span class="shared-chip"><i class="ti ti-users"></i> 공유</span></span>
+        ${newN?`<span class="ir-new">${newN}</span>`:''}
+        <span class="ir-cnt">${r0?'등록':'미등록'}</span>
+        <i class="ti ti-chevron-down ir-chev"></i>
+      </button>
+      <div class="item-rec-body" id="${id}">${picker}<div class="rec-row">${r0?`<span class="rec-site">${r0.manager||''} 올림${r0.viewed===false?' <span class="new-tag">NEW</span>':''}</span>${att}`:'<span class="rec-site" style="color:var(--text4)">아직 등록되지 않았습니다</span>'}</div></div>
+    </div>`;
+  }
+  const bySite={};recs.forEach(r=>{(bySite[r.site]=bySite[r.site]||[]).push(r);});
+  const subSites=Object.keys(bySite).sort((a,b)=>a.localeCompare(b,'ko'));
+  const misSites=allSites.filter(s=>!bySite[s]);
+  const subId=id+'-s',misId=id+'-m';
+  const fileN=recs.filter(r=>r.fileURL).length;
+  const subRows=subSites.length?subSites.map(site=>{
+    const rs=bySite[site],isNew=rs.some(r=>r.viewed===false),r0=rs[0];
+    let att='';
+    if(t.kind==='file'||t.kind==='photo')att=attLink(r0);
+    else if(t.kind==='form')att=`<span class="rec-form">${rs.map(r=>(r.slot&&r.slot!=='기본'?r.slot+' ':'')+(r.form?Object.values(r.form).join('/'):'')).join(' · ')}</span>`;
+    return `<div class="rec-row"><span class="rec-site">${site}${isNew?' <span class="new-tag">NEW</span>':''}</span><span class="rec-mgr">${r0.manager||''}</span>${att}</div>`;
+  }).join(''):'<div class="rec-empty">제출한 사업장이 없습니다</div>';
+  const misRows=misSites.length?misSites.map(s=>`<div class="rec-row mis"><span class="rec-site">${s}</span><i class="ti ti-clock rec-wait"></i></div>`).join(''):'<div class="rec-empty">모두 제출했습니다 🎉</div>';
+  const dlBtn=(fileN&&subSites.length)?`<span class="dl-all" onclick="event.stopPropagation();downloadAll('${k}','${period}')"><i class="ti ti-download"></i> 전체받기</span>`:'';
+  return `<div class="item-rec">
+    <button class="item-rec-head" onclick="toggleRec('${id}')">
+      <span class="ir-name">${t.label} <span class="ir-period">${periodLabel(k,period)}</span></span>
+      ${newN?`<span class="ir-new">${newN}</span>`:''}
+      <span class="ir-cnt">${subSites.length}/${allSites.length}</span>
+      <i class="ti ti-chevron-down ir-chev"></i>
+    </button>
+    <div class="item-rec-body" id="${id}">${picker}
+      <div class="sub-group"><button class="sub-head" onclick="toggleRec('${subId}')"><i class="ti ti-circle-check sg-i green"></i><span class="sg-lbl">제출 ${subSites.length}곳</span>${dlBtn}<i class="ti ti-chevron-down sg-chev"></i></button><div class="sub-body" id="${subId}">${subRows}</div></div>
+      <div class="sub-group"><button class="sub-head" onclick="toggleRec('${misId}')"><i class="ti ti-alert-circle sg-i red"></i><span class="sg-lbl">미제출 ${misSites.length}곳</span><i class="ti ti-chevron-down sg-chev"></i></button><div class="sub-body" id="${misId}">${misRows}</div></div>
+    </div>
+  </div>`;
+}
+// 첨부 열기/저장
+window.openAtt=function(id){const r=adminRecords.find(x=>x.id===id);if(!r)return;attRec=r;$('att-name').innerHTML=`<i class="ti ti-paperclip"></i> ${r.fileName||'첨부파일'}`;$('att-overlay').classList.add('open');};
+window.closeAtt=function(){$('att-overlay').classList.remove('open');attRec=null;};
+window.attOpen=function(){if(!attRec)return;const url=attRec.fileURL||(attRec.photoURLs&&attRec.photoURLs[0]);if(attRec.viewed===false)markViewed(attRec.id);window.open(url,'_blank');closeAtt();};
+window.attSave=async function(){
+  if(!attRec)return;const r=attRec,url=r.fileURL||(r.photoURLs&&r.photoURLs[0]);
+  showLoading('저장 준비 중...');
+  try{
+    const blob=await fetch(url).then(x=>{if(!x.ok)throw new Error('받기 실패');return x.blob();});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=stdName(r);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    if(r.viewed===false)markViewed(r.id);
+    hideLoading();closeAtt();toast('저장했습니다');
+  }catch(e){hideLoading();toast('저장 실패: '+e.message,true);}
+};
+// 공지
+async function checkNotice(){
+  try{
+    const s=await getDoc(doc(db,'config','notice'));if(!s.exists())return;
+    const n=s.data();if(!n.id||localStorage.getItem('noticeRead')===n.id)return;
+    noticeCur=n.id;
+    $('notice-body').innerHTML=`<div style="white-space:pre-line;font-size:14px;line-height:1.7;">${n.text||'마감기한이 변경되었습니다.'}</div><div style="font-size:12px;color:var(--text4);margin-top:12px;">${n.at?'변경 '+fmtWhen(n.at):''}</div>`;
+    $('notice-overlay').classList.add('open');
+  }catch(e){}
+}
+window.dismissNotice=function(){if(noticeCur)localStorage.setItem('noticeRead',noticeCur);$('notice-overlay').classList.remove('open');};
 window.toggleRec=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.ir-chev,.sg-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
 function stdName(r){
   const t=TYPES[r.type];let p='';
@@ -1116,6 +1206,7 @@ async function renderApprovalQueue(){
   const snap=await getDocs(query(collection(db,'records'),where('status','==','pending')));
   const items=[];snap.forEach(d=>{const r=d.data();if(r.kind==='approval')items.push({id:d.id,...r});});
   items.sort((a,b)=>(a.submittedAt||'').localeCompare(b.submittedAt||''));
+  const tb=$('tab-badge-approval');if(tb){tb.textContent=items.length||'';tb.style.display=items.length?'inline-flex':'none';}
   if(!items.length){$('approval-wrap').innerHTML='<div class="empty">대기 중인 결재가 없습니다</div>';return;}
   $('approval-wrap').innerHTML=items.map(r=>{
     const t=TYPES[r.type];
@@ -1150,12 +1241,21 @@ window.decide=async function(id,status){
 function renderDeadlineSettings(){
   let html='';
   GROUP_ORDER.forEach(g=>{
-    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].kind!=='approval'&&TYPES[k].period!=='weekly');
+    const keys=Object.keys(TYPES).filter(k=>TYPES[k].group===g&&TYPES[k].kind!=='approval');
     if(!keys.length)return;
-    const setN=keys.filter(k=>DEADLINES[k]&&DEADLINES[k].date).length;
+    const setN=keys.filter(k=>{const d=DEADLINES[k];return d&&(d.date||d.dow!=null);}).length;
     const id='dlc-'+sani(g);
     const items=keys.map(k=>{
       const t=TYPES[k],r=DEADLINES[k]||{};
+      if(t.period==='weekly'){
+        const defD=(t.weekKind==='next'?0:3);
+        const cur=(r.dow!=null)?r.dow:defD;
+        const sel=`<select onchange="setDlDow('${k}',this.value)">${[1,2,3,4,5,6,0].map(d=>`<option value="${d}"${d===cur?' selected':''}>${WEEKDAY[d]}요일</option>`).join('')}</select>`;
+        return `<div class="dl-item">
+          <div class="dl-item-name">${t.label} <span class="dl-grp">${t.weekKind==='next'?'매주 · 다음주분':'매주 · 전주분'}</span></div>
+          <div class="dl-item-ctl">${sel}${r.dow!=null?`<button class="dl-clear" onclick="clearDl('${k}')" title="기본값으로"><i class="ti ti-rotate-2"></i></button>`:''}</div>
+        </div>`;
+      }
       return `<div class="dl-item">
         <div class="dl-item-name">${t.label}</div>
         <div class="dl-item-ctl">
@@ -1173,12 +1273,30 @@ function renderDeadlineSettings(){
       <div class="dl-cat-body" id="${id}">${items}</div>
     </div>`;
   });
-  $('deadline-settings').innerHTML=html+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장</button>`;
+  $('deadline-settings').innerHTML=html+`<button class="btn-primary" style="width:100%;margin-top:14px;" onclick="saveDl()"><i class="ti ti-device-floppy"></i> 마감기한 저장 · 공지</button>`;
 }
 window.setDl=function(k,field,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k][field]=val;renderDeadlineSettings();};
+window.setDlDow=function(k,val){DEADLINES[k]=DEADLINES[k]||{};DEADLINES[k].dow=+val;renderDeadlineSettings();};
 window.clearDl=function(k){delete DEADLINES[k];renderDeadlineSettings();};
+function noticeText(){
+  const lines=[];
+  Object.keys(TYPES).forEach(k=>{const t=TYPES[k];if(!t.ready||t.kind==='approval')return;
+    if(t.period==='weekly'){const defD=(t.weekKind==='next'?0:3);const D=(DEADLINES[k]&&DEADLINES[k].dow!=null)?DEADLINES[k].dow:defD;lines.push(`· ${t.label}: 매주 ${WEEKDAY[D]}요일`);}
+    else if(DEADLINES[k]&&DEADLINES[k].date){const p=DEADLINES[k].date.split('-');lines.push(`· ${t.label}: ${Number(p[1])}/${Number(p[2])}`);}
+  });
+  return '마감기한이 업데이트되었습니다.\n\n'+lines.join('\n');
+}
+window.saveDl=async function(){
+  showLoading('저장 중...');
+  try{
+    await saveDeadlines();
+    const id=Date.now().toString(36);
+    await setDoc(doc(db,'config','notice'),{id,text:noticeText(),at:new Date().toISOString()});
+    localStorage.setItem('noticeRead',id);
+    hideLoading();toast('마감기한 저장 · 매니저에게 공지됩니다');
+  }catch(e){hideLoading();toast('저장 실패: '+e.message,true);}
+};
 window.toggleDlCat=function(id){const el=$(id);if(!el)return;const open=el.classList.toggle('open');const chev=el.previousElementSibling.querySelector('.dlc-chev');if(chev)chev.style.transform=open?'rotate(180deg)':'';};
-window.saveDl=async function(){showLoading('저장 중...');try{await saveDeadlines();hideLoading();toast('마감기한 저장 완료!');}catch(e){hideLoading();toast('저장 실패: '+e.message,true);}};
 // ── 사업장 · 매니저 관리 ──
 const MEALS4=['조식','중식','석식','야식'];
 const DAYS3=['평일','토요일','일요일'];
